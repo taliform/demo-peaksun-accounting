@@ -32,7 +32,6 @@ class TfCfCollection(models.Model):
     _name = 'tf.cf.collection'
     _description = "Cash Flow Projection"
 
-
     date_from = fields.Date("Date From", required=True)
     date_to = fields.Date("Date To", required=True)
     projected_rate = fields.Float("Projected Percentage Collected", required=True)

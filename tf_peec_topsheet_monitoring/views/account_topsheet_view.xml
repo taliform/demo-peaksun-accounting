@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Peec Topsheet Kanban View -->
+    <record id="peec_topsheet_kanban" model="ir.ui.view">
+        <field name="name">peec.topsheet.kanban</field>
+        <field name="model">account.topsheet</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" records_draggable="0">
+                <field name="stage_id" />
+                <field name="name"/>
+                <field name="topsheet_date"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="row mb4">
+                                <div class="col-6 o_kanban_record_headings">
+                                    <strong>
+                                        <span>
+                                            <field name="name"/>
+                                        </span>
+                                    </strong>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <i class="fa fa-clock-o" aria-label="Date" role="img" title="Date"/> <field name="topsheet_date"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6">
+                                    <span class="float-right">
+                                        <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'validate': 'success'}}"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-6">
+                                    <div class="float-left">
+                                        <button name="action_prev_stage" type="object" class="btn btn-primary btn-sm rounded"
+                                        style="font-size: .8rem;">
+                                            <i class="fa fa-angle-double-left"></i> Prev Stage
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <div class="col-6">
+                                    <div class="float-right">
+                                        <button name="action_next_stage" type="object" class="btn btn-primary btn-sm rounded"
+                                        style="font-size: .8rem;">
+                                            Next Stage <i class="fa fa-angle-double-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

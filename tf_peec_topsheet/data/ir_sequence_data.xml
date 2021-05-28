@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Repair Order Sequence -->
+        <record id="seq_topsheet" model="ir.sequence">
+            <field name="name">Topsheet</field>
+            <field name="code">account.topsheet</field>
+            <field name="prefix">TS/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+	</data>
+
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="reconcile_2307_generate_adjusting_entry_view_form" model="ir.ui.view">
+            <field name="name">reconcile.2307.view.form</field>
+            <field name="model">reconcile.2307.generate.adjusting.entry</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="reconcile_id" invisible="1"/>
+                        <field name="date"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate" string="Generate" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

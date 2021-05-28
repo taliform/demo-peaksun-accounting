@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Peec Topsheet Monitoring Form View -->
+    <record id='peec_topsheet_monitoring_form_view' model='ir.ui.view'>
+        <field name="name">peec.topsheet.monitoring.form.view</field>
+        <field name="model">account.topsheet.stages</field>
+        <field name="arch" type="xml">
+            <form string="Topsheet Stage Definition">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="sequence"/>
+                            <field name="email_template"/>
+                        </group>
+                        <group>
+                            <field name="folded_kanban"/>
+                            <field name="require_date"/>
+                            <field name="compute_days"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Peec Topsheet Monitoring Tree View -->
+    <record id="peec_topsheet_monitoring_tree_view" model="ir.ui.view">
+        <field name="name">peec.topsheet.monitoring.tree.view</field>
+        <field name="model">account.topsheet.stages</field>
+        <field name="arch" type="xml">
+            <tree string="Stages">
+                  <field name="sequence" widget="handle"/>
+                  <field name="name"/>
+                  <field name="folded_kanban"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--  Topsheet Monitoring Actions  -->
+    <record id="action_topsheet_stages" model="ir.actions.act_window">
+			<field name="name">Topsheet Stages</field>
+			<field name="res_model">account.topsheet.stages</field>
+			<field name="context"></field>
+			<field name="domain"></field>
+			<field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Topsheet Menu -->
+    <menuitem id="topsheet_stages" name="Topsheet Stages"  parent="account.account_invoicing_menu" action="action_topsheet_stages" sequence="3"/>
+</odoo>

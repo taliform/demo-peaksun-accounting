@@ -95,7 +95,7 @@
 
         <!-- Disbursements Projection: Menu -->
         <menuitem id="tf_cf_disbursements_projections_menu" name="Disbursements" action="tf_cf_disbursements_projections_action"
-                  parent="tf_ph_cf_treasury.tf_cf_projection_sub_menu" sequence="10"/>
+                  parent="tf_ph_cf_treasury.tf_cf_projection_sub_menu" sequence="5"/>
 
     </data>
 </odoo>

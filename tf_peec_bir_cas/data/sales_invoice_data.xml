@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+		<!-- Sales Invoice Sequence Number-->
+		<record id="tf_peec_sails_invoice_sequence" model="ir.sequence">
+            <field name="name">Sales Invoice</field>
+            <field name="code">tf.peec.sales.invoice</field>
+            <field name="prefix">SI</field>
+            <field name="implementation">no_gap</field>
+            <field eval="4" name="padding" />
+            <field eval="1" name="number_next_actual" />
+            <field eval="1" name="number_increment" />
+        </record>
+	</data>
+</odoo>

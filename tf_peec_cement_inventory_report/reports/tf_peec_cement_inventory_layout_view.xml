@@ -1,0 +1,226 @@
+<odoo>
+	<data>
+		<template id="report_cement_inventory">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<div class="page">
+							<h3 class="text-center text-secondary text-uppercase font-weight-bold" style="margin-top: 32px; ">Withdrawal vs Control Book</h3>
+							<div class="text-center"><strong>For the Period:</strong> <span t-field="o.date_from" t-field-options='{"format": "MMMM d, y"}'/> - <span t-field="o.date_to" t-field-options='{"format": "MMMM d, y"}'/></div>
+							<t t-if="o.atw_ids" name="atw_lines">
+								<table class="table mt32 table-borderless table-condensed table-striped">
+								<thead class="thead-light">
+									<tr>
+										<th>Supplier</th>
+										<th>Customer</th>
+										<th>SO No.</th>
+										<th>ATW No.</th>
+										<th>Withdrawn Date</th>
+										<th class="text-right">Quantity</th>
+										<th class="text-right">Unit Price</th>
+										<th class="text-right">Amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									<t t-set="atws" t-value="o.atw_ids.sorted(key=lambda a: (a.is_delivered, a.packaging, a.vendor_id.id))"/>
+									<t t-set="prev_category" t-value="'dummy'"/>
+									<t t-set="prev_packaging" t-value="'dummy'"/>
+									<t t-set="prev_vendor" t-value="False"/>
+									<t t-set="total_vendor_qty" t-value="0"/>
+									<t t-set="total_packaging_qty" t-value="0"/>
+									<t t-set="total_category_qty" t-value="0"/>
+									<t t-set="total_vendor_amt" t-value="0"/>
+									<t t-set="total_packaging_amt" t-value="0"/>
+									<t t-set="total_category_amt" t-value="0"/>
+									<t t-set="total_grand_qty" t-value="0"/>
+									<t t-set="total_grand_amt" t-value="0"/>
+									<t t-set="atw2"/>
+									<t t-foreach="atws" t-as="atw">
+										<t t-set="atw2" t-value="atw"/>
+										<!-- Add Total for Vendor -->
+										<t t-if="(atw.vendor_id != prev_vendor and prev_vendor != False) or (atw.is_delivered != prev_category and prev_category != 'dummy') or (atw.packaging != prev_packaging and prev_packaging != 'dummy')">
+											<tr>
+												<td class="text-right" colspan="5"><strong><t t-esc="prev_vendor.display_name"/> TOTAL</strong></td>
+												<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_vendor_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+												<td></td>
+												<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_vendor_amt" t-options='{"widget": "monetary", "display_currency": atw.currency_id}'/></strong></td>
+											</tr>
+											<t t-set="total_vendor_qty" t-value="0"/>
+											<t t-set="total_vendor_amt" t-value="0"/>
+										</t>
+
+										<!-- Add Total for Packaging -->
+										<t t-if="(atw.packaging != prev_packaging and prev_packaging != 'dummy') or (atw.is_delivered != prev_category and prev_category != 'dummy')">
+											<tr>
+												<td class="text-right" colspan="5">
+													<strong>
+													<t t-if="prev_packaging == 'bagged'">
+														Bagged
+													</t>
+													<t t-else="">
+														Bulk
+													</t>
+													TOTAL</strong>
+												</td>
+												<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_packaging_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+												<td></td>
+												<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_packaging_amt" t-options='{"widget": "monetary", "display_currency": atw.currency_id}'/></strong></td>
+											</tr>
+											<t t-set="total_packaging_qty" t-value="0"/>
+											<t t-set="total_vendor_qty" t-value="0"/>
+											<t t-set="total_packaging_amt" t-value="0"/>
+											<t t-set="total_vendor_amt" t-value="0"/>
+										</t>
+
+										<!-- Add Total for Category -->
+										<t t-if="atw.is_delivered != prev_category and prev_category != 'dummy'">
+											<tr>
+												<td class="text-right" colspan="5">
+													<strong>
+													<t t-if="prev_category == False">
+														Withdrawn but not Delivered
+													</t>
+													<t t-else="">
+														Withdrawn and Delivered
+													</t>
+													TOTAL</strong>
+												</td>
+												<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_category_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+												<td></td>
+												<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_category_amt" t-options='{"widget": "monetary", "display_currency": atw.currency_id}'/></strong></td>
+											</tr>
+											<t t-set="total_category_qty" t-value="0"/>
+											<t t-set="total_category_amt" t-value="0"/>
+										</t>
+
+										<!-- Add Category Group -->
+										<t t-if="atw.is_delivered != prev_category">
+											<t t-set="prev_category" t-value="'dummy'"/>
+											<t t-set="prev_vendor" t-value="False"/>
+											<t t-set="prev_packaging" t-value="'dummy'"/>
+											<t t-set="total_vendor_qty" t-value="0"/>
+											<t t-set="total_packaging_qty" t-value="0"/>
+											<t t-set="total_category_qty" t-value="0"/>
+											<t t-set="total_vendor_amt" t-value="0"/>
+											<t t-set="total_packaging_amt" t-value="0"/>
+											<t t-set="total_category_amt" t-value="0"/>
+											<tr class="table-primary">
+												<t t-if="atw.is_delivered">
+													<th colspan="8">Withdrawn and Delivered</th>
+												</t>
+												<t t-else="">
+													<th colspan="8">Withdrawn but not Delivered</th>
+												</t>
+											</tr>
+										</t>
+
+										<t t-if="atw.packaging != prev_packaging">
+											<t t-set="prev_vendor" t-value="False"/>
+											<t t-set="prev_packaging" t-value="'dummy'"/>
+											<t t-set="total_vendor_qty" t-value="0"/>
+											<t t-set="total_packaging_qty" t-value="0"/>
+											<t t-set="total_vendor_amt" t-value="0"/>
+											<t t-set="total_packaging_amt" t-value="0"/>
+											<tr class="table-secondary">
+												<th colspan="8"><strong><span t-field="atw.packaging"/></strong></th>
+											</tr>
+										</t>
+
+										<tr>
+											<td>
+												<t t-if="atw.vendor_id != prev_vendor">
+													<t t-esc="atw.vendor_id.display_name"/>
+												</t>
+											</td>
+											<td>
+												<t t-if="atw.sale_id"><t t-esc="atw.sale_id.partner_id.name"/></t>
+												<t t-else=""><t t-esc="atw.delivery_order_id.customer_id.display_name"/></t>
+											</td>
+											<td>
+												<t t-if="atw.sale_id"><t t-esc="atw.sale_id.name"/></t>
+												<t t-else=""><t t-esc="atw.delivery_order_id.sale_id.name"/></t>
+											</td>
+											<td><t t-esc="atw.name"/></td>
+											<td>
+												<t t-if="atw.picking_id">
+													<span t-field="atw.picking_id.date_done"/>
+												</t>
+											</td>
+											<td class="text-right"><span t-field="atw.bags_qty" t-options='{"widget": "float", "precision": 2}'/></td>
+											<td class="text-right"><t t-esc="atw.get_unit_price()" t-options='{"widget": "monetary", "display_currency": atw.currency_id}'/></td>
+											<td class="text-right"><t t-esc="atw.get_total_amount()" t-options='{"widget": "monetary", "display_currency": atw.currency_id}'/></td>
+										</tr>
+										<t t-set="prev_vendor" t-value="atw.vendor_id"/>
+										<t t-set="prev_packaging" t-value="atw.packaging"/>
+										<t t-set="prev_category" t-value="atw.is_delivered"/>
+										<t t-set="total_vendor_qty" t-value="total_vendor_qty + atw.bags_qty"/>
+										<t t-set="total_packaging_qty" t-value="total_packaging_qty + atw.bags_qty"/>
+										<t t-set="total_category_qty" t-value="total_category_qty + atw.bags_qty"/>
+										<t t-set="total_grand_qty" t-value="total_grand_qty + atw.bags_qty"/>
+										<t t-set="total_vendor_amt" t-value="total_vendor_amt + atw.get_total_amount()"/>
+										<t t-set="total_packaging_amt" t-value="total_packaging_amt + atw.get_total_amount()"/>
+										<t t-set="total_category_amt" t-value="total_category_amt + atw.get_total_amount()"/>
+										<t t-set="total_grand_amt" t-value="total_grand_amt + atw.get_total_amount()"/>
+									</t>
+
+									<!-- Add Total for Vendor -->
+									<tr>
+										<td class="text-right" colspan="5"><strong><t t-esc="prev_vendor.display_name"/> TOTAL</strong></td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_vendor_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+										<td></td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_vendor_amt" t-options='{"widget": "monetary", "display_currency": atw2.currency_id}'/></strong></td>
+									</tr>
+
+									<!-- Add Total for Packaging -->
+									<tr>
+										<td class="text-right" colspan="5">
+											<strong>
+											<t t-if="prev_packaging == 'bagged'">
+												Bagged
+											</t>
+											<t t-else="">
+												Bulk
+											</t>
+											TOTAL</strong>
+										</td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_packaging_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+										<td></td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_packaging_amt" t-options='{"widget": "monetary", "display_currency": atw2.currency_id}'/></strong></td>
+									</tr>
+
+									<!-- Add Total for Category -->
+									<tr>
+										<td class="text-right" colspan="5">
+											<strong>
+											<t t-if="prev_category == False">
+												Withdrawn but not Delivered
+											</t>
+											<t t-else="">
+												Withdrawn and Delivered
+											</t>
+											TOTAL</strong>
+										</td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_category_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+										<td></td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_category_amt" t-options='{"widget": "monetary", "display_currency": atw2.currency_id}'/></strong></td>
+									</tr>
+
+									<tr class="table-info">
+										<td class="text-right" colspan="5">
+											<strong>GRAND TOTAL</strong>
+										</td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_grand_qty" t-options='{"widget": "float", "precision": 2}'/></strong></td>
+										<td></td>
+										<td class="text-right" style="border-top: 1px solid black; border-bottom: 1px solid black"><strong><t t-esc="total_grand_amt" t-options='{"widget": "monetary", "display_currency": atw2.currency_id}'/></strong></td>
+									</tr>
+
+								</tbody>
+							</table>
+							</t>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

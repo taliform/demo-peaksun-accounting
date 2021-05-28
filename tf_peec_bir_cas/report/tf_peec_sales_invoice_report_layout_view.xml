@@ -1,0 +1,153 @@
+<odoo>
+	<data>
+		<template id="report_sales_invoice">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<div class="page">
+							<h1 class="text-right" style="margin-top: 32px; color: #0C0FBD;" t-field="o.name"/>
+							<h3 class="text-center text-secondary text-uppercase font-weight-bold" style="margin-top: 32px; ">Sales Invoice</h3>
+							<table class="table mt32 mb32 table-borderless" style="line-height: .3rem;">
+								<tbody>
+									<tr>
+										<td>Customer: <span t-field="o.partner_id"/></td>
+										<td class="text-right" style="width: 20%">Date: <span t-field="o.date" t-field-options='{"format": "MMMM d, y"}'/></td>
+									</tr>
+									<tr>
+										<td>Tin: <span t-field="o.partner_id.vat"/></td>
+										<td class="text-right" style="width: 20%">Terms: <span t-field="o.invoice_payment_term_id"/></td>
+									</tr>
+									<tr>
+										<td>Address: <span t-field="o.partner_id.street"/> <span t-field="o.partner_id.city"/></td>
+									</tr>
+									<tr>
+										<td>Business Style: <span t-field="o.business_style"/></td>
+									</tr>
+								</tbody>
+							</table>
+							<t t-if="o.invoice_line_ids" name="invoice_lines">
+								<div>
+									<table class="table">
+										<thead class="">
+											<tr>
+												<th class="align-middle text-uppercase">DR NO</th>
+												<th class="align-middle text-uppercase">DR DATE</th>
+												<th class="align-middle text-uppercase">Description</th>
+												<th class="align-middle text-uppercase">Quantity</th>
+												<th class="align-middle text-uppercase">UOM</th>
+												<th class="align-middle text-uppercase">Unit Price</th>
+												<th class="align-middle text-uppercase">Amount</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr t-foreach="o.invoice_line_ids" t-as="line_id">
+												<td><span t-field="line_id.move_id.stock_move_id.picking_id.name"/></td>
+												<td><span t-field="line_id.move_id.stock_move_id.picking_id.date_done"/></td>
+												<td><span t-field="line_id.product_id.display_name"/></td>
+												<td><span t-field="line_id.quantity"/></td>
+												<td><span t-field="line_id.product_id.uom_id"/></td>
+												<td><span t-field="line_id.price_unit"/></td>
+												<td><span t-field="line_id.price_total"/></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</t>
+							<br/>
+							<div class="row border-top border-dark">
+								<div class="col-6 ">
+									<p class="font-weight-bold text text-uppercase">Terms and Conditions: </p>
+									<p t-field="o.invoice_terms_conditions" />
+								</div>
+								<div class="col-6 pt-2 pb-1">
+									<span t-field="o.amount_untaxed" />
+									<table class="table table-borderless" style="line-height: .3rem;">
+										<tr>
+											<td>Gross Amount</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+										</tr>
+										<tr>
+											<td>Less: Discount</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.total_discount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> </td>
+										</tr>
+										<tr>
+											<td>VAT Sale</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.vatable" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> </td>
+										</tr>
+										<tr>
+											<td>VAT Exempt Sale</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.exempt" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/> </td>
+										</tr>
+										<tr>
+											<td>Zero-Rated Sale</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.zero" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+										</tr>
+										<tr>
+											<td>Vat Amount</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+										</tr>
+										<tr>
+											<td class="font-weight-bold">Total Amount to be Paid</td>
+											<td>:</td>
+											<td class="text-right"><span t-field="o.amount_residual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="row border-top border-dark">
+								<div class="col-12">
+									<p class="font-italic">Received the above articles in good order and condition.</p>
+								</div>
+							</div>
+							<div class="row pt-3">
+								<div class="col-12">
+									<span class="font-italic">By:</span>
+								</div>
+							</div>
+							<div class="row px-4">
+								<div class="col-4">
+									<div class="border-bottom border-dark pb-3 px-2">
+										<p class="text-center text-uppercase"><small>Printed Name</small></p>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="border-bottom border-dark pb-3 px-2">
+										<p class="text-center text-uppercase"><small>Signature</small></p>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="border-bottom border-dark pb-3 px-2">
+										<p class="text-center text-uppercase"><small>Date</small></p>
+									</div>
+								</div>
+							</div>
+							<div class="row pt-4">
+								<div class="col-12">
+									<p class="text-center text-uppercase font-weight-bold">
+										*THIS INVOICE SHALL BE VALID FOR FIVE (5) YEARS FROM THE DATE OF PERMIT TO USE*
+									</p>
+								</div>
+							</div>
+							<div class="row py-3">
+								<div class="col-8">
+									<p class="text-left text-uppercase">Permit To Use No: <span t-field="o.permit_to_use_no"/> </p>
+									<p class="text-left text-uppercase">Date Issued: <span t-field="o.date_issued"/> </p>
+									<p class="text-left text-uppercase">Valid Until: <span t-field="o.date_valid"/> </p>
+								</div>
+								<div class="col-4">
+									<p class="text-left text-uppercase">Range of Series: <span t-field="o.range_series_si"/> </p>
+								</div>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

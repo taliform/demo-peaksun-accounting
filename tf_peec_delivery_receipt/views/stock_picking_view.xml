@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_picking_form_inherit_delivery_receipt" model="ir.ui.view">
+			<field name="name">stock.picking.form.inherit.delivery.receipt</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group[@name='other_infos']" position="after">
+					<group string="Delivery Receipt" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}">
+						<field name="delivery_receipt" readonly="1"/>
+						<field name="hash_code" readonly="1"/>
+					</group>
+				</xpath>
+				<xpath expr="//page[@name='extra']" position="after">
+					<page string="BIR CAS" name="bir">
+						<group>
+							<group>
+								<field name="range_series"/>
+								<field name="footnote"/>
+							</group>
+							<group>
+								<field name="business_style" />
+								<field name="permit_to_use_no" />
+								<field name="date_issued" />
+								<field name="date_valid" />
+							</group>
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

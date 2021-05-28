@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Invoice Tree view Inherit-->
+    <record id="peec_partner_form_view_inherit_payment_collect_avg" model="ir.ui.view">
+        <field name="name">peec.partner.form.view.inherit.payment.collect.avg</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale']" position="inside">
+                <label for="avg_collection_days"/>
+                <div>
+                    <field name="avg_collection_days" attrs="{'invisible': ('customer_rank','&lt;=', 0)}" class="oe_inline"/>
+                    day(s)
+                </div>
+                <label for="avg_overdue_days"/>
+                <div>
+                    <field name="avg_overdue_days" attrs="{'invisible': ('customer_rank','&lt;=', 0)}" class="oe_inline"/>
+                    day(s)
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

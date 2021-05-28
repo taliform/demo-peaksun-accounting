@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+			id="peec_custom_report_billing_statement"
+			string="Billing Statement"
+			model="account.move"
+			report_type="qweb-pdf"
+			name="tf_peec_bir_cas.report_billing_statement"
+			file="tf_peec_bir_cas.report_billing_statement"
+			attachment="(object.state == 'posted') and ((object.name or 'BS').replace('/','_')+'.pdf')"
+		/>
+
+        <record id="peec_custom_report_billing_statement" model="ir.actions.report">
+            <field name="print_report_name">object.name</field>
+		</record>
+    </data>
+</odoo>

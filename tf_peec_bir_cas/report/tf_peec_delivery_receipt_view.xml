@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+			id="peec_custom_delivery_receipt"
+			string="Delivery Receipt"
+			model="stock.picking"
+			report_type="qweb-pdf"
+			name="tf_peec_bir_cas.delivery_receipt"
+			file="tf_peec_bir_cas.delivery_receipt"
+		/>
+
+        <record id="peec_custom_delivery_receipt" model="ir.actions.report">
+            <field name="print_report_name">object.name</field>
+		</record>
+    </data>
+</odoo>

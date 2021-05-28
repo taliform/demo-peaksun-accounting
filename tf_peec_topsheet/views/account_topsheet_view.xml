@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Peec Topsheet Form View -->
+    <record id="peec_topsheet_form_view" model="ir.ui.view">
+        <field name="name">peec.topsheet.form.view</field>
+        <field name="model">account.topsheet</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" states="draft" />
+                    <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,validate"/>
+                </header>
+                <sheet>
+
+                    <div class="oe_title">
+                        <label for="name" string="Topsheet"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="customer_id" widget="res_partner_many2one" required="1" class="oe_inline" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="invoice_address" string='Delivery Address' attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="sales_order_no" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="customer_po_ref" required="1" widget="timepicker" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+
+                        <group>
+                            <field name="topsheet_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="attention"/>
+                            <field name="thru"/>
+                            <field name="subject"/>
+                            <field name="delivery_order_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="invoice_ids" string="Invoices"
+                              attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <field name="invoice_ids" nolabel="1"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
+                        </page>
+                        <page name="delivery_ids" string="Deliveries"
+                              attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <field name="delivery_ids" nolabel="1"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Peec Topsheet Tree View -->
+    <record id="peec_topsheet_tree_view" model="ir.ui.view">
+        <field name="name">peec.topsheet.monitoring.tree.view</field>
+        <field name="model">account.topsheet</field>
+        <field name="arch" type="xml">
+            <tree string="Topsheet">
+                <field name="for_monitoring"/>
+                <field name="name" string="Number"/>
+                <field name="topsheet_date"/>
+                <field name="customer_id"/>
+                <field name="customer_po_ref"/>
+                <field name="invoice_ids" string="Reference"/>
+                <field name="topsheet_total"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--  Peec Topsheet Actions  -->
+    <record id="action_topsheet" model="ir.actions.act_window">
+        <field name="name">Topsheet</field>
+        <field name="res_model">account.topsheet</field>
+        <field name="context"></field>
+        <field name="domain"></field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <!-- Peec  Topsheet Menu -->
+    <menuitem id="topsheet" name="Topsheet"  parent="account.menu_finance_receivables" action="action_topsheet" sequence="5"/>
+</odoo>

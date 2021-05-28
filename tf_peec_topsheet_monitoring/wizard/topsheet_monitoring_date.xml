@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="topsheet_monitoring_move_stage_view_form" model="ir.ui.view">
+            <field name="name">topsheet.monitoring.move.stage.view.form</field>
+            <field name="model">topsheet.monitoring.move.stage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="remarks" required="1"/>
+                        </group>
+                        <group>
+                            <field name="movement_date" required="1"/>
+                        </group>
+                        <field name="topsheet_id" invisible="1"/>
+                        <field name="to_stage" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_move" string="Move Stage" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

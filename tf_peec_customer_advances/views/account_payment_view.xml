@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- Account Payment -->
+	    <record id="peec_customer_advances_payment_form" model="ir.ui.view">
+            <field name="name">peec.customer.advances.payment.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='crdr_allocation']" position="replace">
+	                <group name="crdr_allocation" string="Credit Notes / Customer Advances" attrs="{'invisible':['|','|',('payment_method_type','!=','adjustment'),('payment_type','==','transfer'),('partner_id','=',False)]}">
+						<field name="payment_crdr_inv_line_ids" nolabel="1" context="{'partner_id':partner_id,'payment_type':payment_type}" domain="[('state','=','open'),('partner_id','=',partner_id)]" attrs="{'readonly': [('state','!=','draft')]}" />
+	                </group>
+                </xpath>
+            </field>
+        </record>
+
+		<record id="account_customer_advance_payment_crdr_line_tree" model="ir.ui.view">
+			<field name="name">account.customer.advance.payment.crdr.line.tree</field>
+			<field name="model">account.payment.crdr.invoice.line</field>
+			<field name="arch" type="xml">
+				<tree decoration-info="sub_type=='note'" decoration-danger="sub_type=='advance'" editable="bottom" >
+					<field name="invoice_ids_ref" invisible="1"/>
+					<field name="invoice_id" domain="[('id', 'in', invoice_ids_ref)]" required="1" options="{'no_create_edit': True}"/>
+					<field name="reference" string="Payment Ref" readonly="1"/>
+					<field name="sub_type" />
+					<field name="account_id" invisible="1"/>
+					<field name="invoice_date" readonly="1"/>
+					<field name="due_date" readonly="1"/>
+					<field name="currency_id" readonly="1"/>
+					<field name="original_amount" readonly="1"/>
+					<field name="balance_amount" readonly="1"/>
+					<field name="full_reconcile"/>
+					<field name="allocation" sum="Total Amount"/>
+				</tree>
+			</field>
+		</record>
+
+
+	</data>
+</odoo>

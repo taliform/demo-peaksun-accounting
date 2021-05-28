@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+			id="peec_custom_report_sales_invoice"
+			string="VAT Sales Invoice"
+			model="account.move"
+			report_type="qweb-pdf"
+			name="tf_peec_sales_invoice.report_sales_invoice"
+			file="tf_peec_sales_invoice.report_sales_invoice"
+		/>
+
+        <record id="peec_custom_report_sales_invoice" model="ir.actions.report">
+            <field name="print_report_name">object.name</field>
+		</record>
+    </data>
+</odoo>

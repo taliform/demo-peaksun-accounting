@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+
+		<record id="peec_topsheet_invoice_form_view" model="ir.ui.view">
+			<field name="name">peec.topsheet.invoice.form.view</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form"/>
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='invoice_partner_bank_id']" position="after">
+					<field name="for_monitoring" attrs="{'invisible': [('type', 'in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+				</xpath>
+
+			</field>
+		</record>
+
+	</data>
+
+
+</odoo>

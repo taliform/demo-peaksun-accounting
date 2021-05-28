@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="peec_tax_form_view_inherit" model="ir.ui.view">
+			<field name="name">peec.tax.form.view.inherit</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='purchase_tax_ids']" position="after">
+					<field name="withholding_tax_ids" widget="many2many_tags" string="Withholding Tax"/>
+				</xpath>
+			</field>
+		</record>
+
+    </data>
+</odoo>
+
+

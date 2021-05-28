@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_analysis_overdue_account" model="ir.cron">
+            <field name="name">Account Analysis of Overdue Accounts</field>
+            <field name="model_id" ref="model_account_overdue_receivables"/>
+            <field name="state">code</field>
+            <field name="code">model.action_analyze_overdue_accounts()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True" />
+        </record>
+    </data>
+</odoo>

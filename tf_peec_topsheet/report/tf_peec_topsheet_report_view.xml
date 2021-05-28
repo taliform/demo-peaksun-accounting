@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+			id="peec_custom_report_topsheet_summary"
+			string="Top Sheet Summary"
+			model="account.topsheet"
+			report_type="qweb-pdf"
+			name="tf_peec_topsheet.report_topsheet_summary"
+			file="tf_peec_topsheet.report_topsheet_summary"
+			print_report_name="Topsheet Summary"
+		/>
+		<report
+			id="peec_custom_report_topsheet_details1"
+			string="Top Sheet Details 1"
+			model="account.topsheet"
+			report_type="qweb-pdf"
+			name="tf_peec_topsheet.report_topsheet_details1"
+			file="tf_peec_topsheet.report_topsheet_details1"
+			print_report_name="Topsheet Details 1"
+		/>
+		<report
+			id="peec_custom_report_topsheet_details2"
+			string="Top Sheet Details 2"
+			model="account.topsheet"
+			report_type="qweb-pdf"
+			name="tf_peec_topsheet.report_topsheet_details2"
+			file="tf_peec_topsheet.report_topsheet_details2"
+			print_report_name="Topsheet Details 2"
+		/>
+
+		<record id="peec_custom_report_topsheet_summary" model="ir.actions.report">
+            <field name="print_report_name">object.name</field>
+		</record>
+		<record id="peec_custom_report_topsheet_details1" model="ir.actions.report">
+            <field name="print_report_name">object.name</field>
+		</record>
+		<record id="peec_custom_report_topsheet_details2" model="ir.actions.report">
+            <field name="print_report_name">object.name</field>
+		</record>
+    </data>
+</odoo>

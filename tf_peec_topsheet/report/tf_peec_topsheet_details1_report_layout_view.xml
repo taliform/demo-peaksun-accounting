@@ -1,0 +1,111 @@
+<odoo>
+	<data>
+		<template id="report_topsheet_details1">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<div class="page">
+							<h1 class="text-right" style="margin-top: 32px; color: #0C0FBD;" t-field="o.name"/>
+							<h3 class="text-center text-secondary text-uppercase font-weight-bold" style="margin-top: 32px; ">Topsheet Details 1</h3>
+							<table class="table mt32 mb32 table-borderless" style="line-height: .3rem;">
+								<tbody>
+									<tr>
+										<td>
+											<strong><span t-field="o.customer_id"/></strong>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<span t-field="o.customer_id.street"/> <span t-field="o.customer_id.city"/> <span t-field="o.customer_id.country_id"/>
+										</td>
+									</tr>
+									<tr>
+										<td>ATTENTION: <span t-field="o.attention"/></td>
+									</tr>
+									<tr>
+										<td>THRU: <span t-field="o.thru"/> </td>
+									</tr>
+									<tr>
+										<td>SUBJECT: <span t-field="o.subject"/></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row pt-4 pb-4">
+								<div class="col-12">
+									<p class="text-left">
+										Dear Sir / Madame:
+									</p>
+									<p class="text-left">
+										Presented below are DR's representing our cement deliveries to you
+									</p>
+								</div>
+							</div>
+							<t t-set="total_qty" t-value="0"/>
+							<t t-if="o.invoice_ids" name="invoice_lines">
+								<div>
+									<table class="table">
+										<thead class="">
+											<tr>
+												<th class="align-middle text-uppercase">DR Date</th>
+												<th class="align-middle text-uppercase">Delivery Site</th>
+												<th class="align-middle text-uppercase">DR No</th>
+												<th class="align-middle text-uppercase">Quantity</th>
+												<th class="align-middle text-uppercase">Invoice No</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr t-foreach="o.invoice_ids" t-as="invoice">
+												<td><span t-field="o.delivery_order_id.scheduled_date"/></td>
+												<td><span t-field="o.delivery_order_id.partner_id.contact_address"/></td>
+												<td><span t-field="o.delivery_order_id.name"/></td>
+												<td><span t-esc="sum(invoice.invoice_line_ids.mapped('quantity'))"/></td>
+												<td><span t-field="invoice.display_name"/></td>
+												<t t-set="total_qty" t-value="total_qty + sum(invoice.invoice_line_ids.mapped('quantity'))"/>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="3"> <strong>Total Deliveries >>></strong></td>
+												<td><strong t-esc="total_qty"/></td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</t>
+							<br/>
+							<div class="row pt-4 pb-4">
+								<div class="col-12">
+									<p class="text-left">
+										Thank you and more power.
+									</p>
+								</div>
+							</div>
+							<div class="row pt-4 pb-4">
+								<div class="col-6">
+									<p class="text-left font-weight-bold">
+										Noted by:
+									</p>
+									<br />
+									<hr/>
+									<p class="text-left">
+										Billing, Credit &amp; Collection
+									</p>
+								</div>
+								<div class="col-6">
+									<p class="text-left font-weight-bold">
+										Received by:
+									</p>
+									<br />
+									<hr/>
+									<p class="text-left">
+										Signature over Printed Name
+									</p>
+								</div>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

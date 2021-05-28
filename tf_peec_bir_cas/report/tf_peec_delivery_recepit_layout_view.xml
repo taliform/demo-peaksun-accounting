@@ -1,0 +1,99 @@
+<odoo>
+	<data>
+		<template id="delivery_receipt">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<div class="page">
+							<h1 class="text-right" style="margin-top: 32px; color: #0C0FBD;" t-field="o.name"/>
+							<h3 class="text-center text-secondary text-uppercase font-weight-bold" style="margin-top: 32px; ">Delivery Receipt</h3>
+							<table class="table mt32 mb32 table-borderless" style="line-height: .3rem;">
+								<tbody>
+									<tr>
+										<td><strong>Customer</strong>: <span t-field="o.partner_id"/></td>
+										<td class="text-right" style="width: 30%"><strong>Date</strong>: <span t-field="o.date" t-field-options='{"format": "MMMM d, y"}'/></td>
+									</tr>
+									<tr>
+										<td><strong>TIN</strong>: <span t-field="o.partner_id.vat"/></td>
+									</tr>
+									<tr>
+										<td><strong>Address</strong>: <span t-field="o.partner_id.street"/> <span t-field="o.partner_id.city"/></td>
+									</tr>
+									<tr>
+										<td><strong>Business Style</strong>:
+										<t t-if="o.partner_id.business_id">
+											<span t-field="o.partner_id.business_id.name"/>
+										</t>
+										<t t-else="">
+											<span t-field="o.business_style"/>
+										</t>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-12">
+									<table class="table">
+										<thead class="">
+											<tr>
+												<th class="align-middle text-uppercase">Order</th>
+												<th class="align-middle text-uppercase">Date</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><span t-field="o.sale_id"/></td>
+												<td><span t-field="o.sale_id.date_order"/></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<t t-if="o.move_ids_without_package" name="line">
+								<div class="row">
+									<div class="col-12">
+										<table class="table">
+											<thead class="">
+												<tr>
+													<th class="align-middle text-uppercase">Product</th>
+													<th class="align-middle text-uppercase">Quantity</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr t-foreach="o.move_ids_without_package" t-as="line_id">
+													<td><span t-field="line_id.product_id"/></td>
+													<td><span t-field="line_id.quantity_done"/></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</t>
+							<br/>
+							<div class="row pt-4">
+								<div class="col-12">
+									<p class="text-center text-uppercase font-weight-bold">
+										"THIS DOCUMENT IS NOT VALID FOR CLAIMING INPUT TAX"
+									</p>
+									<p class="text-center text-uppercase font-weight-bold">
+										"THIS DOCUMENT SHALL BE VALID FOR FIVE (5) YEARS FROM THE DATE OF PERMIT TO USE"
+									</p>
+								</div>
+							</div>
+							<div class="row py-3">
+								<div class="col-8">
+									<p class="text-left text-uppercase"><strong>Permit To Use No</strong>: <span t-field="o.permit_to_use_no"/> </p>
+									<p class="text-left text-uppercase"><strong>Date Issued</strong>: <span t-field="o.date_issued"/> </p>
+									<p class="text-left text-uppercase"><strong>Valid Until</strong>: <span t-field="o.date_valid"/> </p>
+								</div>
+								<div class="col-4">
+									<p class="text-left text-uppercase"><strong>Range of Series</strong>: <span t-field="o.range_series_dr"/> </p>
+								</div>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

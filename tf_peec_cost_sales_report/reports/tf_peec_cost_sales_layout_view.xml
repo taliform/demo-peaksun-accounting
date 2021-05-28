@@ -1,0 +1,73 @@
+<odoo>
+	<data>
+		<template id="report_cost_sales">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<div class="page">
+							<div class="text-left"><strong>For the Period:</strong> <span t-field="o.date_from" t-field-options='{"format": "MMMM DD, YY"}'/> - <span t-field="o.date_to" t-field-options='{"format": "MMMM DD,YY"}'/></div>
+							<t t-set="invoice_unit_price" t-value="0"/>
+							<t t-set="margin_unit_price" t-value="0"/>
+							<t t-set="margin_total" t-value="0"/>
+							<t t-set="amount_of_sales" t-value="0"/>
+							<t t-set="po_total_unit_cost" t-value="0"/>
+							<t t-set="cost_of_sales" t-value="0"/>
+							<t t-if="o.atw_ids" name="lines">
+								<table class="table mt32 table-borderless table-condensed table-striped">
+									<tr t-foreach="o.atw_ids" t-as="line">
+										<!--Purchase Order-->
+										<td><span t-field="line.purchase_id.name"/></td>
+										<td><span t-field="line.purchase_id.product_id.name"/></td>
+										<td><span t-field="line.name"/></td>
+										<td><span t-field="line.quantity"/></td>
+										<td><span t-field="line.bags_qty"/></td>
+										<td><span t-field="line.picking_id.scheduled_date"/></td>
+										<td><span t-field="line.delivery_order_id.name"/></td>
+										<td><span t-field="line.delivery_order_id.schedule_date"/></td>
+										<td><span t-field="line.picking_id.partner_id.contact_address"/></td>
+										<td><span t-esc="sum(line.delivery_order_id.trip_ids.mapped('distance_travelled'))"/></td>
+										<td><span t-esc="sum(line.purchase_id.order_line.mapped('price_unit'))"/></td>
+										<t t-set="po_total_unit_cost" t-value="po_total_unit_cost + sum(line.purchase_id.order_line.mapped('price_unit'))"/>
+										<t t-set="cost_of_sales" t-value="cost_of_sales + (po_total_unit_cost * line.bags_qty)"/>
+
+										<!--Sale Order-->
+										<t t-if="line.sale_id.invoice_count == 1">
+											<td><span t-field="line.sale_id.name"/></td>
+											<td><span t-field="line.sale_id.partner_id.name"/></td>
+											<td><span t-field="line.sale_id.invoice_ids.name"/></td>
+											<td><span t-field="line.sale_id.invoice_count"/></td>
+											<td><span t-field="line.sale_id.invoice_ids.invoice_date"/></td>
+											<t t-set="invoice_unit_price" t-value="sum(line.sale_id.invoice_ids.invoice_line_ids.mapped('price_unit'))"/>
+											<td><span t-esc="invoice_unit_price"/></td>
+											<t t-set="amount_of_sales" t-value="amount_of_sales + (invoice_unit_price * line.sale_id.invoice_count)"/>
+										</t>
+										<t t-else="">
+											<tr t-foreach="line.sale_id.invoice_ids" t-as="invoice">
+												<td colspan="11"></td>
+												<td><span t-field="line.sale_id.name"/></td>
+												<td><span t-field="line.sale_id.partner_id.name"/></td>
+												<td><span t-field="invoice.name"/></td>
+												<td><span t-field="line.sale_id.invoice_count"/></td>
+												<td><span t-field="invoice.invoice_date"/></td>
+												<t t-set="invoice_unit_price" t-value="sum(invoice.invoice_line_ids.mapped('price_unit'))"/>
+												<td><span t-esc="invoice_unit_price"/></td>
+												<t t-set="amount_of_sales" t-value="amount_of_sales + (invoice_unit_price * line.sale_id.invoice_count)"/>
+											</tr>
+										</t>
+									</tr>
+									<tr>
+										<td colspan="2" class="font-weight-bold">Cost of Sales: <span t-esc="cost_of_sales"/></td>
+										<td colspan="2" class="font-weight-bold">Amount of Sales: <span t-esc="amount_of_sales"/></td>
+										<td colspan="2" class="font-weight-bold">Margin(Unit Price): <span t-esc="invoice_unit_price - po_total_unit_cost"/></td>
+										<td colspan="2" class="font-weight-bold">Margin(Total): <span t-esc="amount_of_sales - cost_of_sales"/></td>
+									</tr>
+								</table>
+							</t>
+
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

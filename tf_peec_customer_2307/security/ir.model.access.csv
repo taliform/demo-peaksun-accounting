@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bir_creditable_tax_withheld_reconcile_user,access.bir.creditable.tax.withheld.reconcile.user,model_bir_creditable_tax_withheld_reconcile,account.group_account_user,1,1,1,1
+access_bir_creditable_tax_withheld_reconcile_submitted_user,access.bir.creditable.tax.withheld.reconcile.submitted.user,model_bir_creditable_tax_withheld_reconcile_submitted,account.group_account_user,1,1,1,1

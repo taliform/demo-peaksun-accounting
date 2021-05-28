@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access,credit_line_management_account_manager,model_account_overdue_receivables,account.group_account_manager,1,1,1,1
+access,credit_line_management_account_invoice,model_account_overdue_receivables,account.group_account_invoice,1,1,1,1
+access,credit_line_management_account_user,model_account_overdue_receivables,account.group_account_user,1,1,1,1
+
+

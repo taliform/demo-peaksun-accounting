@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+
+		<record id="tf_supplier_advances_purchase_form_view" model="ir.ui.view">
+			<field name="name">tf.supplier.advances.purchase.form.view</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_view_invoice'][1]" position="replace">
+					<button name="action_view_invoice" string="Create Bill" type="object" class="oe_highlight" context="{'create_bill':True}" invisible="1"/>
+					<button name="%(tf_peec_supplier_advances.tf_action_view_purchase_advance_payment_bill)d" string="Create Bill"
+                        class="oe_highlight" type="action" context="{'default_advance_payment_method': 'delivered'}"
+                        attrs="{'invisible': ['|', ('state', 'not in', ('purchase', 'done')), ('invoice_status', 'in', ('no', 'invoiced'))]}"/>
+				</xpath>
+
+				<xpath expr="//button[@name='action_view_invoice'][2]" position="replace">
+					<button name="action_view_invoice" string="Create Bill" type="object" context="{'create_bill':True}" invisible="1"/>
+					<button name="%(tf_peec_supplier_advances.tf_action_view_purchase_advance_payment_bill)d" string="Create Bill"
+                        type="action" context="{'default_advance_payment_method': 'percentage'}"
+                        attrs="{'invisible': ['|', '|', ('state', 'not in', ('purchase', 'done')), ('invoice_status', 'not in', ('no', 'invoiced')), ('order_line', '=', [])]}"/>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

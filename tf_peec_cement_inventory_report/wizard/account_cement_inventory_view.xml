@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="peec_account_cement_inventory" model="ir.ui.view">
+        <field name="name">peec.account.cement.inventory.wizard</field>
+        <field name="model">account.cement.inventory</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <string> General information </string>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_from" required="1" />
+                            <field name="atw_status" />
+                        </group>
+
+                        <group>
+                            <field name="date_to" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print_cement_inventory" string="Generate" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_generate_cement_inventory" model="ir.actions.act_window">
+        <field name="name">Cement Inventory</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.cement.inventory</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="peec_account_cement_inventory"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Peec  Cost of Sales Menu -->
+    <menuitem id="cement_inventory" name="Cement Inventory"  parent="account.account_reports_management_menu" action="action_generate_cement_inventory" sequence="6"/>
+
+
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="peec_sales_invoice_company_form_view_inherit" model="ir.ui.view">
+			<field name="name">peec.sales.invoice.company.form.view.inherit</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page[last()]" position="after">
+					<page string="BIR CAS">
+						<group>
+							<group>
+								<field name="range_series_dr"/>
+								<field name="range_series_bs"/>
+								<field name="range_series_si"/>
+								<field name="footnote"/>
+							</group>
+							<group>
+								<field name="business_style" />
+								<field name="permit_to_use_no" />
+								<field name="date_issued" />
+								<field name="date_valid" />
+							</group>
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="tf_peec_credit_line_management" model="ir.ui.view">
+            <field name="name">tf.peec.credit.line.management</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='account']">
+					<h2>Bank Loan</h2>
+                    <div class="row mt16 o_settings_container">
+                    	<div class="col-12 col-lg-6 o_setting_box" id="principal_account">
+                            <div class="o_setting_right_pane">
+                                <label for="principal_account_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="principal_account_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="penalty_account">
+                            <div class="o_setting_right_pane">
+                                <label for="penalty_account_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="penalty_account_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="interest_account">
+                            <div class="o_setting_right_pane">
+                            	<label for="interest_account_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="interest_account_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="other_expense_account">
+                            <div class="o_setting_right_pane">
+                                <label for="other_expense_account_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="other_expense_account_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="collection_journal">
+                            <div class="o_setting_right_pane">
+                            	<label for="collection_journal_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="collection_journal_id" nolabel="1" domain="[('type','=','sale'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="loan_journal">
+                            <div class="o_setting_right_pane">
+                            	<label for="loan_journal_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="loan_journal_id" nolabel="1" domain="[('type','=','purchase'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="prepaid_expense_account">
+                            <div class="o_setting_right_pane">
+                            	<label for="prepaid_expense_account_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="prepaid_expense_account_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="accrued_expense_account">
+                            <div class="o_setting_right_pane">
+                            	<label for="accrued_expense_account_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="accrued_expense_account_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="adjusting_journal">
+                            <div class="o_setting_right_pane">
+                            	<label for="adjusting_journal_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="adjusting_journal_id" nolabel="1" domain="[('type','=','general'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="withholding_tax">
+                            <div class="o_setting_right_pane">
+                            	<label for="withholding_tax_id"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="withholding_tax_id" nolabel="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

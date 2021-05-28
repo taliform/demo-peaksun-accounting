@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access,topsheet_stage_user,model_account_topsheet_stages,,1,1,1,1
+access_topsheet_stage,topsheet_stage_move_user,model_topsheet_monitoring_move_stage,account.group_account_user,1,1,1,1
+

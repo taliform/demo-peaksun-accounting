@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+
+		<record id="tf_supplier_advances_config_settings" model="ir.ui.view">
+			<field name="name">view.supplier.advances.configuration</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="purchase.res_config_settings_view_form_purchase"/>
+			<field name="arch" type="xml">
+				<xpath expr="//div[@data-key='purchase']/div[2]" position="inside">
+					<div class="col-12 col-lg-6 o_setting_box">
+						<div class="o_setting_left_pane"/>
+						<div class="o_setting_right_pane">
+							<span class="o_form_label">Down Payments</span>
+							<div class="text-muted">
+								Product used for down payments
+							</div>
+							<div class="text-muted">
+								<field name="purchase_deposit_product_id"/>
+							</div>
+						</div>
+					</div>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

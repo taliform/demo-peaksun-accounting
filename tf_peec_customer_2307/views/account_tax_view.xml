@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_tax_form_inherit_reconcile_2307" model="ir.ui.view">
+			<field name="name">account.tax.form.inherit.reconcile.2307</field>
+			<field name="model">account.tax</field>
+			<field name="inherit_id" ref="account.view_tax_form"/>
+			<field name="arch" type="xml">
+                 <xpath expr="//page[last()]/group[1]/group[2]" position="inside">
+                      <field name="withholding_tax_account_id"
+                             attrs="{'invisible':['|', ('for_withholding','=', False), ('type_tax_use','!=', 'sale')]}"/>
+                      <field name="tax_due_2307"
+                             attrs="{'invisible':['|', ('for_withholding','=', False), ('type_tax_use','!=', 'sale')]}" widget="radio"/>
+                 </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

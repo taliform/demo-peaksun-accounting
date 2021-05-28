@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Invoice Tree view Inherit-->
+    <record id="peec_invoice_tree_view_inherit_payment_collect_avg" model="ir.ui.view">
+        <field name="name">peec.invoice.tree.view.inherit.payment.collect.avg</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_date_due']" position="after">
+                <field name="counter_date" optional="show"/>
+                <field name="collection_days" optional="show" sum="Total" invisible="context.get('default_type') not in ('out_invoice', 'out_refund','out_receipt')"/>
+                <field name="overdue_days" optional="show" sum="Total" invisible="context.get('default_type') not in ('out_invoice', 'out_refund','out_receipt')"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Invoice Form View Inherit-->
+    <record id="peec_invoice_form_view_inherit_payment_collect_avg" model="ir.ui.view">
+        <field name="name">peec.invoice.form.view.inherit.payment.collect.avg</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_date']" position="after">
+                <field name="counter_date" options="{'datepicker': {'warn_future': true}}"
+                       attrs="{'invisible':[('type','in',('in_invoice','in_refund','in_receipt'))],'readonly':[('invoice_payment_state','=','paid')]}"/>
+            </xpath>
+            <xpath expr="//group[@name='payments_info_group']" position="inside">
+                <field name="collection_days" invisible="context.get('default_type') not in ('out_invoice', 'out_refund','out_receipt')"/>
+                <field name="overdue_days" invisible="context.get('default_type') not in ('out_invoice', 'out_refund','out_receipt')"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Invoice Search View Inherit-->
+    <record id="peec_invoice_search_view_inherit_payment_collect_avg" model="ir.ui.view">
+        <field name="name">peec.invoice.search.view.inherit.payment.collect.avg</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='salesperson']" position="after">
+                <filter string="City" name="city" context="{'group_by':'city'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

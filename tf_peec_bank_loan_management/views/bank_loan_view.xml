@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+		<!--Tree View -->
+		<record id="tf_peec_bank_loan_management_tree_view" model="ir.ui.view">
+			<field name="name">tf.peec.bank.loan.management.tree.view</field>
+			<field name="model">bank.loan</field>
+			<field name="priority" eval="10"/>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="bank_name_id"/>
+					<field name="loan_reference_id"/>
+					<field name="promissory_note" />
+					<field name="total_loan_amount"/>
+					<field name="date_granted" />
+					<field name="maturity_date" />
+					<field name="outstanding_balance"/>
+					<field name="total_interest_paid"/>
+					<field name="next_due_date"/>
+					<field name="next_principal_payment"/>
+					<field name="next_interest_due"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Form View -->
+		<record id="tf_peec_bank_loan_management_form_view" model="ir.ui.view">
+			<field name="name">tf.peec.bank.loan.management.form.view</field>
+			<field name="model">bank.loan</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="action_confirm" class="oe_highlight" string="Confirm" type="object" states="draft"  />
+						<button name="cancel" class="oe_highlight" string="Cancel" type="object" states="ongoing" />
+						<button name="action_recompute" string="Recompute" type="object" states="ongoing"/>
+						<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,ongoing,closed"/>
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+									attrs="{'invisible': [('invoice_count', '=', 0)]}">
+								<field name="invoice_count" widget="statinfo" string="Invoices"/>
+							</button>
+						</div>
+						<group>
+							<group>
+								<field name="is_recompute" invisible="1"/>
+								<field name="loan_status" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="loan_type" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="bank_name_id" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="promissory_note" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="total_loan_amount" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="date_granted" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="maturity_date" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="interest_payment" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="loan_computation" attrs="{'readonly': [('state', '=', 'ongoing')]}"/>
+								<field name="period_principal_amount" attrs="{'readonly': ['&amp;', '&amp;', ('loan_computation','=','diminishing'),
+									   ('state', '=', 'ongoing'), ('is_recompute', '=', False)]}"/>
+								<field name="payment_schedule"
+									   attrs="{'readonly': ['&amp;', '&amp;', ('loan_computation','=','diminishing'),
+									   ('state', '=', 'ongoing'), ('is_recompute', '=', False)]}"/>
+								<field name="loan_payment_term" />
+							</group>
+
+							<group>
+								<field name="loan_duration"/>
+								<field name="interest_rate" attrs="{'readonly': ['&amp;', '&amp;', ('loan_computation','=','diminishing'),
+									   ('state', '=', 'ongoing'), ('is_recompute', '=', False)]}"/>
+								<field name="charges" attrs="{'readonly': ['&amp;', ('loan_computation','=','diminishing'), ('state', '=', 'ongoing')]}"/>
+								<field name="outstanding_principal"/>
+								<field name="total_interest_paid"/>
+								<field name="next_principal_payment"/>
+								<field name="next_interest_due"/>
+								<field name="next_due_date"/>
+								<field name="loan_reference_id" attrs="{'invisible': [('loan_status', '!=', 'existing')]}"/>
+								<field name="additional_loan_amount" attrs="{'invisible': [('loan_status', '!=', 'existing')]}"/>
+								<field name="payment_method_id" attrs="{'invisible': [('loan_status', '!=', 'existing')]}"/>
+								<field name="outstanding_balance" attrs="{'invisible': [('loan_status', '!=', 'existing')]}"/>
+								<field name="customer_invoice_id" invisible="1"/>
+								<field name="invoice_status" invisible="1"/>
+							</group>
+						</group>
+						<button name="load_initial_schedule" type="object" icon="fa-plus-circle"
+							string="Load Schedule"
+						 	class="btn-danger oe_right"
+							attrs="{'invisible': [('state', '=', 'ongoing')]} "
+						/>
+						<button name="recompute_schedule_lines" type="object" icon="fa-pencil-square-o"
+							string="Recompute Schedule"
+						 	class="btn-danger oe_right"
+							attrs="{'invisible': [('is_recompute', '=', False)]} "
+						/>
+						<notebook>
+							<page name="loan_schedule_ids" string="Loan Schedules" attrs="{'readonly': [('state', '!=', 'draft')]}">
+								<field name="loan_schedule_ids">
+                            		<tree editable="bottom">
+                            			<field name="line_no" />
+                            			<field name="period_from"/>
+                            			<field name="period_to"/>
+                            			<field name="payment_date" attrs="{'readonly': [('bill_id', '!=', False)]}"/>
+					                  	<field name="term" readonly="1"/>
+					                  	<field name="outstanding_principal" attrs="{'readonly': [('bill_id', '!=', False)]}"/>
+					                  	<field name="principal_payment" attrs="{'readonly': [('bill_id', '!=', False)]}"/>
+					                  	<field name="interest_due" attrs="{'readonly': [('bill_id', '!=', False)]}"/>
+					                  	<field name="penalty" attrs="{'readonly': [('bill_id', '!=', False)]}" />
+					                  	<field name="due_amount" />
+										<field name="bill_id" readonly="1"/>
+										<field name="reference" />
+                            		</tree>
+                            	</field>
+							</page>
+							<page string="Other Info">
+								<group>
+									<group>
+										<field name="principal_account_id"/>
+										<field name="penalty_account_id"/>
+										<field name="interest_account_id"/>
+										<field name="other_expense_account_id"/>
+										<field name="prepaid_expense_account_id"/>
+									</group>
+									<group>
+										<field name="accrued_expense_account_id"/>
+										<field name="collection_journal_id"/>
+										<field name="loan_journal_id"/>
+										<field name="adjusting_journal_id"/>
+										<field name="withholding_tax_id"/>
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_tf_peec_bank_loan_management" model="ir.actions.act_window">
+			<field name="name">Bank Loan Management</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">bank.loan</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+		</record>
+
+		<menuitem
+				id="tf_peec_bank_loan_management_menu"
+				parent="account.menu_finance_entries_management"
+				action="action_tf_peec_bank_loan_management"/>
+	</data>
+</odoo>

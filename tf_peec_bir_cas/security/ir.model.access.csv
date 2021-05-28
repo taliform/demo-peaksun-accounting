@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_billing_statement_uinvoice,account.move,tf_peec_bir_cas.model_account_billing_statement,account.group_account_invoice,1,1,1,1
+access_account_billing_statement_portal,account.move.portal,tf_peec_bir_cas.model_account_billing_statement,base.group_portal,1,0,0,0
