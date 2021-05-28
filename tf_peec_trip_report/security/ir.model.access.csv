@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_logistics_trip_report_user,access.logistics.trip.report.user,model_logistics_trip_report,tf_peec_logistics.group_logistics_user,1,1,1,1
+access_logistics_trip_report_employee_officer,access.logistics.trip.report.employee.officer,model_logistics_trip_report,hr.group_hr_user,1,0,0,0

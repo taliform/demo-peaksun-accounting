@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="tf_dh_eval_view_tree" model="ir.ui.view">
+            <field name="name">DH Eval Tree View</field>
+            <field name="model">tf.dh.eval</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="config_id"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- DH Eval Form View -->
+        <record id="tf_dh_eval_view_form" model="ir.ui.view">
+            <field name="name">DH Eval Form View</field>
+            <field name="model">tf.dh.eval</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="DH Eval Config">
+                    <header>
+                        <button name="action_generate_report" type="object" string="Generate Report" class="oe_highlight" states="draft,confirm,reject"/>
+                        <button name="action_confirm" states="draft" string="Confirm" type="object" class="oe_highlight"/>
+                        <button name="action_for_approval" string="For Approval" type="object" class="oe_highlight"
+                                confirm="Send the evaluation for approval indicates that the skills report has been populated and the generated data has been reviewed."
+                                attrs="{'invisible': [('state', 'not in', ['confirm', 'reject'])]}"/>
+                        <button name="action_approve" states="approval" string="Approve" type="object" class="oe_highlight"
+                                groups="hr_appraisal.group_hr_appraisal_manager"
+                                confirm="Approving the evaluation will distribute the badges to the employees. Proceed?"/>
+                        <button name="action_reject_wizard" states="approval" string="Reject" type="object" groups="hr_appraisal.group_hr_appraisal_manager"/>
+                        <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', 'in', ['draft', 'approve','cancel'])]}"
+                                confirm="This will cancel the evaluation. Proceed?"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box" attrs="{'invisible': [('state','=','cancel')]}">
+                            <button name="view_prod" type="object" string="Productivity Report" icon="fa-plus-circle" attrs="{'invisible':[('state','=','draft')]}"/>
+                            <button name="view_corpo" type="object" string="Corporate Report" icon="fa-minus-circle" attrs="{'invisible':[('state','=','draft')]}"/>
+                            <button name="view_skills" type="object" string="Skills Report" icon="fa-gear" attrs="{'invisible':[('state','=','draft')]}"/>
+                            <button name="view_summary" type="object" string="Summary Report" icon="fa-bar-chart" attrs="{'invisible':[('state','=','draft')]}"/>
+                        </div>
+                        <div class="oe_title">
+                            <span class="o_form_label">Reference</span>
+                            <h1><field name="name" readonly="1"/></h1>
+                            <h2><field name="description" placeholder="...description" attrs="{'readonly':[('state','not in',['draft','reject'])]}"/></h2>
+                        </div>
+                        <div name="reject_warning" class="alert alert-danger" role="alert" attrs="{'invisible':[('state','!=','reject')]}" style="margin-top: 10px;">
+                            <p><label for="reject_reason"/><field name="reject_reason" class="oe_inline" readonly="1"/></p>
+                        </div>
+                        <group>
+                            <group name="left_group">
+                                <field name="config_id" attrs="{'readonly':[('state','not in',['draft','reject'])]}"/>
+                                <label for="from_date" string="Interval"/>
+                                <div class="o_row">
+                                    <field name="from_date" attrs="{'readonly':[('state','not in',['draft','reject'])]}"/>
+                                    -
+                                    <field name="to_date" attrs="{'readonly':[('state','not in',['draft','reject'])]}"/>
+                                </div>
+                            </group>
+                            <group name="right_group">
+                                <field name="create_date" readonly="1"/>
+                                <field name="create_uid" readonly="1"/>
+                                <field name="approve_date" readonly="1" attrs="{'invisible':[('state','!=','approve')]}"/>
+                                <field name="approver_id" readonly="1" attrs="{'invisible':[('state','!=','approve')]}"/>
+                            </group>
+                        </group>
+                        <group name="hidden_fields" invisible="1">
+                            <field name="n_months"/>
+                        </group>
+                        <notebook>
+                            <page name="contracts" string="Contracts">
+                                <field name="contract_ids" attrs="{'readonly':[('state','not in',['draft','reject'])]}" options="{'no_create': True}"/>
+                            </page>
+                            <page name="appraisal" string="Appraisal">
+                                <field name="line_ids" readonly="1">
+                                    <tree>
+                                        <field name="employee_id"/>
+                                        <field name="job_title"/>
+                                        <field name="last_name"/>
+                                        <field name="first_name"/>
+                                        <field name="middle_name"/>
+                                        <field name="work_location"/>
+                                        <field name="total_score" widget="percentage"/>
+                                        <field name="rating"/>
+                                        <field name="badge_ids" widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- DH Eval Search View -->
+		<record id="tf_dh_eval_view_search" model="ir.ui.view">
+            <field name="name">DH Eval Search View</field>
+            <field name="model">tf.dh.eval</field>
+            <field name="arch" type="xml">
+                <search string="Search DH Evaluations">
+                    <field name="name" string="Evaluation" filter_domain="['|', ('name', 'ilike', self), ('name', 'ilike', self)]"/>
+                    <field name="config_id"/>
+                    <separator/>
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="confirm" string="Confirmed" domain="[('state', '=', 'confirm')]"/>
+                    <filter name="approval" string="Waiting Approval" domain="[('state', '=', 'approval')]"/>
+                    <filter name="approve" string="Approved" domain="[('state', '=', 'approve')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <filter name="reject" string="For Revision" domain="[('state', '=', 'reject')]"/>
+                    <separator/>
+                    <filter name="from_date" string="Date From" date="from_date"/>
+                    <filter name="to_date" string="Date To" date="to_date"/>
+                    <filter name="create_date" string="Creation Date" date="create_date"/>
+                    <filter name="approve_date" string="Approval Date" date="approve_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Creator" name="create_uid" domain="[]" context="{'group_by': 'create_uid'}"/>
+                        <filter string="Approver" name="approver_id" domain="[]" context="{'group_by': 'approver_id'}"/>
+                        <filter string="Creation Date" name="group_create_date" domain="[]" context="{'group_by': 'create_date'}"/>
+                        <filter string="Approval Date" name="group_approve_date" domain="[]" context="{'group_by': 'approve_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- DH Eval Action -->
+		<record id="tf_dh_eval_action" model="ir.actions.act_window">
+			<field name="name">Driver/Helper Evaluation</field>
+			<field name="res_model">tf.dh.eval</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+            <field name="search_view_id" ref="tf_dh_eval_view_search"/>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- Appraisal DH Menu -->
+        <menuitem id="tf_dh_eval_menu" name="Driver/Helper"
+          parent="hr_appraisal.menu_hr_appraisal_root"
+          action="tf_dh_eval_action"
+          sequence="10"/>
+
+    </data>
+</odoo>

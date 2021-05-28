@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_delivery_order_end_trip_view_form" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.end.trip.view.form</field>
+            <field name="model">logistics.delivery.order.end.trip</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="delivery_order_id" invisible="1"/>
+                    <field name="delivery_unit_id" invisible="1"/>
+                    <group>
+                        <field name="odometer_reading"/>
+                    </group>
+                    <group>
+                        <field name="is_manual_date"/>
+                        <field name="arrival_date"
+                               attrs="{'invisible': [('is_manual_date', '=', False)], 'required': [('is_manual_date', '=', True)]}"/>
+                        <field name="manual_reason"
+                               placeholder="Please enter the reason why you need to manually enter the Departure Date."
+                               attrs="{'invisible': [('is_manual_date', '=', False)], 'required': [('is_manual_date', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="action_end_trip" type="object" string="End Trip" class="oe_highlight" confirm="Is your Odometer Reading correct? Click 'Ok' to continue."/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

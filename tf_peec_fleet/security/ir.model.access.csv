@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fleet_drive_config_manager,access.fleet.drive.config.manager,model_fleet_vehicle_drive_configuration,fleet.fleet_group_manager,1,1,1,1
+access_fleet_vehicle_tank_user,access.fleet.vehicle.tank.user,model_fleet_vehicle_tank,fleet.fleet_group_user,1,0,0,0
+access_fleet_vehicle_tank_manager,access.fleet.vehicle.tank.manager,model_fleet_vehicle_tank,fleet.fleet_group_manager,1,1,1,1
+access_fleet_suspension_type_manager,access.fleet.suspension.type.manager,model_fleet_vehicle_suspension_type,fleet.fleet_group_manager,1,1,1,1
+access_fleet_card_manager,access.fleet.card.manager,model_fleet_card,fleet.fleet_group_manager,1,1,1,1
+access_fleet_card_purchase_user,access.fleet.card.purchase.user,model_fleet_card,purchase.group_purchase_user,1,0,0,0
+access_fleet_location_user,access.fleet.location.user,model_fleet_location,fleet.fleet_group_user,1,0,0,0
+access_fleet_location_manager,access.fleet.location.manager,model_fleet_location,fleet.fleet_group_manager,1,1,1,1
+access_fleet_vehicle_pairing_manager,access.fleet.vehicle.pairing.manager,model_fleet_vehicle_pairing,fleet.fleet_group_manager,1,1,1,1
+access_fleet_stock_location_manager,access.fleet.stock.location.manager,model_stock_location,fleet.fleet_group_manager,1,1,1,1

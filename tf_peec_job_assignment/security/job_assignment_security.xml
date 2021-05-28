@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Security -->
+        <record id="module_category_hr_job_assignment_config" model="ir.module.category">
+			<field name="name">Job Assignment</field>
+			<field name="sequence">18</field>
+			<field name="parent_id" ref="base.module_category_human_resources" />
+		</record>
+        
+        <record id="group_hr_job_assignment_user" model="res.groups">
+            <field name="name">Job Assignment Officer</field>
+            <field name="category_id" ref="tf_peec_job_assignment.module_category_hr_job_assignment_config"/>
+            <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+        </record>
+
+        <record id="group_hr_job_assignment_approver" model="res.groups">
+            <field name="name">Job Assignment Approver</field>
+            <field name="category_id" ref="tf_peec_job_assignment.module_category_hr_job_assignment_config"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_job_assignment_user'))]"/>
+        </record>
+
+        <record id="group_hr_job_assignment_manager" model="res.groups">
+            <field name="name">Job Assignment Manager</field>
+            <field name="category_id" ref="tf_peec_job_assignment.module_category_hr_job_assignment_config"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_job_assignment_approver'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

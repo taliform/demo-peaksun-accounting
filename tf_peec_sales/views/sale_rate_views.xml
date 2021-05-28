@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!--Search View-->
+        <record id="peec_sale_rate_table_view_search" model="ir.ui.view">
+            <field name="name">peec.sale.rate.table.view.search</field>
+            <field name="model">sale.rate</field>
+		    <field name="type">search</field>
+		    <field name="arch" type="xml">
+		        <search string="Search Rate Tables">
+                    <field name="name" string="Name" filter_domain="[('name','ilike',self)]"/>
+                    <field name="type" string="Type" filter_domain="[('type','ilike',self)]"/>
+                    <separator/>
+                    <group expand='0' string='Group by'>
+                        <filter name="group_type" string='Type' domain="[]" context="{'group_by':'type'}"/>
+                    </group>
+		        </search>
+		    </field>
+		</record>
+
+        <!--Actions-->
+        <record id="peec_action_sale_rate_table" model="ir.actions.act_window">
+            <field name="name">Rate Table</field>
+            <field name="res_model">sale.rate</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Rate Table.
+                </p>
+            </field>
+        </record>
+
+        <record id="peec_sale_rate_table_lines_view_action" model="ir.actions.act_window">
+            <field name="name">Rate Table Lines</field>
+            <field name="res_model">sale.rate.line</field>
+            <field name="context">{}</field>
+            <field name="domain">[('rate_table_id', '=', active_id)]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new Rate Table Line.
+                </p>
+            </field>
+        </record>
+
+        <!--Tree Views-->
+        <record id="peec_sale_rate_view_tree" model="ir.ui.view">
+            <field name="name">peec.sale.rate.table.view.tree</field>
+            <field name="model">sale.rate</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Rate Tables">
+                    <field name="name"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_sale_rate_lines_view_tree" model="ir.ui.view">
+            <field name="name">peec.sale.rate.lines.view.tree</field>
+            <field name="model">sale.rate.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Rate Table Lines" editable="bottom">
+                    <field name="cement_plant_id" context="{'default_is_cement_plant': True}"
+                           options="{'always_reload': True}"
+                           domain="[('is_cement_plant', '=', True)]"/>
+                    <field name="batching_plant_id"  context="{'default_is_batching_plant': True}"
+                           options="{'always_reload': True}"
+                           domain="[('is_batching_plant', '=', True)]"/>
+                    <field name="distance"/>
+                    <field name="rate" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Form Views-->
+        <record id="peec_sale_rate_table_view_form" model="ir.ui.view">
+            <field name="name">peec.sale.rate.table.view.form</field>
+            <field name="model">sale.rate</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="compute_rate" string="Compute Rate"
+                                type="object" class="oe_highlight"
+                                context="{'default_rate_table_id': id}"
+                                attrs="{'invisible': [('type','!=','cement')]}"/>
+                    </header>
+                    <sheet>
+                        <div name="button_box" class="oe_button_box" attrs="{'invisible': [('type','!=','hauling')]}">
+                            <button name="%(peec_sale_rate_table_lines_view_action)d" type="action"
+                                    class="oe_stat_button" icon="fa-th-list"
+                                    context="{'default_rate_table_id': active_id}">
+                                <field name="rate_table_line_ids" string="Rate Table Lines" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <span class="o_form_label" >Name</span>
+                            <h1>
+                                <field name="name" required="1"/>
+                            </h1>
+                        </div>
+                        <group name="type">
+                            <field name="type" widget="radio"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <!--Cement Type-->
+                        <group name="type_cement" attrs="{'invisible': [('type','!=','cement')]}">
+                            <group name="section1" colspan="2">
+                                <group name="param" string="Parameters">
+                                    <field name="diesel_cost"/>
+                                    <field name="lt_km_factor"/>
+                                </group>
+                                <group name="dp" string="Driver &amp; Pahinante">
+                                    <field name="dp_line_ids" nolabel="1">
+                                        <tree editable="bottom" name="dp_tree">
+                                            <field name="km_from"/>
+                                            <field name="km_to"/>
+                                            <field name="driver_rate"/>
+                                            <field name="helper_rate"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                            <group name="section2" string="Rate Parameters" colspan="2">
+                                <group name="other" string="Other Information">
+                                    <field name="avg_bag_per_trip"/>
+                                    <field name="vat_rate"/>
+                                    <field name="toll_fee"/>
+                                    <field name="round_trip"/>
+                                </group>
+                                <group name="maintenance" string="Maintenance">
+                                    <field name="maintenance_factor"/>
+                                </group>
+                                <group name="tires" string="Tires">
+                                    <field name="tire_cost"/>
+                                    <field name="tire_qty"/>
+                                    <field name="tire_lifespan"/>
+                                    <field name="tire_factor"/>
+                                </group>
+                                <group name="salary" string="Salary">
+                                    <field name="salary_factor"/>
+                                    <field name="avg_trip_per_month"/>
+                                    <field name="er_govt_cont"/>
+                                    <field name="misc"/>
+                                </group>
+                                <group name="fixed" string="Fixed">
+                                    <field name="fx_truck_misc"/>
+                                    <field name="fx_admin"/>
+                                </group>
+                                <group name="rate" string="Rate">
+                                    <field name="rate_line_ids" nolabel="1">
+                                        <tree editable="bottom" name="dp_tree">
+                                            <field name="rate"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                        </group>
+                        <group name="type_cement_comp" attrs="{'invisible': [('type','!=','cement')]}">
+                            <group name="section3" colspan="2">
+                                <group name="test_comp" string="Test Computation">
+                                    <field name="km_comp"/>
+                                    <field name="rate_id_comp" options="{'no_create_edit': True}"/>
+                                </group>
+                            </group>
+                            <!--Group readonly not working, need to define per field-->
+                            <group name="section4" colspan="2">
+                                <group name="test_res" string="Test Result">
+                                    <field name="diesel_comp" readonly="1"/>
+                                    <field name="maintenance_comp" readonly="1"/>
+                                    <field name="tires_comp" readonly="1"/>
+                                    <field name="driver_comp" readonly="1"/>
+                                    <field name="helper_comp" readonly="1"/>
+                                    <field name="salary_misc_comp" readonly="1"/>
+                                    <field name="toll_fee_comp" readonly="1"/>
+                                    <field name="total_vc_comp" readonly="1"/>
+                                </group>
+                                <group name="test_res2">
+                                    <field name="truck_ins_reg_comp" readonly="1"/>
+                                    <field name="overhead_admin_comp" readonly="1"/>
+                                    <field name="total_fc_comp" readonly="1"/>
+                                </group>
+                            </group>
+                            <group name="section5" colspan="2">
+                                <group name="total_res">
+                                    <field name="total_vcfc_comp" readonly="1"/>
+                                    <field name="cost_bag_comp" readonly="1"/>
+                                    <field name="based_rate_comp" readonly="1"/>
+                                    <field name="rate_total_comp" readonly="1"/>
+                                </group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_sale_rate_lines_view_form" model="ir.ui.view">
+            <field name="name">peec.sale.rate.lines.view.form</field>
+            <field name="model">sale.rate.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group name="section1">
+                                <field name="cement_plant_id" context="{'default_is_cement_plant': True}"
+                                       options="{'always_reload': True}"
+                                       domain="[('is_cement_plant', '=', True)]"/>
+                                <field name="batching_plant_id"  context="{'default_is_batching_plant': True}"
+                                       options="{'always_reload': True}"
+                                       domain="[('is_batching_plant', '=', True)]"/>
+                            </group>
+                            <group name="section2">
+                                <field name="distance"/>
+                                <field name="rate" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--Menu Item-->
+        <menuitem id="menu_sale_rate_tables_config" name="Rate Tables"
+                  parent="sale.menu_sale_config" sequence="150"
+                  action="peec_action_sale_rate_table"
+                  groups="sales_team.group_sale_manager"/>
+
+    </data>
+</odoo>

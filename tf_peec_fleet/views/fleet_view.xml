@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Fleet Vehicle Form View Inherit -->
+        <record id="peec_fleet_vehicle_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Fleet Vehicle Form View Inherit</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_title']" position="replace">
+                    <div class="oe_title">
+                        <label for="body_num" class="oe_edit_only"/>
+                        <h1>
+                            <field name="body_num"/>
+                        </h1>
+                        <label for="license_plate" class="oe_edit_only"/>
+                        <h2>
+                            <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
+                        </h2>
+                        <label for="model_id" class="oe_edit_only"/>
+                        <h3>
+                            <field name="model_id" placeholder="e.g. Model S"/>
+                        </h3>
+                        <label for="tag_ids" class="oe_edit_only"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                    </div>
+                </xpath>
+                <field name="location" position="replace">
+                    <field name="location_id"/>
+                </field>
+                <field name="first_contract_date" position="after">
+                    <field name="registered_date"/>
+                    <field name="lto_office_id"/>
+                    <field name="cr_date"/>
+                </field>
+                <field name="acquisition_date" position="after">
+                    <field name="km_total"/>
+                </field>
+                <field name="vin_sn" position="after">
+                    <field name="mv_file_num"/>
+                    <field name="engine_num"/>
+                    <field name="type"/>
+                    <field name="pair_id" attrs="{'invisible': [('type','!=','tractor')]}"/>
+                    <field name="equipment_vocation_id"/>
+                    <field name="tank_id"/>
+                    <field name="config_id"/>
+                    <field name="suspension_id"/>
+                    <field name="capacity"/>
+                </field>
+                <xpath expr="//group[1]/group[last()]" position="after">
+                    <!-- Please double check if this intended, 2 fields are repeated -->
+                    <group string="Others" name="others">
+                        <group>
+                            <field name="inventory_location_id"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//header">
+                    <button name="create_inventory_location" type="object" string="Create Inventory Location" attrs="{'invisible': [('inventory_location_id', '!=', False)]}"/>
+                </xpath>
+                <field name="manager_id" position="after">
+                    <field name="owner_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="fleet_vehicle_view_kanban_inherit_tf_peec_fleet" model="ir.ui.view">
+            <field name="name">fleet.vehicle.kanban.inherit.tf.peec.fleet</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//strong[@class='o_kanban_record_title']/field[@name='license_plate']" position="before">
+                    <t t-if="record.body_num">
+                        <field name="body_num"/> :
+                    </t>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="fleet_vehicle_view_tree_inherit_tf_peec_fleet" model="ir.ui.view">
+            <field name="name">fleet.vehicle.tree.inherit.tf.peec.fleet</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="license_plate" position="before">
+                    <field name="body_num"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Fleet Vehicle Log Fuel Form View Inherit -->
+        <record id="peec_fleet_vehicle_log_fuel_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Fleet Vehicle Log Fuel Form View Inherit</field>
+            <field name="model">fleet.vehicle.log.fuel</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_log_fuel_view_form"/>
+            <field name="arch" type="xml">
+                <field name="vendor_id" position="replace">
+                </field>
+                <field name="liter" position="replace">
+                    <field name="fuel_source" required="1"/>
+                    <field name="location_id" attrs="{'invisible':[('fuel_source','!=','garage')], 'required':[('fuel_source','=','garage')]}"/>
+                    <field name="liter" required="True"/>
+                    <field name="vendor_id" attrs="{'invisible':[('fuel_source','=','garage')], 'required':[('fuel_source','!=','garage')]}"/>
+                    <field name="fuel_id" attrs="{'invisible':[('fuel_source','!=','garage')], 'required':[('fuel_source','=','garage')]}"/>
+                </field>
+                <field name="price_per_liter" position="attributes">
+                    <attribute name="attrs">
+                         {'invisible': ['|',('fuel_source','=',False),('fuel_source','=','garage'),('price_per_liter', '=', 0.0)]}
+                    </attribute>
+                </field>
+                <field name="amount" position="attributes">
+                    <attribute name="attrs">
+                         {'invisible': ['|',('fuel_source','=',False),('fuel_source','=','garage'),('amount', '=', 0.0)]}
+                    </attribute>
+                </field>
+                <field name="amount" position="after">
+                    <field name="picking_id" attrs="{'invisible': ['|',('fuel_source','=',False),('fuel_source','=','garage'),('picking_id', '=', False)]}"/>
+                </field>
+                <label for="odometer" position="before">
+                    <field name="distance_travelled"/>
+                </label>
+                <field name="purchaser_id" position="after">
+                    <field name="card_id"/>
+                </field>
+                <xpath expr="//sheet/group[2]" position="after">
+                    <group>
+                        <group name="group_inspection" string="Inspection">
+                            <field name="inspector_id"/>
+                            <field name="measurement"/>
+                            <field name="volume_actual"/>
+                            <field name="short_over"/>
+                            <field name="balance"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Fleet Vehicle Log Fuel Form View Inherit -->
+        <record id="peec_fleet_vehicle_log_contract_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Fleet Vehicle Log Contract Form View Inherit</field>
+            <field name="model">fleet.vehicle.log.contract</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form"/>
+            <field name="arch" type="xml">
+                <field name="vehicle_id" position="replace"/>
+                <field name="currency_id" position="after">
+                    <div class="oe_title">
+                    <label for="vehicle_id" class="oe_edit_only"/>
+                    <h1 class="oe_edit_only">
+                        <field name="vehicle_id"/>
+                    </h1>
+                    <h1 class="oe_read_only">
+                        <field name="body_num"/>
+                    </h1>
+                    <h2 class="oe_read_only">
+                        <field name="license_plate"/>
+                    </h2>
+                    <h2 class="oe_read_only">
+                        <field name="model_id"/>
+                    </h2>
+                </div>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="reg_num"/>
+                    <field name="receipt_num"/>
+                    <field name="reg_name"/>
+                </field>
+                <field name="expiration_date" position="after">
+                    <field name="exp_odomtr"/>
+                </field>
+                <xpath expr="//group[2]/group[1]/div" position="after">
+                    <field name="odomtr_interval"/>
+                    <field name="renewal_reading"/>
+                    <field name="next_recurring"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="fleet_vehicle_pairing_view_tree" model="ir.ui.view">
+            <field name="name">fleet.vehicle.pairing.view.tree</field>
+            <field name="model">fleet.vehicle.pairing</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="tractor_head_id"/>
+                    <field name="trailer_id"/>
+                    <field name="remarks"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_fleet_vehicle_pairing" model="ir.actions.act_window">
+            <field name="name">Vehicle Pairings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fleet.vehicle.pairing</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Vehicle Pairing.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_fleet_vehicle_pairing" name="Vehicle Pairings"
+                  parent="fleet.fleet_vehicles" sequence="20"
+                  action="action_fleet_vehicle_pairing"/>
+
+    </data>
+</odoo>

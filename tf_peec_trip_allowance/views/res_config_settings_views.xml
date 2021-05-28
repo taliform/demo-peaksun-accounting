@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_inherit_trip_allowance" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.trip.allowance</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@data-key='hr']">
+
+                    <h2>Logistics</h2>
+                    <div class="row mt16 o_settings_container" id="logistics_settings">
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="trip_allowance_salary_adjustment_type_id"/>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
+                                <div class="row">
+                                    <div class="text-muted col-lg-8">
+                                        Set the Salary Adjustment Type for Trip Allowances.
+                                    </div>
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="trip_allowance_salary_adjustment_type_id"
+                                            class="o_light_label"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="trip_allowance_non_payroll"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="trip_allowance_non_payroll"/>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific."
+                                      role="img" aria-label="Values set here are company-specific."
+                                      groups="base.group_multi_company"/>
+                                <div class="text-muted">
+                                    Sets whether Trip Allowances are non-payroll items or not.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="trip_allowance_non_payroll" string="Trip Allowance Rates"/>
+                                <div class="row">
+                                    <div class="text-muted col-lg-8">
+                                        Set up the rates for Trip Allowances
+                                    </div>
+                                </div>
+                                <div class="mt8">
+                                    <button name="%(tf_peec_trip_allowance.action_trip_allowance_rate)d" icon="fa-arrow-right" type="action" string="Manage Trip Allowance Rates" class="btn-link"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </xpath>
+			</field>
+		</record>
+
+</odoo>

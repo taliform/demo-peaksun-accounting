@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Partner Customization -->
+        <record id="res_partner_form_inherit_tf_peec_partner" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.tf.peec.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="replace">
+                    <field name="parent_id"
+                           widget="res_partner_many2one"
+                           placeholder="Company"
+                           domain="[('is_company', '=', True)]"
+                           context="{'default_is_company': True, 'show_vat': True}"/>
+                </field>
+
+                <xpath expr="//form[1]/sheet[1]/div[not(@name)][1]/h1[1]" position="after">
+                    <h2>
+                        <field name="trade_name" string="Trade Name" placeholder="Trade Name"
+                               attrs="{'invisible': [('is_company', '=', False)]}"/>
+                    </h2>
+                </xpath>
+
+                <field name="vat" position="after">
+                    <field name="nature_id"/>
+                    <field name="year_business_started"/>
+                </field>
+
+                <field name="mobile" position="after">
+                    <field name="fax" widget="phone"/>
+                </field>
+
+                <field name="category_id" position="after">
+                    <field name="classification_id"/>
+                </field>
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page name="major_projects" string="Major Projects">
+                        <group>
+                            <field name="project_ids" string="Major Projects" nolabel="1"/>
+                        </group>
+                    </page>
+                    <page name="others" string="Others">
+                        <group>
+                            <group>
+                                <field name="is_company_officer" string="Company Officer"/>
+                                <field name="is_check_signatory" string="Check Signatory"/>
+                                <field name="is_cement_plant"/>
+                                <field name="is_batching_plant"/>
+                            </group>
+                            <group>
+                                <field name="signature" widget="signature" string="Signature"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='child_ids']/form[1]/sheet[1]/group[1]"
+                       position="after">
+                    <group>
+                        <group>
+                            <field name="is_company_officer"/>
+                            <field name="is_check_signatory"/>
+                            <field name="is_cement_plant"/>
+                            <field name="is_batching_plant"/>
+                        </group>
+                        <group>
+                            <field name="signature" widget="signature"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <xpath expr="//page[@name='accounting']/group[1]" position="after">
+                    <group name="collection" string="Collection">
+                        <group>
+                            <field name="collection_day"/>
+                            <field name="collection_time" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="collection_address"/>
+                            <field name="mode_of_payment"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="tf_ph_partner_tax_view_inherit_tf_peec_partner" model="ir.ui.view">
+            <field name="name">tf.ph.partner.tax.view.inherit.tf.peec.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="tf_ph_partner_tax.tf_ph_partner_tax_view"/>
+            <field name="arch" type="xml">
+                <field name="vat" position="replace">
+                    <field name="vat" placeholder="Enter your TIN: ie. 123-456-789-00000" attrs="{'required': [('is_cement_plant', '=', False), ('is_batching_plant', '=', False)]}"/>
+                </field>
+                <field name="rdo_code" position="replace">
+                    <field name="rdo_code" attrs="{'required': [('is_cement_plant', '=', False), ('is_batching_plant', '=', False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="res_partner_kanban_inherit_tf_peec_partner" model="ir.ui.view">
+            <field name="name">res.partner.kanban.inherit.tf.peec.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_kanban_details']/ul/li[1]" position="before">
+                    <li t-if="record.trade_name"><strong><field name="trade_name"/></strong></li>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_tree_inherit_tf_peec_partner" model="ir.ui.view">
+            <field name="name">res.partner.tree.inherit.tf.peec.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="display_name" position="after">
+                    <field name="trade_name"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Customer Classification -->
+        <record id="res_partner_classification_view_tree" model="ir.ui.view">
+            <field name="name">res.partner.classification.view.tree</field>
+            <field name="model">res.partner.classification</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_res_partner_classification" model="ir.actions.act_window">
+            <field name="name">Customer Classifications</field>
+            <field name="res_model">res.partner.classification</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="res_partner_classification_view_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a Customer Classification
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_res_partner_classification" id="menu_crm_config_res_partner_classification"
+                  parent="crm.crm_menu_config" sequence="20"/>
+        <menuitem action="action_res_partner_classification" id="menu_contacts_config_res_partner_classification"
+                  parent="contacts.res_partner_menu_config" sequence="20"/>
+
+        <!-- Nature of Business -->
+        <record id="res_partner_nature_view_tree" model="ir.ui.view">
+            <field name="name">res.partner.nature.view.tree</field>
+            <field name="model">res.partner.nature</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_res_partner_nature" model="ir.actions.act_window">
+            <field name="name">Nature of Businesses</field>
+            <field name="res_model">res.partner.nature</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="res_partner_nature_view_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a Nature of Business
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_res_partner_nature" id="menu_crm_config_res_partner_nature"
+                  parent="crm.crm_menu_config" sequence="30"/>
+        <menuitem action="action_res_partner_nature" id="menu_contacts_config_res_partner_nature"
+                  parent="contacts.res_partner_menu_config" sequence="30"/>
+
+        <!-- Major Projects -->
+        <record id="res_partner_project_view_tree" model="ir.ui.view">
+            <field name="name">res.partner.project.view.tree</field>
+            <field name="model">res.partner.project</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="location"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_partner_project_view_form" model="ir.ui.view">
+            <field name="name">res.partner.project.view.form</field>
+            <field name="model">res.partner.project</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" options="{'clickable': '1'}" widget="statusbar" string="State"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Project Name"/>
+                            </h1>
+                            <h2>
+                                <field name="location" placeholder="Location"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="developer_id"/>
+                                <field name="contractor_id"/>
+                                <field name="batching_plant_ids" widget="many2many_tags" domain="[('is_batching_plant', '=', True)]"/>
+                            </group>
+                            <group>
+                                <label for="cement_type_is_bagged" string="Type of Cement Supply"/>
+                                <div>
+                                    <field name="cement_type_is_bagged"/> Bagged<br/>
+                                    <field name="cement_type_is_bulk"/> Bulk<br/>
+                                    <field name="cement_type_is_others"/> Others<br/>
+                                </div>
+                                <label for="duration"/>
+                                <div class="o_row">
+                                    <field name="duration"/>
+                                    <field name="duration_measure"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="comments" string="Other Comments"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

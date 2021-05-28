@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Job Form View Inherit -->
+        <record id="peec_view_hr_job_form_dh_inherit" model="ir.ui.view">
+            <field name="name">Job Form Driver Helper Customizations</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group[@name='recruitment']/field[1]" position="before">
+                    <field name="is_dh" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Application Form View Inherit -->
+        <record id="peec_hr_applicant_view_form_dh_inherit" model="ir.ui.view">
+            <field name="name">Recruitment Form Driver Helper Customizations</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <field name="is_dh" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Plant Accreditation: Filter -->
+		<record id="peec_hr_plant_acc_view_filter" model="ir.ui.view">
+			<field name="name">peec.hr.plant.acc.view.filter</field>
+			<field name="model">tf.hr.plant.accreditation</field>
+			<field name="arch" type="xml">
+				<search string="Search Salary Adjustment Types">
+                    <field name="employee_id" filter_domain="[('employee_id','ilike',self)]"/>
+                    <field name="plant_id" filter_domain="[('plant_id','ilike',self)]"/>
+                    <field name="status" filter_domain="[('status','ilike',self)]"/>
+					<separator/>
+                    <filter name="draft" string="Draft" domain="[('status', '=', 'draft')]"/>
+                    <filter name="active" string="Active" domain="[('status', '=', 'active')]"/>
+                    <filter name="renewal" string="For Renewal" domain="[('status', '=', 'renewal')]"/>
+                    <filter name="expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                    <separator/>
+                    <filter name="accredited" string="Accredited(Requirement Status)" domain="[('requirement_status', '=', 'accredited')]"/>
+                    <filter name="renewal" string="For Renewal(Requirement Status)" domain="[('requirement_status', '=', 'renewal')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_plant" string="Plant" context="{'group_by': 'plant_id'}"/>
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <filter name="group_status" string="Status" context="{'group_by':'status'}"/>
+                    </group>
+				</search>
+			</field>
+		</record>
+
+        <!-- Plant Accreditation Views-->
+        <record id="peec_hr_plant_acc_tree_view" model="ir.ui.view">
+            <field name="name">Plant Accreditation Tree View</field>
+            <field name="model">tf.hr.plant.accreditation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_init"/>
+                    <field name="work_location"/>
+                    <field name="position_id"/>
+                    <field name="rank_id"/>
+                    <field name="plant_id" />
+                    <field name="ref_no" />
+                    <field name="cert_auth" />
+                    <field name="effective_date" />
+                    <field name="expiration_date" />
+                    <field name="status" readonly="1"/>
+                    <field name="requirement_status" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_hr_plant_acc_form_view" model="ir.ui.view">
+            <field name="name">Plant Accreditation Form View</field>
+            <field name="model">tf.hr.plant.accreditation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_accredited" type="object" string="Accredited"/>
+                        <field name="status" widget="statusbar" type="object" statusbar_visible="draft,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="plant_id" class="oe_edit_only"/>
+                            <h1>
+                                <field name="plant_id" />
+                            </h1>
+                            <label for="employee_id" class="oe_edit_only"/>
+                            <h3>
+                                <field name="employee_id"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="work_location"/>
+                                <field name="position_id"/>
+                                <field name="rank_id"/>
+                                <field name="requirement_status"/>
+                            </group>
+                            <group>
+                                <field name="ref_no" />
+                                <field name="cert_auth" />
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                                <field name="attachment" widget="many2many_binary"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+					</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Plant Requirements: Filter -->
+		<record id="peec_hr_plant_req_view_filter" model="ir.ui.view">
+			<field name="name">peec.hr.plant.req.view.filter</field>
+			<field name="model">tf.hr.logistic.plant.requirements</field>
+			<field name="arch" type="xml">
+				<search string="Search Salary Adjustment Types">
+                    <field name="employee_id" filter_domain="[('employee_id','ilike',self)]"/>
+                    <field name="plant_acc_id" filter_domain="[('plant_acc_id','ilike',self)]"/>
+                    <field name="requirement_type_id" filter_domain="[('requirement_type_id','ilike',self)]"/>
+                    <field name="status" filter_domain="[('status','ilike',self)]"/>
+					<separator/>
+                    <filter name="draft" string="Draft" domain="[('status', '=', 'draft')]"/>
+                    <filter name="active" string="Active" domain="[('status', '=', 'active')]"/>
+                    <filter name="renewal" string="For Renewal" domain="[('status', '=', 'renewal')]"/>
+                    <filter name="expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_plant_acc" string="Plant Accreditation" context="{'group_by': 'plant_acc_id'}"/>
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <filter name="group_req_type" string="Requirement Type" context="{'group_by':'requirement_type_id'}"/>
+                        <filter name="group_status" string="Status" context="{'group_by':'status'}"/>
+                    </group>
+				</search>
+			</field>
+		</record>
+
+        <!-- Plant Accreditation Views-->
+        <record id="peec_hr_plant_req_tree_view" model="ir.ui.view">
+            <field name="name">Plant Requirements Tree View</field>
+            <field name="model">tf.hr.logistic.plant.requirements</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_init"/>
+                    <field name="work_location"/>
+                    <field name="position_id"/>
+                    <field name="rank_id"/>
+                    <field name="plant_acc_id" required="1" context="{'default_is_cement_plant': True}"/>
+                    <field name="requirement_type_id" options="{'always_reload': True}"/>
+                    <field name="training_ids"/>
+                    <field name="document_ids"/>
+                    <field name="license_ids"/>
+                    <field name="effective_date" />
+                    <field name="expiration_date" />
+                    <field name="status" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_hr_plant_req_form_view" model="ir.ui.view">
+            <field name="name">Plant Requirements Form View</field>
+            <field name="model">tf.hr.logistic.plant.requirements</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="status" widget="statusbar" type="object" statusbar_visible="draft,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="plant_acc_id" string="Plant" class="oe_edit_only"/>
+                            <h1>
+                                <field name="plant_acc_id" />
+                            </h1>
+                            <label for="employee_id" string="Employee" class="oe_edit_only"/>
+                            <h3>
+                                <field name="employee_id" required="1"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="work_location"/>
+                                <field name="position_id"/>
+                                <field name="rank_id"/>
+                            </group>
+                            <group>
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Particular">
+                                <group string="Trainings">
+                                    <field name="training_ids" nolabel="0">
+                                        <tree>
+                                            <field name="training_id"/>
+                                            <field name="course_id"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Documents">
+                                    <field name="document_ids" nolabel="0">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="certification_authority"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Licenses">
+                                    <field name="license_ids" nolabel="0">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="certification_authority"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+					</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Document Accreditation: Filter -->
+		<record id="peec_hr_doc_acc_view_filter" model="ir.ui.view">
+			<field name="name">peec.hr.doc.acc.view.filter</field>
+			<field name="model">tf.hr.doc.accreditation</field>
+			<field name="arch" type="xml">
+				<search string="Search Salary Adjustment Types">
+                    <field name="employee_id" filter_domain="[('employee_id','ilike',self)]"/>
+                    <field name="type_id" filter_domain="[('type_id','ilike',self)]"/>
+                    <field name="status" filter_domain="[('status','ilike',self)]"/>
+					<separator/>
+                    <filter name="draft" string="Draft" domain="[('status', '=', 'draft')]"/>
+                    <filter name="active" string="Active" domain="[('status', '=', 'active')]"/>
+                    <filter name="renewal" string="For Renewal" domain="[('status', '=', 'renewal')]"/>
+                    <filter name="expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_doc_type" string="Document Type" context="{'group_by': 'type_id'}"/>
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <filter name="group_status" string="Status" context="{'group_by':'status'}"/>
+                    </group>
+				</search>
+			</field>
+		</record>
+
+        <!-- Document Accreditation Views-->
+        <record id="peec_hr_doc_acc_tree_view" model="ir.ui.view">
+            <field name="name">Document Accreditation Tree View</field>
+            <field name="model">tf.hr.doc.accreditation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_init"/>
+                    <field name="work_location"/>
+                    <field name="position_id"/>
+                    <field name="rank_id"/>
+                    <field name="type_id"/>
+                    <field name="ref_no" />
+                    <field name="cert_auth"/>
+                    <field name="effective_date" />
+                    <field name="expiration_date" />
+                    <field name="status" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_hr_doc_acc_form_view" model="ir.ui.view">
+            <field name="name">Document Accreditation Form View</field>
+            <field name="model">tf.hr.doc.accreditation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_active" type="object" string="Active"/>
+                        <field name="status" widget="statusbar" type="object" statusbar_visible="draft,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="type_id" string="Document" class="oe_edit_only"/>
+                            <h1>
+                                <field name="type_id" required="1"/>
+                            </h1>
+                            <label for="employee_id" string="Employee" class="oe_edit_only"/>
+                            <h3>
+                                <field name="employee_id" required="1"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="work_location"/>
+                                <field name="position_id"/>
+                                <field name="rank_id"/>
+                            </group>
+                            <group>
+                                <field name="ref_no" />
+                                <field name="cert_auth" />
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                                <field name="attachment" widget="many2many_binary"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+					</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Logistics Document Type Form -->
+		<record id="peec_hr_logistic_doc_type_form_view" model="ir.ui.view">
+			<field name="name">tf.hr.logistic_doc.type.form.view</field>
+			<field name="model">tf.hr.logistic_doc.type</field>
+			<field name="arch" type="xml">
+				<form string="Document Type Form">
+					<sheet>
+				    	<div class="oe_title">
+				            <h1>
+				                <field required="1" name="name" placeholder="Document Name..."/>
+				            </h1>
+				            <h2>
+				                <field name="certification_authority" placeholder="Certification Authority"/>
+				            </h2>
+				        </div>
+				        <group>
+				            <group>
+				                <field name="create_uid" readonly="1"/>
+				                <field name="write_uid" readonly="1"/>
+				            </group>
+				            <group>
+				                <field name="create_date" readonly="1"/>
+				                <field name="write_date" readonly="1"/>
+				            </group>
+				        </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+				</form>
+			</field>
+		</record>
+
+        <!-- Document Accreditation: Filter -->
+		<record id="peec_hr_lic_acc_view_filter" model="ir.ui.view">
+			<field name="name">peec.hr.lic.acc.view.filter</field>
+			<field name="model">tf.hr.license.accreditation</field>
+			<field name="arch" type="xml">
+				<search string="Search Salary Adjustment Types">
+                    <field name="employee_id" filter_domain="[('employee_id','ilike',self)]"/>
+                    <field name="type_id" filter_domain="[('type_id','ilike',self)]"/>
+                    <field name="status" filter_domain="[('status','ilike',self)]"/>
+					<separator/>
+                    <filter name="draft" string="Draft" domain="[('status', '=', 'draft')]"/>
+                    <filter name="active" string="Active" domain="[('status', '=', 'active')]"/>
+                    <filter name="renewal" string="For Renewal" domain="[('status', '=', 'renewal')]"/>
+                    <filter name="expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_lic_type" string="License Type" context="{'group_by': 'type_id'}"/>
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <filter name="group_status" string="Status" context="{'group_by':'status'}"/>
+                    </group>
+				</search>
+			</field>
+		</record>
+
+         <!-- License Accreditation Views-->
+        <record id="peec_hr_lic_acc_tree_view" model="ir.ui.view">
+            <field name="name">License Accreditation Tree View</field>
+            <field name="model">tf.hr.license.accreditation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_init"/>
+                    <field name="work_location"/>
+                    <field name="position_id"/>
+                    <field name="rank_id"/>
+                    <field name="type_id"/>
+                    <field name="ref_no" />
+                    <field name="cert_auth"/>
+                    <field name="effective_date" />
+                    <field name="expiration_date" />
+                    <field name="status" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_hr_lic_acc_form_view" model="ir.ui.view">
+            <field name="name">License Accreditation Form View</field>
+            <field name="model">tf.hr.license.accreditation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_active" type="object" string="Active"/>
+                        <field name="status" widget="statusbar" type="object" statusbar_visible="draft,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="type_id" string="License" class="oe_edit_only"/>
+                            <h1>
+                                <field name="type_id" required="1"/>
+                            </h1>
+                            <label for="employee_id" string="Employee" class="oe_edit_only"/>
+                            <h3>
+                                <field name="employee_id" required="1"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="work_location"/>
+                                <field name="position_id"/>
+                                <field name="rank_id"/>
+                            </group>
+                            <group>
+                                <field name="ref_no" />
+                                <field name="cert_auth" />
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                                <field name="attachment" widget="many2many_binary"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+					</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Logistics License Type Form -->
+		<record id="peec_hr_logistic_license_type_form_view" model="ir.ui.view">
+			<field name="name">tf.hr.logistic_license.type.form.view</field>
+			<field name="model">tf.hr.logistic_license.type</field>
+			<field name="arch" type="xml">
+				<form string="License Type Form">
+					<sheet>
+				    	<div class="oe_title">
+				            <h1>
+				                <field required="1" name="name" placeholder="License Name..."/>
+				            </h1>
+				            <h2>
+				                <field name="certification_authority" placeholder="Certification Authority"/>
+				            </h2>
+				        </div>
+				        <group>
+				            <group>
+				                <field name="create_uid" readonly="1"/>
+				                <field name="write_uid" readonly="1"/>
+				            </group>
+				            <group>
+				                <field name="create_date" readonly="1"/>
+				                <field name="write_date" readonly="1"/>
+				            </group>
+				        </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+				</form>
+			</field>
+		</record>
+
+        <!-- Document Accreditation: Filter -->
+		<record id="peec_hr_training_acc_view_filter" model="ir.ui.view">
+			<field name="name">peec.hr.training.acc.view.filter</field>
+			<field name="model">tf.hr.training.accreditation</field>
+			<field name="arch" type="xml">
+				<search string="Search Salary Adjustment Types">
+                    <field name="employee_id" filter_domain="[('employee_id','ilike',self)]"/>
+                    <field name="training_list_id" filter_domain="[('training_list_id','ilike',self)]"/>
+                    <field name="status" filter_domain="[('status','ilike',self)]"/>
+					<separator/>
+                    <filter name="draft" string="Draft" domain="[('status', '=', 'draft')]"/>
+                    <filter name="active" string="Active" domain="[('status', '=', 'active')]"/>
+                    <filter name="renewal" string="For Renewal" domain="[('status', '=', 'renewal')]"/>
+                    <filter name="expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_training_list" string="Training Checklist" context="{'group_by': 'training_list_id'}"/>
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <filter name="group_status" string="Status" context="{'group_by':'status'}"/>
+                    </group>
+				</search>
+			</field>
+		</record>
+
+        <!-- Training Accreditation Views-->
+        <record id="peec_hr_training_acc_tree_view" model="ir.ui.view">
+            <field name="name">Training Accreditation Tree View</field>
+            <field name="model">tf.hr.training.accreditation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_init"/>
+                    <field name="work_location"/>
+                    <field name="position_id"/>
+                    <field name="rank_id"/>
+                    <field name="training_list_id"/>
+                    <field name="training_id" />
+                    <field name="session_id" />
+                    <field name="course_id" />
+                    <field name="deadline"/>
+                    <field name="date_completed"/>
+                    <field name="expiration_duration"/>
+                    <field name="effective_date" />
+                    <field name="expiration_date" />
+                    <field name="status" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_hr_training_acc_form_view" model="ir.ui.view">
+            <field name="name">Training Accreditation Form View</field>
+            <field name="model">tf.hr.training.accreditation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="status" widget="statusbar" type="object" statusbar_visible="draft,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="employee_id" string="Employee" class="oe_edit_only"/>
+                            <h1>
+                                <field name="employee_id" required="1"/>
+                            </h1>
+                            <label for="type_id" string="Training Checklist" class="oe_edit_only"/>
+                            <h3>
+                                <field name="training_list_id" domain="[('employee_id', '=', employee_id)]" context="{'default_employee_id': employee_id}" required="1"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <field name="item_ids">
+                                <tree>
+									<field name="requirement_id" required="1"/>
+									<field name="training_id" readonly="1"/>
+									<field name="course_id" readonly="1"/>
+									<field name="deadline_date"/>
+									<field name="date_completed" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+								</tree>
+                            </field>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="work_location"/>
+                                <field name="position_id"/>
+                                <field name="rank_id"/>
+                            </group>
+                            <group>
+                                <field name="effective_date" />
+                                <field name="expiration_duration" />
+                                <field name="expiration_date" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+					</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- 201 Form View Inherit -->
+        <record id="peec_hr_employee_view_form_dh_inherit" model="ir.ui.view">
+            <field name="name">Employee Form Driver Helper Customizations</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='hr_settings']" position="before">
+                    <page name="accreditations" string="Accreditations" id="accreditations">
+                        <h2><label for="plant_acc_ids"/></h2>
+                        <field name="plant_acc_ids">
+                            <tree editable="top">
+                                <field name="plant_id" required="True" context="{'default_is_cement_plant': True}"/>
+                                <field name="ref_no" />
+                                <field name="cert_auth" />
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                                <field name="attachment" widget="many2many_binary" context="{'default_res_id':active_id ,'default_res_model':active_model}"/>
+                                <field name="status" readonly="1"/>
+                            </tree>
+                        </field>
+                        <h2><label for="doc_acc_ids"/></h2>
+                        <field name="doc_acc_ids">
+                            <tree editable="top">
+                                <field name="type_id"/>
+                                <field name="ref_no" />
+                                <field name="cert_auth"/>
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                                <field name="attachment" widget="many2many_binary" context="{'default_res_id':active_id ,'default_res_model':active_model}"/>
+                                <field name="status" readonly="1"/>
+                            </tree>
+                        </field>
+                        <h2><label for="license_acc_ids"/></h2>
+                        <field name="license_acc_ids">
+                            <tree editable="top">
+                                <field name="type_id"/>
+                                <field name="ref_no" />
+                                <field name="cert_auth"/>
+                                <field name="effective_date" />
+                                <field name="expiration_date" />
+                                <field name="attachment" widget="many2many_binary" context="{'default_res_id':active_id ,'default_res_model':active_model}"/>
+                                <field name="status" readonly="1"/>
+                            </tree>
+                        </field>
+                        <h2><label for="truck_ids"/></h2>
+                        <field name="truck_ids"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="peec_hr_employee_view_form_dh_inherit2" model="ir.ui.view">
+            <field name="name">Employee Form Driver Helper Customizations 2</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="tf_peec_logistics.hr_employee_form_inherit_tf_peec_logistics"/>
+            <field name="arch" type="xml">
+                <field name="delivery_unit_id" position="replace">
+                    <field name="is_dh" readonly="1"/>
+                    <field name="select_dh" attrs="{'invisible':[('is_dh','=',False)], 'required':[('is_dh','=',True)]}"/>
+                    <field name="delivery_unit_id" readonly="1" attrs="{'invisible': [('is_dh', '=', False)]}"/>
+                </field>
+                <xpath expr="//field[@name='dh_availability']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_dh', '=', False)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='delivery_unit_state']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_dh', '=', False)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="peec_hr_employee_view_form_custom_dh_inherit" model="ir.ui.view">
+            <field name="name">Employee Form Driver Helper Customizations Inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@id='accreditations']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_dh', '=', False)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <!-- Plant Accreditation Action -->
+		<record id="peec_hr_plant_acc_action" model="ir.actions.act_window">
+			<field name="name">Plant Accreditation</field>
+			<field name="res_model">tf.hr.plant.accreditation</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+        <!-- Plant Requirements Action -->
+		<record id="peec_hr_plant_req_action" model="ir.actions.act_window">
+			<field name="name">Plant Requirements</field>
+			<field name="res_model">tf.hr.logistic.plant.requirements</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- Document Accreditation Action -->
+		<record id="peec_hr_doc_acc_action" model="ir.actions.act_window">
+			<field name="name">Document Accreditation</field>
+			<field name="res_model">tf.hr.doc.accreditation</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- License Accreditation Action -->
+		<record id="peec_hr_lic_acc_action" model="ir.actions.act_window">
+			<field name="name">License Accreditation</field>
+			<field name="res_model">tf.hr.license.accreditation</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- License Accreditation Action -->
+		<record id="peec_hr_training_acc_action" model="ir.actions.act_window">
+			<field name="name">Training Accreditation</field>
+			<field name="res_model">tf.hr.training.accreditation</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- Driver/Helper Attendance -->
+        <record id="tf_hr_dh_attendance_view_tree" model="ir.ui.view">
+            <field name="name">tf.hr.dh.attendance.view.tree</field>
+            <field name="model">tf.hr.dh.attendance</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="employee_domain_ids" invisible="1"/>
+                    <field name="employee_id" domain="[('id', 'in', employee_domain_ids)]"/>
+                    <field name="job_id"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+                <record id="tf_hr_dh_attendance_view_calendar" model="ir.ui.view">
+            <field name="name">tf.hr.dh.attendance.view.calendar</field>
+            <field name="model">tf.hr.dh.attendance</field>
+            <field name="arch" type="xml">
+                <calendar color="display_name" date_start="from_date" date_stop="to_date" mode="month">
+                    <field name="employee_id"/>
+                    <field name="job_id"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="tf_hr_dh_attendance_action" model="ir.actions.act_window">
+			<field name="name">Driver/Helper Attendance</field>
+            <field name="type">ir.actions.act_window</field>
+			<field name="res_model">tf.hr.dh.attendance</field>
+            <field name="view_mode">tree,calendar,form</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+		</record>
+
+        <menuitem name="Driver/Helper Attendance"
+			id="tf_hr_dh_attendance_menu"
+			parent="ss_hris_schedule.menu_hris_schedule"
+			action="tf_hr_dh_attendance_action" sequence="30"
+			groups="group_hr_dh_dashboard_user"/>
+
+        <record id="action_logistics_driverhelper" model="ir.actions.act_window">
+			<field name="name">Drivers / Helpers</field>
+            <field name="type">ir.actions.act_window</field>
+			<field name="res_model">hr.employee</field>
+            <field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+			<field name="domain">[('is_dh', '=', True)]</field>
+		</record>
+
+    </data>
+</odoo>

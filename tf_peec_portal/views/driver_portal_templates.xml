@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="driver_portal_link" name="Link to driver portal" inherit_id="portal.frontend_layout">
+        <xpath expr="//a[@id='o_logout']" position="before">
+            <a href="/driver_portal" role="menuitem" class="dropdown-item">Driver Portal</a>
+        </xpath>
+    </template>
+
+        <template id="driver_portal_frontend_layout" name="Driver Portal Layout">&lt;!DOCTYPE html&gt;
+            <html t-att="html_data or {}">
+                <head>
+                    <meta charset="utf-8"/>
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+                    <title t-esc="title or 'Odoo'"/>
+                    <link type="image/x-icon" rel="shortcut icon"
+                          t-att-href="x_icon or '/web/static/src/img/favicon.ico'"/>
+                    <link rel="stylesheet" type="text/css" href="/tf_peec_portal/static/src/css/milligram.css"/>
+                    <link rel="stylesheet" type="text/css" href="/tf_peec_portal/static/src/css/driver_portal.css"/>
+                    <script id="web.layout.odooscript" type="text/javascript">
+                        var odoo = {
+                        csrf_token: "<t t-esc="request.csrf_token(None)"/>",
+                        debug: "<t t-esc="debug"/>",
+                        };
+                    </script>
+                    <script type="text/javascript">
+                        odoo.session_info =<t t-raw="json.dumps(request.env['ir.http'].get_frontend_session_info())"/>;
+                    </script>
+
+                    <t t-raw="head or ''"/>
+                </head>
+                <body t-att-class="body_classname">
+                    <div class="user-info">
+                        <div class="container">
+                            <div class="row">
+                                <div t-if="employee" class="column center">
+                                    Logged in as <strong><a href="/my/home"><t t-raw="employee.display_name"/></a></strong>. <a href="/web/session/logout?redirect=/driver_portal">Logout?</a>
+                                </div>
+                                <div t-else="" class="column center">
+                                    You are currently logged out. <a href="/web/login?redirect=/driver_portal">Login?</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="column center">
+                                <h1>
+                                    <a href="/driver_portal">Driver Portal</a>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <blockquote t-if="error" class="error">
+                                    <p>
+                                        <em>
+                                            <strong>ERROR:</strong> <t t-raw="error"/>
+                                        </em>
+                                    </p>
+                                </blockquote>
+                                <blockquote t-if="success" class="success">
+                                    <p>
+                                        <em>
+                                            <strong>SUCCESS:</strong> <t t-raw="success"/>
+                                        </em>
+                                    </p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-raw="0"/>
+                </body>
+            </html>
+        </template>
+
+        <template id="driver_portal_home" name="Driver Portal - Home">
+            <t t-call="tf_peec_portal.driver_portal_frontend_layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="column">
+                            <blockquote t-if="error">
+                                <p>
+                                    <em>
+                                        <t t-esc="error"/>
+                                    </em>
+                                </p>
+                            </blockquote>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <a class="button button-large" href="/driver_portal/attendance">Attendance</a>
+                        </div>
+                        <div t-if="employee" class="column">
+                            <a class="button button-large" href="/driver_portal/delivery_order">Delivery Orders</a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="driver_portal_delivery_order_list" name="Driver Portal - Delivery Order List">
+            <t t-call="tf_peec_portal.driver_portal_frontend_layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="column">
+                            <h2 class="center"><a href="/driver_portal/delivery_order">Delivery Orders</a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <table class="table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Reference</th>
+                                        <th>Schedule</th>
+                                        <th>Cement Plant</th>
+                                        <th>Batching Plant</th>
+                                        <th>State</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="delivery_orders" t-as="delivery_order">
+                                        <tr style='cursor: pointer; cursor: hand;'
+                                            t-attf-onclick="window.location='/driver_portal/delivery_order/{{delivery_order.id}}';">
+                                            <td>
+                                                <t t-raw="delivery_order.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="delivery_order.schedule_date"/>
+                                            </td>
+                                            <td>
+                                                <t t-raw="delivery_order.cement_plant_id.name"/>
+                                            </td>
+                                            <td>
+                                                <t t-raw="delivery_order.batching_plant_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span class="badge" t-field="delivery_order.state"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="driver_portal_delivery_order_main" name="Driver Portal - Delivery Order Main">
+            <t t-call="tf_peec_portal.driver_portal_frontend_layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="column center">
+                            <h2><a href="/driver_portal/delivery_order">Delivery Orders</a> / <a t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}"><t t-raw="delivery_order.name"/></a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <span class="badge float-right" t-field="delivery_order.state"/>
+                            <h3>Information</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <table class="table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <td>
+                                            <div t-field="delivery_order.customer_id"
+                                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Cement Plant</th>
+                                        <td>
+                                            <div t-field="delivery_order.cement_plant_id"
+                                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Batching Plant</th>
+                                        <td>
+                                            <div t-field="delivery_order.batching_plant_id"
+                                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Cement Product</th>
+                                        <td>
+                                            <t t-raw="delivery_order.product_id.display_name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Cement Quantity</th>
+                                        <td>
+                                            <t t-raw="delivery_order.requested_load"/>
+                                            <t t-raw="delivery_order.uom_id.name"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div t-if="delivery_order.state == 'unloaded' and delivery_order.is_unloaded_weighed" class="row">
+                        <div class="column">
+                            <form action="/driver_portal/delivery_order/for_validation" method="post" enctype="multipart/form-data" style="margin:0;">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                <button class="button button-large" id="forValidationBtn">For Validation</button>
+                            </form>
+                        </div>
+                        <t t-set="trip_mode" t-value="'start'"/>
+                    </div>
+                    <div t-if="delivery_order.state in ['assigned']" class="row">
+                        <div class="column">
+                            <button class="button button-large" id="tripBtn">Start Trip to Cement Plant</button>
+                        </div>
+                        <t t-set="trip_mode" t-value="'start'"/>
+                    </div>
+                    <div t-if="delivery_order.state in ['loaded']" class="row">
+                        <div class="column">
+                            <button class="button button-large" id="tripBtn">Start Trip to Batching Plant</button>
+                        </div>
+                        <t t-set="trip_mode" t-value="'start'"/>
+                    </div>
+                    <div t-if="delivery_order.state in ['unloaded', 'validation'] and not delivery_order.is_returning" class="row">
+                        <div class="column">
+                            <button class="button button-large" id="tripBtn">Start Trip to Garage</button>
+                        </div>
+                        <t t-set="trip_mode" t-value="'start'"/>
+                    </div>
+                    <div t-if="delivery_order.state not in ['assigned', 'loaded', 'in_transit_cp', 'in_transit_bp', 'unloaded', 'validation']" class="row hide">
+                        <div class="column">
+                            <button class="button button-large" id="tripBtn">Start Trip</button>
+                        </div>
+                    </div>
+                    <div t-if="delivery_order.state in ['in_transit_cp', 'in_transit_bp'] or delivery_order.is_returning" class="row">
+                        <div class="column">
+                            <button class="button button-large" id="tripBtn">End Trip</button>
+                            <t t-set="trip_mode" t-value="'end'"/>
+                        </div>
+                    </div>
+                    <div t-if="delivery_order.state == 'cp'" class="row">
+                        <div class="column">
+                            <form action="/driver_portal/delivery_order/start_loading" method="post" enctype="multipart/form-data" style="margin:0;">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                <button class="button button-large" id="startLoadingBtn">Start Loading</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div t-if="delivery_order.state == 'loading'" class="row">
+                        <div class="column">
+                            <form action="/driver_portal/delivery_order/end_loading" method="post" enctype="multipart/form-data" style="margin:0;">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                <button class="button button-large" id="endLoadingBtn">End Loading</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div t-if="delivery_order.state == 'bp'" class="row">
+                        <div class="column">
+                            <form action="/driver_portal/delivery_order/start_unloading" method="post" enctype="multipart/form-data" style="margin:0;">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                <button class="button button-large" id="startUnloadingBtn">Start Unloading</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div t-if="delivery_order.state == 'unloading'" class="row">
+                        <div class="column">
+                            <form action="/driver_portal/delivery_order/end_unloading" method="post" enctype="multipart/form-data" style="margin:0;">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                <button class="button button-large" id="endUnloadingBtn">End Unloading</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <t t-if="(delivery_order.state == 'loaded' and not delivery_order.is_loaded_weighed) or (delivery_order.state == 'unloaded' and not delivery_order.is_unloaded_weighed)">
+                                <button class="button button-large" id="weightBtn">Log Weight</button>
+                            </t>
+                            <t t-else="">
+                                <button class="button button-muted button-large" id="weightBtn">Log Weight</button>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="row mt2">
+                        <div class="column">
+                            <h3>Documents</h3>
+                        </div>
+                    </div>
+                    <div class="row" id="documents">
+                        <div class="column">
+                            <form id="documents_form" action="/driver_portal/delivery_order/submit_documents" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                <fieldset>
+                                    <t t-foreach="delivery_order.document_ids" t-as="document">
+                                        <label t-attf-for="document-{{document.id}}"><t t-raw="document.type_id.name"/></label>
+                                        <input type="file" t-attf-id="document-{{document.id}}" t-attf-name="document-{{document.id}}" multiple="multiple"/>
+                                        <t t-if="document.picture1 or document.picture2 or document.picture3">
+                                            <br/><strong>Uploaded: </strong>
+                                            <t t-if="document.picture1">
+                                                <a t-attf-href="/web/image/{{document._get_picture_id('picture1')}}">Picture 1</a>
+                                            </t>
+                                            <t t-if="document.picture2">
+                                                <a t-attf-href="/web/image/{{document._get_picture_id('picture2')}}">Picture 2</a>
+                                            </t>
+                                            <t t-if="document.picture3">
+                                                <a t-attf-href="/web/image/{{document._get_picture_id('picture3')}}">Picture 3</a>
+                                            </t>
+                                            <br/><br/>
+                                        </t>
+
+                                    </t>
+                                    <button class="button button-muted button-large" type="submit" onclick="submitDocuments()">Submit Documents</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row mt2">
+                        <div class="column">
+                            <h3>Others</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <a class="button button-muted button-large" t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}/messenger">Messenger</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <a class="button button-muted button-large" t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}/expense">Manage Expenses</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <a class="button button-muted button-large" t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}/maintenance">Maintenance Request</a>
+                        </div>
+                    </div>
+<!--                    <div class="row mt4">-->
+<!--                        <div class="column">-->
+<!--                            <button class="button button-danger button-large" onclick="rejectDelivery()">Reject Delivery</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+
+                <div id="tripModal" class="modal">
+                    <div class="modal-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="column">
+                                    <span class="modal-close float-right" id="trip-close">&amp;times;</span>
+                                    <form id="trip_form" t-attf-action="/driver_portal/delivery_order/{{ 'start_trip' if trip_mode == 'start' else 'end_trip' }}" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="is_manual" id="is_manual" value="0"/>
+                                        <t t-if="trip_mode == 'start'">
+                                            <input t-if="delivery_order.state == 'assigned'" type="hidden" name="start_trip_type" value="cp"/>
+                                            <input t-elif="delivery_order.state == 'loaded'" type="hidden" name="start_trip_type" value="bp"/>
+                                            <input t-else="" type="hidden" name="start_trip_type" value="garage"/>
+                                        </t>
+                                        <t t-else="">
+                                            <input t-if="delivery_order.state == 'in_transit_cp'" type="hidden" name="end_trip_type" value="cp"/>
+                                            <input t-elif="delivery_order.state == 'in_transit_bp'" type="hidden" name="end_trip_type" value="bp"/>
+                                            <input t-else="" type="hidden" name="end_trip_type" value="garage"/>
+                                        </t>
+                                        <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                        <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                        <t t-if="delivery_order.trip_log_id">
+                                            <input type="hidden" name="trip_log_id" t-att-value="delivery_order.trip_log_id.id"/>
+                                        </t>
+                                        <fieldset>
+                                            <t t-if="trip_mode == 'start'">
+                                                <label for="inspection_done">Inspection Done?</label>
+                                                <input type="checkbox" name="inspection_done" id="inspection_done" required="required"/> Yes
+                                            </t>
+                                            <label for="odometer_reading">Odometer Reading</label>
+                                            <input type="number" name="odometer_reading" id="odometer_reading" required="required"/>
+                                        </fieldset>
+                                        <fieldset id="manual_form" style="display: none;">
+                                            <label t-if="trip_mode == 'start'" for="manual_date">Departure Date &amp; Time</label>
+                                            <label t-else="" for="manual_date">Arrival Date &amp; Time</label>
+                                            <input type="datetime-local" name="manual_date" id="manual_date"/>
+                                            <label for="manual_reason">Comment</label>
+                                            <textarea placeholder="Reason for manual entry..." name="manual_reason" id="manual_reason"></textarea>
+                                        </fieldset>
+                                        <span class="button button-muted button-large" onclick="showManual()">Manual Time</span>
+                                        <button t-if="trip_mode == 'start'" class="button button-large" type="submit">Start Trip</button>
+                                        <button t-else="" class="button button-large" type="submit">End Trip</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="weightModal" class="modal">
+                    <div class="modal-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="column">
+                                    <span class="modal-close float-right" id="weight-close">&amp;times;</span>
+                                    <form id="trip_form" t-attf-action="/driver_portal/delivery_order/log_weight" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                        <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                        <input type="hidden" name="load_state" t-att-value="load_state"/>
+                                        <t t-if="delivery_order.state == 'loaded'">
+                                            <input type="hidden" name="cp_load" value="1"/>
+                                        </t>
+                                        <t t-if="delivery_order.state == 'unloaded'">
+                                            <input type="hidden" name="bp_unload" value="1"/>
+                                        </t>
+                                        <fieldset>
+                                            <label for="checker_id">Checker</label>
+                                            <select name="checker_id" id="checker_id" required="required">
+                                                <t t-foreach="checkers" t-as="checker">
+                                                    <option t-att-value="checker.id"><t t-raw="checker.display_name"/></option>
+                                                </t>
+                                                <option value="new">... New Checker</option>
+                                            </select>
+                                            <label for="new_checker" id="new_checker_label" class="hide">New Checker</label>
+                                            <input type="text" name="new_checker" id="new_checker" class="hide"/>
+                                            <label for="tare_weight">Tare Weight (kg)</label>
+                                            <t t-if="load_state == 'empty'">
+                                                <input type="number" name="tare_weight" id="tare_weight" required="required"/>
+                                            </t>
+                                            <t t-else="">
+                                                <input type="number" name="tare_weight" id="tare_weight" required="required" t-att-value="tare_weight"/>
+                                                <label for="gross_weight">Gross Weight (kg)</label>
+                                                <input type="number" name="gross_weight" id="gross_weight" required="required"/>
+                                            </t>
+                                        </fieldset>
+                                        <button class="button button-large" type="submit">Log Weight</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<script type="text/javascript" src="/tf_peec_portal/static/src/js/driver_portal.js"></script>
+            </t>
+        </template>
+
+        <template id="driver_portal_delivery_order_messenger" name="Driver Portal - Delivery Order - Messenger">
+            <t t-call="portal.portal_layout">
+                <t t-set="wrapwrap_classes" t-value="'o_portal_bg_dark'"/>
+
+                <t t-set="o_portal_fullwidth_alert" groups="base.group_user">
+                    <t t-call="portal.portal_back_in_edit_mode">
+                        <t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=logistics.delivery.order&amp;id=%s&amp;view_type=form' % (delivery_order.id)"/>
+                    </t>
+                </t>
+
+                <t t-call="portal.portal_record_layout">
+                    <t t-set="card_header">
+                        <div class="row no-gutters">
+                            <div class="col-md">
+                                <h5 class="mb-1 mb-md-0">
+                                    <span t-field="delivery_order.name"/>
+                                    <small class="text-muted"> (#<span t-field="delivery_order.id"/>)</small>
+                                </h5>
+                            </div>
+                            <div class="col-md text-md-right">
+                                <small class="text-right">Status:</small>
+                                <span t-field="delivery_order.state" class=" badge badge-pill badge-info" title="Current stage of this delivery order"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+
+                <t t-if="delivery_order.state != 'unassigned'">
+                    <div class="o_portal_messages_container mt32">
+                        <h4>Message and communication history</h4>
+                        <t t-call="portal.message_thread">
+                            <t t-set="token" t-value="delivery_order.access_token"/>
+                            <t t-set="object" t-value="delivery_order"/>
+                            <t t-set="pid" t-value="pid"/>
+                            <t t-set="hash" t-value="hash"/>
+                            <t t-set="disable_composer"/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="driver_portal_delivery_order_expenses" name="Driver Portal - Delivery Order - Expenses">
+            <t t-call="tf_peec_portal.driver_portal_frontend_layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="column center">
+                            <h2><a href="/driver_portal/delivery_order">Delivery Orders</a> / <a t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}"><t t-raw="delivery_order.name"/></a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <h3>Expenses</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <table class="table-striped" id="expense_table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Description</th>
+                                        <th>Expense Date</th>
+                                        <th>Amount</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="expenses" t-as="expense">
+                                        <tr>
+                                            <td><t t-raw="expense.product_id.display_name"/></td>
+                                            <td><t t-esc="expense.name"/></td>
+                                            <td><span t-field="expense.expense_date"/></td>
+                                            <td><span t-field="expense.amount"/></td>
+                                            <td class="center">
+                                                <form action="/driver_portal/delivery_order/delete_expense" method="post" enctype="multipart/form-data" class="compact">
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                    <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                                    <input type="hidden" name="expense_id" t-att-value="expense.id"/>
+                                                    <button type="submit" class="button button-danger">X</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="not expenses">
+                                        <tr>
+                                            <td colspan="5">
+                                                No expenses.
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <button class="button button-large" id="addBtn">Add Line</button>
+                        </div>
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="column">-->
+<!--                            <button class="button button-muted button-large" id="endLoadingBtn">Update</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="row">
+                        <div class="column">
+                            <a class="button button-muted button-large" t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="addModal" class="modal">
+                    <div class="modal-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="column">
+                                    <span class="modal-close float-right">&amp;times;</span>
+                                    <form id="add_form" t-attf-action="/driver_portal/delivery_order/add_expense" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                        <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                        <t t-if="delivery_order.trip_log_id">
+                                            <input type="hidden" name="trip_log_id" t-att-value="delivery_order.trip_log_id.id"/>
+                                        </t>
+                                        <fieldset>
+                                            <label for="product_id">Product</label>
+                                            <select name="product_id" id="product_id" required="required">
+                                                <t t-foreach="products" t-as="product">
+                                                    <option t-att-value="product.id"><t t-raw="product.display_name"/></option>
+                                                </t>
+                                            </select>
+                                            <label for="description">Description</label>
+                                            <input type="text" name="description" id="description" required="required"/>
+                                            <label for="expense_date">Expense Date</label>
+                                            <input type="datetime-local" name="expense_date" id="expense_date" required="required"/>
+                                            <label for="amount">Amount</label>
+                                            <input type="number" name="amount" id="amount" required="required"/>
+                                        </fieldset>
+                                        <button class="button button-large" type="submit">Add Expense</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<script type="text/javascript" src="/tf_peec_portal/static/src/js/driver_portal_expmain.js"></script>
+            </t>
+        </template>
+
+        <template id="driver_portal_delivery_order_maintenance" name="Driver Portal - Delivery Order - Maintenance">
+            <t t-call="tf_peec_portal.driver_portal_frontend_layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="column center">
+                            <h2><a href="/driver_portal/delivery_order">Delivery Orders</a> / <a t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}"><t t-raw="delivery_order.name"/></a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <h3>Maintenance Requests</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <table class="table-striped" id="expense_table">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Request Date</th>
+                                        <th>Vehicle</th>
+                                        <th>Stage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="maintenances" t-as="maintenance">
+                                        <tr style='cursor: pointer; cursor: hand;'
+                                            t-attf-onclick="window.location='/driver_portal/maintenance_request/{{maintenance.id}}';">
+                                            <td><t t-raw="maintenance.name"/></td>
+                                            <td><span t-field="maintenance.request_date"/></td>
+                                            <td><t t-raw="maintenance.vehicle_id.display_name"/></td>
+                                            <td><span t-field="maintenance.stage_id.name"/></td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="not maintenances">
+                                        <tr>
+                                            <td colspan="4">
+                                                No maintenance requests.
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <button class="button button-large" id="addBtn">Add Request</button>
+                        </div>
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="column">-->
+<!--                            <button class="button button-muted button-large" id="endLoadingBtn">Update</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="row">
+                        <div class="column">
+                            <a class="button button-muted button-large" t-attf-href="/driver_portal/delivery_order/{{delivery_order.id}}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="addModal" class="modal">
+                    <div class="modal-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="column">
+                                    <span class="modal-close float-right">&amp;times;</span>
+                                    <form id="add_form" t-attf-action="/driver_portal/delivery_order/add_maintenance" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="delivery_order_id" t-att-value="delivery_order.id"/>
+                                        <input type="hidden" name="delivery_unit_id" t-att-value="delivery_unit.id"/>
+                                        <t t-if="delivery_order.trip_log_id">
+                                            <input type="hidden" name="trip_log_id" t-att-value="delivery_order.trip_log_id.id"/>
+                                        </t>
+                                        <fieldset>
+                                            <label for="name">Subject</label>
+                                            <input type="text" name="name" id="name" required="required"/>
+                                            <label for="vehicle_id">Vehicle</label>
+                                            <select name="vehicle_id" id="vehicle_id" required="required">
+                                                <t t-foreach="vehicles" t-as="vehicle">
+                                                    <option t-att-value="vehicle.id"><t t-raw="vehicle.display_name"/></option>
+                                                </t>
+                                            </select>
+                                            <label for="description">Description</label>
+                                            <textarea name="description" id="description" required="required"/>
+                                        </fieldset>
+                                        <button class="button button-large" type="submit">Submit Request</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<script type="text/javascript" src="/tf_peec_portal/static/src/js/driver_portal_expmain.js"></script>
+            </t>
+        </template>
+
+        <template id="driver_portal_delivery_order_maintenance_main" name="Driver Portal - Delivery Order - Maintenance Main">
+        <t t-call="portal.portal_layout">
+            <t t-set="wrapwrap_classes" t-value="'o_portal_bg_dark'"/>
+
+            <t t-set="o_portal_fullwidth_alert" groups="base.group_user">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=maintenance.request&amp;id=%s&amp;view_type=form' % (maintenance.id)"/>
+                </t>
+            </t>
+
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <div class="row no-gutters">
+                        <div class="col-md">
+                            <h5 class="mb-1 mb-md-0">
+                                <span t-field="maintenance.name"/>
+                                <small class="text-muted"> (#<span t-field="maintenance.id"/>)</small>
+                            </h5>
+                        </div>
+                        <div class="col-md text-md-right">
+                            <small class="text-right">Status:</small>
+                            <span t-field="maintenance.stage_id.name" class=" badge badge-pill badge-info" title="Current stage of this maintenance request"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-set="card_body">
+                    <div class="row mb-4" t-if="maintenance.vehicle_id">
+                        <strong class="col-lg-2">Vehicle</strong>
+                        <div t-if="maintenance.vehicle_id" class="col-lg-10" t-field="maintenance.vehicle_id.display_name"/>
+                    </div>
+                    <div class="row mb-4" t-if="maintenance.request_date">
+                        <strong class="col-lg-2">Request Date</strong>
+                        <div t-if="maintenance.request_date" class="col-lg-10" t-field="maintenance.request_date"/>
+                    </div>
+                    <div class="row mb-4" t-if="maintenance.description">
+                        <strong class="col-lg-2">Description</strong>
+                        <div t-if="maintenance.description" class="col-lg-10" t-field="maintenance.description"/>
+                    </div>
+                </t>
+            </t>
+            <div class="o_portal_messages_container mt32">
+                <h4>Message and communication history</h4>
+                <t t-call="portal.message_thread">
+                    <t t-set="token" t-value="maintenance.access_token"/>
+                    <t t-set="object" t-value="maintenance"/>
+                    <t t-set="pid" t-value="pid"/>
+                    <t t-set="hash" t-value="hash"/>
+                    <t t-set="disable_composer"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+        <template id="driver_portal_attendance" name="Driver Portal - Attendance">
+            <t t-call="tf_peec_portal.driver_portal_frontend_layout">
+                <div class="container">
+                    <div class="row">
+                        <div class="column center">
+                            <h2><a href="/driver_portal/attendance">Attendance</a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <form action="/driver_portal/attendance/available" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <label for="from_date">From</label>
+                                <input type="date" name="from_date" id="from_date" required="required"/>
+                                <label for="to_date">To</label>
+                                <input type="date" name="to_date" id="to_date" required="required"/>
+                                <t t-if="not employee">
+                                    <label for="employee_pin">Employee PIN</label>
+                                    <input type="password" name="employee_pin" id="employee_pin" required="required"/>
+                                </t>
+                                <button type="submit" class="button button-large">Available</button>
+                                <button type="submit" class="button button-muted button-large" formaction="/driver_portal/attendance/leave">On Leave</button>
+                                <button type="submit" class="button button-muted button-large" formaction="/driver_portal/attendance/meeting">In Meeting</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div t-if="employee" class="row">
+                        <div class="column">
+                            <table class="table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>State</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="attendances" t-as="attendance">
+                                        <tr>
+                                            <td><t t-esc="attendance.employee_id.display_name"/></td>
+                                            <td><t t-esc="attendance.from_date"/></td>
+                                            <td><t t-esc="attendance.to_date"/></td>
+                                            <td><span t-field="attendance.state"/></td>
+                                            <td class="center">
+                                                <form action="/driver_portal/attendance/delete" method="post" enctype="multipart/form-data" class="compact">
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                    <input type="hidden" name="attendance_id" t-att-value="attendance.id"/>
+                                                    <button type="submit" class="button button-danger">X</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div t-if="pager" class="pager center">
+                                <t t-call="portal.pager"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<script type="text/javascript" src="/tf_peec_portal/static/src/js/driver_portal.js"></script>
+            </t>
+        </template>
+
+    </data>
+</odoo>

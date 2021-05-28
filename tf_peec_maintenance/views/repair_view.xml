@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Repair Order Form View Inherit -->
+        <record id="peec_repair_order_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Repair Order Form View Inherit</field>
+            <field name="model">repair.order</field>
+            <field name="inherit_id" ref="repair.view_repair_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='product_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <field name="product_id" position="replace">
+                    <field name="to_repair" widget="radio"/>
+                    <field name="equipment_id"
+                           attrs="{'required': [('to_repair', '=', 'equipment')], 'invisible': [('to_repair','!=', 'equipment')]}"/>
+                    <field name="vehicle_id"
+                           attrs="{'required': [('to_repair', '=', 'vehicle')], 'invisible': [('to_repair','!=', 'vehicle')]}"/>
+                    <field name="product_id"
+                           attrs="{'required': [('to_repair', '=', 'product')], 'invisible': [('to_repair','!=', 'product')]}"/>
+                </field>
+
+                <field name="tag_ids" position="after">
+                    <field name="maintenance_request_id"/>
+                    <field name="reason_for_repair_id"/>
+                </field>
+
+                <field name="location_id" position="after">
+                    <field name="installation_loc"
+                           attrs="{'required': [('to_repair', '=', 'vehicle')], 'invisible': [('to_repair','!=', 'vehicle')]}"/>
+                </field>
+
+                <!-- Add fields to Operations page-->
+                <xpath expr="//sheet/notebook/page[2]/field/tree/field[@name='name']" position="after">
+                    <field name="work_accomplished_id"/>
+                    <field name="failure_code_id"/>
+                    <field name="system_lvl_id"/>
+                    <field name="assembly_lvl_id"/>
+                    <field name="component_lvl_id"/>
+                    <field name="supplier_iden_id"/>
+                </xpath>
+
+                <field name="operations" position="attributes">
+                    <attribute name="context"> {'default_product_uom_qty': product_qty, 'default_location_dest_id': installation_loc}</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        <!-- Repair Order List View Inherit -->
+        <record id="peec_repair_order_list_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Repair Order List View Inherit</field>
+            <field name="model">repair.order</field>
+            <field name="inherit_id" ref="repair.view_repair_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="replace">
+                    <field name="to_repair"/>
+                    <field name="vehicle_id"/>
+                    <field name="equipment_id"/>
+                    <field name="installation_loc"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Repair Order List View Inherit -->
+        <record id="repair_order_operation_list_view" model="ir.ui.view">
+            <field name="name">repair.order.operation.list.view</field>
+            <field name="model">repair.fee</field>
+            <field name="arch" type="xml">
+                <tree string="Operations" create="false" edit="false" delete="false">
+                    <field name="repair_id"/>
+                    <field name="product_id" domain="[('type', '!=', 'service')]"/>
+                    <field name="name" optional="show"/>
+                    <field name="work_accomplished_id"/>
+                    <field name="failure_code_id"/>
+                    <field name="system_lvl_id"/>
+                    <field name="assembly_lvl_id" attrs="{'required': [('system_lvl_id', '!=', False)]}"/>
+                    <field name="component_lvl_id" attrs="{'required': [('system_lvl_id', '!=', False)]}"/>
+                    <field name="supplier_iden_id" attrs="{'required': [('system_lvl_id', '!=', False)]}"/>
+                    <field name="product_uom_qty" string="Quantity"/>
+                    <field name="product_uom" string="UoM" groups="uom.group_uom" optional="show"/>
+                    <field name="price_unit"/>
+                    <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"
+                           optional="show"/>
+                    <field name="price_subtotal" widget="monetary"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="repair_order_operation_pivot_view" model="ir.ui.view">
+            <field name="name">repair.order.operation.pivot.view</field>
+            <field name="model">repair.fee</field>
+            <field name="arch" type="xml">
+                <pivot string="Operations">
+                    <field name="product_uom_qty" string="Quantity" type="measure"/>
+                    <field name="price_unit" type="measure"/>
+                    <field name="price_subtotal" widget="monetary" type="measure"/>
+                    <field name="repair_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="repair_order_operation_view_action" model='ir.actions.act_window'>
+            <field name="name">Repair Operations</field>
+            <field name="res_model">repair.fee</field>
+            <field name="view_mode">pivot,tree</field>
+        </record>
+
+        <menuitem id="repair_order_operations_menu" name="Repair Operations" parent="repair.repair_menu_reporting"
+                  action="repair_order_operation_view_action" sequence="20"/>
+
+    </data>
+</odoo>

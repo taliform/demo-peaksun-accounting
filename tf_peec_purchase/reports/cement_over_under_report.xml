@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_a4_landscape" model="report.paperformat">
+            <field name="name">A4 Landscape</field>
+            <field name="default" eval="False" />
+            <field name="format">custom</field>
+            <field name="page_height">400</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">35</field>
+        </record>
+
+        <report id="cement_over_under_pdf"
+                string="Cement Over Under Report (PDF)"
+                model="purchase.order"
+                report_type="qweb-pdf"
+                name="tf_peec_purchase.cement_over_under_pdf"
+                file="tf_peec_purchase.cement_over_under_pdf"
+                paperformat="paperformat_a4_landscape"
+                menu="False"
+        />
+
+        <template id="cement_over_under_pdf">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Advances (Over-Under)</h2>
+                            <div>
+                                <div>
+                                    <strong>From: </strong>
+                                    <span t-if="data.get('date_from')"><t t-esc="data['date_from']"/></span>
+                                    <strong>To: </strong>
+                                    <span t-if="data.get('date_to')"><t t-esc="data['date_to']"/></span>
+                                </div>
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="15" class="text-center">PURCHASE ORDER</th>
+                                        <th colspan="4" class="text-center">ATW</th>
+                                        <th colspan="9" class="text-center">ACTUAL WITHDRAWAL</th>
+                                        <th colspan="3" class="text-center">VARIANCE</th>
+                                        <th colspan="6" class="text-center">AP ADJUSTMENT</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">PO NO</th>
+                                        <th class="text-center">SO NO</th>
+                                        <th class="text-center">BRAND</th>
+                                        <th class="text-center">APV</th>
+                                        <th class="text-center">APV DATE</th>
+                                        <th class="text-center">SUPP SI NO</th>
+                                        <th class="text-center">PO QTY</th>
+                                        <th class="text-center">UNIT PRICE</th>
+                                        <th class="text-center">PO AMT</th>
+                                        <th class="text-center">CV NO</th>
+                                        <th class="text-center">CV DATE</th>
+                                        <th class="text-center">CV AMT</th>
+                                        <th class="text-center">BANK</th>
+                                        <th class="text-center">CHECK</th>
+                                        <th class="text-center">CHECK DATE</th>
+                                        <th class="text-center">ATW NO</th>
+                                        <th class="text-center">ATW QTY</th>
+                                        <th class="text-center">UNIT PRICE</th>
+                                        <th class="text-center">ATW AMT</th>
+                                        <th class="text-center">SI NO</th>
+                                        <th class="text-center">APV NO</th>
+                                        <th class="text-center">APV DATE</th>
+                                        <th class="text-center">CP DR NO</th>
+                                        <th class="text-center">CP OUT</th>
+                                        <th class="text-center">CP QTY</th>
+                                        <th class="text-center">CP AMT</th>
+                                        <th class="text-center">EWT</th>
+                                        <th class="text-center">NET OF EWT</th>
+                                        <th class="text-center">VAR QTY</th>
+                                        <th class="text-center">VAR AMT</th>
+                                        <th class="text-center">ADJ VARIANCE</th>
+                                        <th class="text-center">DM NO</th>
+                                        <th class="text-center">DM DATE</th>
+                                        <th class="text-center">DM AMT</th>
+                                        <th class="text-center">CV/JV NO</th>
+                                        <th class="text-center">CV/JV DATE</th>
+                                        <th class="text-center">CV/JV AMT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="partner_names" t-as="partner_id">
+                                        <td colspan="37"><span t-if="partner_names[partner_id]"><t t-esc="partner_names[partner_id]"/></span></td>
+                                        <tr t-foreach="lines_data[partner_id]" t-as="po_id">
+                                            <t t-set="pol_id" t-value="po_id.order_line[0]"/>
+                                            <td><span t-esc="po_id.name"/></td>
+                                            <td><!-- SO NO --></td>
+                                            <td><span t-esc="pol_id.product_id.display_name"/></td>
+                                            <td><!-- APV --></td>
+                                            <td><span t-esc="po_id.date_approve"/></td>
+                                            <td><!-- SUPP SI NO --></td>
+                                            <td><span t-esc="pol_id.product_qty"/></td>
+                                            <td><span t-esc="pol_id.price_unit"/></td>
+                                            <td><span t-esc="po_id.amount_total"/></td>
+                                            <td><!-- CV NO --></td>
+                                            <td><!-- CV DATE --></td>
+                                            <td><!-- CV AMT --></td>
+                                            <td><!-- BANK --></td>
+                                            <td><!-- CHECK --></td>
+                                            <td><!-- CHECK DATE --></td>
+                                            <td><!-- ATW NO --></td>
+                                            <td><!-- ATW QTY --></td>
+                                            <td><!-- UNIT PRICE --></td>
+                                            <td><!-- ATW AMT --></td>
+                                            <td><!-- SI NO --></td>
+                                            <td><!-- APV NO --></td>
+                                            <td><!-- APV DATE --></td>
+                                            <td><!-- CP DR NO --></td>
+                                            <td><!-- CP OUT --></td>
+                                            <td><!-- CP QTY --></td>
+                                            <td><!-- CP AMT --></td>
+                                            <td><!-- EWT --></td>
+                                            <td><!-- NET OF EWT --></td>
+                                            <td><!-- VAR QTY --></td>
+                                            <td><!-- VAR AMT --></td>
+                                            <td><!-- ADJ VARIANCE --></td>
+                                            <td><!-- DM NO --></td>
+                                            <td><!-- DM DATE --></td>
+                                            <td><!-- DM AMT --></td>
+                                            <td><!-- CV/JV NO --></td>
+                                            <td><!-- CV/JV DATE --></td>
+                                            <td><!-- CV/JV AMT --></td>
+
+                                        </tr>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                     </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

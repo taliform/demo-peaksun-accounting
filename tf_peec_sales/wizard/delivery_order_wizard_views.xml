@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Create Delivery Orders -->
+        <record id="peec_sale_delivery_order_view_form" model="ir.ui.view">
+            <field name="name">peec.sale.delivery.order.view.form</field>
+            <field name="model">sale.logistics.delivery.order</field>
+            <field name="arch" type="xml">
+                <form string="Create Delivery Order">
+                    <group name="create_do">
+                        <div class="oe_grey" colspan="2">
+                               Indicate the number of delivery orders (no. of truck loads) and quantity per delivery order (truck load capacity).
+                            </div>
+                        <group name="section1">
+                            <field name="no_delivery_order" required="1"/>
+                            <label for="no_delivery_order_qty"/>
+                            <div class="o_row">
+                                <field name="no_delivery_order_qty" required="1"/>
+                                <field name="uom_id" required="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="cement_plant_id" required="1"/>
+                            <field name="batching_plant_id"/>
+                            <field name="sale_type" invisible="1"/>
+                            <field name="product_id" attrs="{'invisible': [('sale_type', '!=', 'hauling')], 'required': [('sale_type', '=', 'hauling')]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="prepare_delivery_order"
+                            string="Create DO"
+                            type="object"
+                            class="btn-primary"/>
+                        <button string="Discard"
+                            class="btn-secondary"
+                            special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_sale_delivery_order_view_action" model="ir.actions.act_window">
+            <field name="name">Delivery Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.logistics.delivery.order</field>
+            <field name="binding_model_id" eval="False"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="peec_sale_delivery_order_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <act_window
+            name="Create Delivery Orders"
+            res_model="sale.logistics.delivery.order"
+            binding_model="sale.order"
+            binding_views="list"
+            view_mode="form"
+            target="new"
+            view_id="tf_peec_sales.peec_sale_delivery_order_view_form"
+            id="peec_sale_order_create_do_view_action"
+        />
+
+        <!-- Merge Delivery Orders-->
+        <record id="peec_sale_merge_delivery_order_view_form" model="ir.ui.view">
+            <field name="name">peec.sale.merge.delivery.order.view.form</field>
+            <field name="model">sale.merge.logistics.delivery.order</field>
+            <field name="arch" type="xml">
+                <form string="Create Merged Delivery Order">
+                    <group name="create_do">
+                        <group name="section1">
+                            <field name="no_delivery_order" readonly="1" required="1"/>
+                            <field name="no_delivery_order_qty"/>
+                        </group>
+                        <div attrs="{'invisible': [('with_excess','=',False)]}" class="oe_grey" colspan="4">
+                               There's an excess quantity that id less than the requested quantity per Delivery Order.
+                                Select Sales Order to shoulder the insufficient truck load.
+                        </div>
+                        <group name="section2">
+                            <field name="so_id" string="Sales Order"
+                                   options="{'no_create_edit': True}"
+                                   domain="[('id', 'in', so_ids)]"
+                                   attrs="{'invisible': [('with_excess','=',False)],'required': [('with_excess','=',True)]}"/>
+                            <field name="excess_qty" readonly="1" attrs="{'invisible': [('with_excess','=',False)]}"/>
+                            <field name="so_ids" tags="many2many_tags" invisible="1"/>
+                            <field name="with_excess" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="prepare_merge_delivery_order"
+                            string="Merge DO"
+                            type="object"
+                            class="btn-primary"/>
+                        <button string="Discard"
+                            class="btn-secondary"
+                            special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_sale_merge_delivery_order_view_action" model="ir.actions.act_window">
+            <field name="name">Merge Delivery Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.merge.logistics.delivery.order</field>
+            <field name="binding_model_id" eval="False"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="peec_sale_merge_delivery_order_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <act_window
+            name="Create Merged Delivery Order"
+            res_model="sale.merge.logistics.delivery.order"
+            binding_model="sale.order"
+            binding_views="list"
+            view_mode="form"
+            target="new"
+            view_id="tf_peec_sales.peec_sale_merge_delivery_order_view_form"
+            id="peec_sale_order_merge_do_view_action"
+        />
+    </data>
+</odoo>

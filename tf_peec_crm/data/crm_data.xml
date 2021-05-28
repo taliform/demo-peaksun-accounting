@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Custom Currency -->
+        <record id="BAGS" model="res.currency">
+            <field name="name">Bags</field>
+            <field name="symbol">Bags</field>
+            <field name="rounding">0.01</field>
+            <field name="position">after</field>
+            <field name="currency_unit_label">Bags</field>
+        </record>
+
+        <record id="base.main_company" model="res.company">
+            <field name="bag_currency_id" ref="tf_peec_crm.BAGS"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_delivery_order_assign_view_form" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.assign.view.form</field>
+            <field name="model">logistics.delivery.order.assign</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="delivery_order_id" invisible="1"/>
+                    <group>
+                        <field name="delivery_unit_id"
+                               options="{'limit': 10, 'search_more':true}"
+                               domain="[('delivery_order_id', '=', False), ('state', '=', 'active')]"/>
+                    </group>
+                    <footer>
+                        <button name="action_assign" type="object" string="Assign" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

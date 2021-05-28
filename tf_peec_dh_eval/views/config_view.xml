@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Appraisal DH Menu -->
+        <menuitem id="tf_dh_eval_base_config_menu" name="Driver/Helper"
+          parent="hr_appraisal.menu_hr_appraisal_configuration"
+          sequence="100" groups="base.group_no_one"/>
+
+        <!-- DH Eval Search View -->
+		<record id="tf_dh_eval_config_view_search" model="ir.ui.view">
+            <field name="name">DH Eval Config Search View</field>
+            <field name="model">tf.dh.eval.config</field>
+            <field name="arch" type="xml">
+                <search string="Search Evaluation Matrices">
+                    <field name="name" string="Matrix" filter_domain="[('name', 'ilike', self)]"/>
+                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+		<!-- DH Eval Action -->
+		<record id="tf_dh_eval_config_action" model="ir.actions.act_window">
+			<field name="name">Driver/Helper Evaluation Matrices</field>
+			<field name="res_model">tf.dh.eval.config</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+            <field name="search_view_id" ref="tf_dh_eval_config_view_search"/>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- DH Eval Menu -->
+        <menuitem id="tf_dh_eval_config_menu" name="Evaluation Matrices"
+				  parent="tf_dh_eval_base_config_menu"
+				  action="tf_dh_eval_config_action"
+				  sequence="5" groups="hr.group_hr_user"/>
+
+        <!-- DH Eval Tree View -->
+        <record id="tf_dh_eval_config_view_tree" model="ir.ui.view">
+            <field name="name">DH Eval Config Tree View</field>
+            <field name="model">tf.dh.eval.config</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval Config">
+                    <field name="name"/>
+                    <field name="percent_prod" widget="percentage"/>
+                    <field name="percent_corp" widget="percentage"/>
+                    <field name="percent_skills" widget="percentage"/>
+                </tree>
+            </field>
+        </record>
+
+		<!-- DH Eval Form View -->
+        <record id="tf_dh_eval_config_view_form" model="ir.ui.view">
+            <field name="name">DH Eval Config Form View</field>
+            <field name="model">tf.dh.eval.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="DH Eval Config">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" string="Active" type="object" groups="hr.group_hr_user" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <span class="o_form_label" >Configuration Name</span>
+                            <h1>
+                                <field name="name" placeholder="Description"/>
+                            </h1>
+                        </div>
+                        <group string="Overall Rating Multiplier">
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr style="background-color:lightgrey;">
+                                        <th style="text-align:center;">Productivity</th>
+                                        <th style="text-align:center;">Corporate</th>
+                                        <th style="text-align:center;">Skills</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="text-align:center;font-weight:bold;font-size:13px;">
+                                        <td><field name="percent_prod" widget="percentage" nolabel="1" required="1"/></td>
+                                        <td><field name="percent_corp" widget="percentage" nolabel="1" required="1"/></td>
+                                        <td><field name="percent_skills" widget="percentage" nolabel="1" required="1"/></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color:lightgrey;vertical-align:middle;">
+                                        <td colspan="2" style="text-align:right;font-weight:bold;font-size:13px;vertical-align:right;">
+                                            Total
+                                        </td>
+                                        <td style="text-align:center;font-weight:bold;font-size:15px;">
+                                            <field name="total_rating" nolabel="1" widget="percentage"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </group>
+                        <group string="Appraisal Grading">
+                            <field name="grade_ids" nolabel="1" context="{'default_from_range': max_rating, 'default_to_range': max_rating + 0.24}">
+                                <tree editable="bottom">
+                                    <field name="from_range" widget="percentage"/>
+                                    <field name="to_range" widget="percentage"/>
+                                    <field name="rating" />
+                                    <field name="badge_ids" widget="many2many_tags"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group name="hidden_fields" invisible="1">
+                            <field name="max_prod"/>
+                            <field name="max_accident"/>
+                            <field name="max_speeding"/>
+                            <field name="max_infraction"/>
+                            <field name="max_rating"/>
+                        </group>
+                        <notebook>
+                            <page name="productivity" string="Productivity">
+                                <field name="productivity_ids" context="{'default_from_range': max_prod, 'default_to_range': max_prod + 4}">
+                                    <tree editable="bottom">
+                                        <field name="from_range" />
+                                        <field name="to_range"/>
+                                        <field name="score" widget="percentage" />
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="corporate" string="Corporate">
+                                <group>
+                                    <group name="accidents" string="Accidents" style="border: 0.5px solid #E8E8E8;">
+                                        <field name="accident_infra_id" options="{'no_create_edit': True}"/>
+                                        <field name="accident_action_id" options="{'no_create_edit': True}"/>
+                                        <field name="accident_ids" nolabel="1" colspan="2" context="{'default_from_range': max_accident, 'default_to_range': max_accident + 4}"/>
+                                    </group>
+                                    <group name="overspeeding" string="Overspeeding" style="border: 0.5px solid #E8E8E8;">
+                                        <field name="speeding_infra_id" options="{'no_create_edit': True}"/>
+                                        <field name="speeding_action_id" options="{'no_create_edit': True}"/>
+                                        <field name="speeding_ids" nolabel="1" colspan="2" context="{'default_from_range': max_speeding, 'default_to_range': max_speeding + 4}"/>
+                                    </group>
+                                    <group name="others" string="Other Infraction" style="border: 0.5px solid #E8E8E8;">
+                                        <field name="other_infra_id" options="{'no_create_edit': True}"/>
+                                        <field name="other_action_id" options="{'no_create_edit': True}"/>
+                                        <field name="infraction_ids" nolabel="1" colspan="2" context="{'default_from_range': max_infraction, 'default_to_range': max_infraction + 4}"/>
+                                    </group>
+                                    <group name="leaves" string="Leaves" style="border: 0.5px solid #E8E8E8;">
+                                        <field name="leave_type_ids" widget="many2many_tags" context="{'default_from_range': max_speeding, 'default_to_range': max_speeding + 4}"/>
+                                        <field name="leave_multiplier" widget="percentage" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- DH Productivity Form View -->
+        <record id="tf_dh_eval_prod_config_view_form" model="ir.ui.view">
+            <field name="name">DH Eval Productivity Config Form View</field>
+            <field name="model">tf.dh.eval.prod.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="DH Eval Prod Config">
+                    <group>
+                        <group>
+                            <label for="from_range" string="Range"/>
+                            <div>
+                                <field name="from_range" class="oe_inline"/>
+                                <span> to </span>
+                                <field name="to_range" class="oe_inline"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="score" widget="percentage"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- DH Corporate Config Tree View -->
+        <record id="tf_dh_eval_corpo_config_view_tree" model="ir.ui.view">
+            <field name="name">DH Eval Corporate Config Tree View</field>
+            <field name="model">tf.dh.eval.corpo.config</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval Corpo Config" editable="bottom">
+                    <field name="from_range"/>
+                    <field name="to_range"/>
+                    <field name="score" widget="percentage"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- DH Corporate Config Form View -->
+        <record id="tf_dh_eval_corpo_config_view_form" model="ir.ui.view">
+            <field name="name">DH Eval Corpo Config Form View</field>
+            <field name="model">tf.dh.eval.corpo.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="DH Eval Corpo Config">
+                    <group>
+                        <group>
+                            <label for="from_range" string="Range"/>
+                            <div>
+                                <field name="from_range" class="oe_inline"/>
+                                <span> to </span>
+                                <field name="to_range" class="oe_inline"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="score" widget="percentage"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- DH Grade Config Form View -->
+        <record id="tf_dh_eval_grade_config_view_form" model="ir.ui.view">
+            <field name="name">DH Eval Grade Config Form View</field>
+            <field name="model">tf.dh.eval.grade.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="DH Eval Grade Config">
+                    <group>
+                        <group>
+                            <label for="from_range" string="Range"/>
+                            <div>
+                                <field name="from_range" class="oe_inline" widget="percentage"/>
+                                <span> to </span>
+                                <field name="to_range" class="oe_inline" widget="percentage"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="rating"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="badge_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+<!--         &lt;!&ndash; DH Eval Badge Search View &ndash;&gt;-->
+<!--		<record id="tf_dh_badge_config_view_search" model="ir.ui.view">-->
+<!--            <field name="name">DH Eval Badge Search View</field>-->
+<!--            <field name="model">tf.dh.eval.badge</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <search string="Search Badges">-->
+<!--                    <field name="name" string="Badge" filter_domain="[('name', 'ilike', self)]"/>-->
+<!--                </search>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; DH Eval Badge Tree View &ndash;&gt;-->
+<!--        <record id="tf_dh_badge_config_view_tree" model="ir.ui.view">-->
+<!--            <field name="name">DH Eval Badge Tree View</field>-->
+<!--            <field name="model">tf.dh.eval.badge</field>-->
+<!--            <field name="type">tree</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="DH Eval Corpo Config" editable="bottom">-->
+<!--                    <field name="name"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--		&lt;!&ndash; DH Eval Badge Action &ndash;&gt;-->
+<!--		<record id="tf_dh_badge_config_action" model="ir.actions.act_window">-->
+<!--			<field name="name">Driver/Helper Badges</field>-->
+<!--			<field name="res_model">tf.dh.eval.badge</field>-->
+<!--			<field name="context">{}</field>-->
+<!--			<field name="domain">[]</field>-->
+<!--            <field name="search_view_id" ref="tf_dh_eval_config_view_search"/>-->
+<!--			<field name="view_mode">tree</field>-->
+<!--		</record>-->
+
+        <!-- DH Badge Menu -->
+        <menuitem id="tf_dh_badge_config_menu" name="Badges"
+				  parent="tf_dh_eval_base_config_menu"
+				  action="gamification.badge_list_action"
+				  sequence="10" groups="hr.group_hr_user"/>
+
+    </data>
+</odoo>

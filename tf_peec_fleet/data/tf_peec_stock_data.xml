@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Configuration -->
+        <record id="peec_stock_settings" model="res.config.settings">
+            <field name="group_stock_multi_locations">True</field>
+            <field name="group_stock_multi_warehouses">True</field>
+        </record>
+
+        <function model="res.config.settings" name="execute">
+            <value model="res.config.settings" search="[('id', '=', ref('peec_stock_settings'))]"/>
+        </function>
+
+	    <!--Sequences-->
+        <record id="tf_peec_stock_transfer_seq" model="ir.sequence">
+            <field name="name">Stock Transfer Sequence</field>
+            <field name="code">tf.peec.stock.transfer</field>
+            <field name="prefix">ST/</field>
+            <field name="padding">5</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+        </record>
+
+        <record id="tf_peec_stock_incoming_seq" model="ir.sequence">
+            <field name="name">Incoming Stock Sequence</field>
+            <field name="code">tf.peec.stock.incoming</field>
+            <field name="prefix">IS/</field>
+            <field name="padding">5</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+        </record>
+
+        <!--Stock Operation Types-->
+        <record id="tf_peec_stock_transfer_type" model="stock.picking.type">
+            <field name="name">Stock Transfer</field>
+            <field name="sequence_code">OUT-TRANSFER</field>
+            <field name="code">internal</field>
+            <field name="show_operations" eval="True"/>
+            <field name="is_internal_out" eval="True"/>
+            <field name="sequence_id" ref="tf_peec_stock_transfer_seq"/>
+            <field name="default_location_src_id" ref="stock.stock_location_stock"/>
+            <field name="default_location_dest_id" ref="stock.stock_location_inter_wh"/>
+        </record>
+
+        <record id="tf_peec_stock_incoming_type" model="stock.picking.type">
+            <field name="name">Incoming Stock</field>
+            <field name="sequence_code">IN-TRANSFER</field>
+            <field name="code">internal</field>
+            <field name="show_operations" eval="True"/>
+            <field name="sequence_id" ref="tf_peec_stock_incoming_seq"/>
+            <field name="default_location_src_id" ref="stock.stock_location_inter_wh"/>
+            <field name="default_location_dest_id" ref="stock.stock_location_stock"/>
+        </record>
+
+	</data>
+
+</odoo>

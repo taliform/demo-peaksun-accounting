@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_tyrecheck_root" name="TyreCheck"
+                  web_icon="tf_peec_tyrecheck,static/description/icon.png"/>
+
+        <menuitem id="menu_tyrecheck_tires" name="Tires"
+                  parent="menu_tyrecheck_root" sequence="10"
+                  action="action_tyrecheck_tire"/>
+
+        <menuitem id="menu_tyrecheck_vehicles" name="Vehicles"
+                  parent="menu_tyrecheck_root" sequence="20"
+                  action="action_tyrecheck_vehicle"/>
+
+        <menuitem id="menu_tyrecheck_products" name="Products"
+                  parent="menu_tyrecheck_root" sequence="30"
+                  action="action_tyrecheck_product"/>
+
+        <menuitem id="menu_tyrecheck_service_centers" name="Service Centers"
+                  parent="menu_tyrecheck_root" sequence="40"
+                  action="action_tyrecheck_service_center"/>
+
+        <menuitem id="menu_tyrecheck_companies" name="Companies"
+                  parent="menu_tyrecheck_root" sequence="50"
+                  action="action_tyrecheck_company"/>
+
+        <menuitem id="menu_tyrecheck_update_all" name="Update All"
+                  parent="menu_tyrecheck_root" sequence="60"
+                  action="model_tyrecheck_action_update_all"/>
+
+    </data>
+</odoo>

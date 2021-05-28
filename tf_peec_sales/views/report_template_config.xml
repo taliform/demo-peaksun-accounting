@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_sale_cement_delivery_order" model="ir.actions.report">
+            <field name="name">Summary of Cement Deliveries</field>
+            <field name="model">sale.cement.delivery.report</field>
+            <field name="report_name">sale.cement.delivery.order.report</field>
+            <field name="report_type">py3o</field>
+            <field name="py3o_filetype">pdf</field>
+            <field name="module">tf_peec_sales</field>
+            <field name="py3o_template_fallback">reports/Cement3.odt</field>
+        </record>
+
+    </data>
+</odoo>

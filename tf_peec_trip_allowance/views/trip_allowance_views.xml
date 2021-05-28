@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="trip_allowance_view_tree" model="ir.ui.view">
+            <field name="name">tf.hr.dh.trip.allowance.view.tree</field>
+            <field name="model">tf.hr.dh.trip.allowance</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="duration_from"/>
+                    <field name="duration_to"/>
+                    <field name="total_amount"/>
+                    <field name="total_paid"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="trip_allowance_view_form" model="ir.ui.view">
+            <field name="name">tf.hr.dh.trip.allowance.view.form</field>
+            <field name="model">tf.hr.dh.trip.allowance</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
+                        <button name="action_compute" type="object" string="Process" states="confirm" class="oe_highlight"/>
+                        <button name="action_validate" type="object" string="Validate" states="compute" class="oe_highlight"/>
+                        <button name="action_recompute" type="object" string="Recompute" states="compute"/>
+                        <button name="action_generate" type="object" string="Generate" states="validate" class="oe_highlight"/>
+                        <button name="action_regenerate" type="object" string="Regenerate" states="generate"/>
+                        <field name="state" widget="statusbar" string="State"
+                               statusbar_visible="draft,confirm,compute,validate,generate"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button type="object" name="action_view_adjustments" class="oe_stat_button" icon="fa-money" attrs="{'invisible':[('adjustment_ids','=',[])]}">
+                                <field name="adjustment_count" widget="statinfo" string="Salary Adjustments" help="Salary Adjustments"/>
+                                <field name="adjustment_ids" invisible="1"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="duration_from"/>
+                                <field name="duration_to"/>
+                            </group>
+                            <group>
+                                <field name="is_non_payroll"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <group string="Attendances">
+                            <field name="line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="job_id"/>
+                                    <field name="rank_id"/>
+                                    <field name="no_of_days"/>
+                                    <field name="rate"/>
+                                    <field name="amount"/>
+                                    <field name="adjustment_id"/>
+                                    <field name="adjustment_state" optional="hide"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group name="note_group" col="6">
+                            <group colspan="4">
+                                <field name="notes" nolabel="1" placeholder="Notes..."/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="allowance_total">
+                                <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="total_paid" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <div class="oe_clear"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_trip_allowance" model="ir.actions.act_window">
+            <field name="name">Trip Allowance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tf.hr.dh.trip.allowance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <menuitem id="trip_allowance_main_menu"
+                  name="Trip Allowance"
+                  parent="ss_hris_compben.ss_hris_compben"
+                  sequence="50"/>
+
+		<menuitem id="peec_hr_rice_subsidy_report_menu"
+                  name="Trip Allowance"
+                  action="action_trip_allowance"
+                  parent="trip_allowance_main_menu"
+                  sequence="10"/>
+
+        <record id="trip_allowance_rate_view_tree" model="ir.ui.view">
+            <field name="name">tf.hr.dh.trip.allowance.rate.view.tree</field>
+            <field name="model">tf.hr.dh.trip.allowance.rate</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="job_id"/>
+                    <field name="rank_id"/>
+                    <field name="rate"/>
+                    <field name="currency_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_trip_allowance_rate" model="ir.actions.act_window">
+            <field name="name">Trip Allowance Rates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tf.hr.dh.trip.allowance.rate</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+    </data>
+</odoo>

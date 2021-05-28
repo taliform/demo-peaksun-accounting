@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_logistics_root" name="Logistics"
+                  groups="group_logistics_user"
+                  web_icon="tf_peec_logistics,static/description/icon.png"/>
+
+        <menuitem id="menu_logistics_dashboard_group" name="Overview"
+                  parent="menu_logistics_root" sequence="10"
+                  action="action_logistics_dashboard_group_menu"/>
+
+        <menuitem id="menu_logistics_delivery_order" name="Delivery Orders"
+                  parent="menu_logistics_root" sequence="20"
+                  action="action_logistics_delivery_order"/>
+
+        <menuitem id="menu_logistics_delivery_unit_root" name="Delivery Units"
+                  parent="menu_logistics_root" sequence="30"/>
+
+        <menuitem id="menu_logistics_delivery_unit" name="Delivery Units"
+                  parent="menu_logistics_delivery_unit_root" sequence="10"
+                  action="action_logistics_delivery_unit"/>
+
+        <menuitem id="menu_logistics_dh_pairing" name="D/H Pairing"
+                  parent="menu_logistics_delivery_unit_root" sequence="20"
+                  action="action_logistics_dh_pairing"/>
+
+        <menuitem id="menu_logistics_atw" name="ATWs"
+                  parent="menu_logistics_root" sequence="40"
+                  action="action_logistics_atw"/>
+
+        <menuitem id="menu_logistics_log" name="Logs"
+                  parent="menu_logistics_root" sequence="50"/>
+
+        <menuitem id="menu_logistics_log_trip" name="Trip Logs"
+                  parent="menu_logistics_log" sequence="10"
+                  action="action_logistics_log_trip"/>
+
+        <menuitem id="menu_logistics_log_expense" name="Trip Expenses"
+                  parent="menu_logistics_log" sequence="20"
+                  action="action_logistics_log_expense_root"/>
+
+        <menuitem id="menu_logistics_log_weight" name="Weight Logs"
+                  parent="menu_logistics_log" sequence="30"
+                  action="action_logistics_log_weight"/>
+
+        <menuitem id="menu_logistics_log_loading" name="Loading Logs"
+                  parent="menu_logistics_log" sequence="40"
+                  action="action_logistics_log_loading"/>
+
+        <menuitem id="menu_logistics_log_unloading" name="Unloading Logs"
+                  parent="menu_logistics_log" sequence="40"
+                  action="action_logistics_log_unloading"/>
+
+        <menuitem id="menu_logistics_config" name="Configuration"
+                  parent="menu_logistics_root" groups="group_logistics_manager"
+                  sequence="999"/>
+
+        <menuitem id="menu_logistics_setting" name="Settings"
+                  parent="menu_logistics_config" sequence="10"
+                  action="logistics_config_settings_action"/>
+
+        <menuitem id="menu_logistics_dashboard_group_config" name="Dashboard Groups"
+                  parent="menu_logistics_config" sequence="20"
+                  action="action_logistics_dashboard_group_config"/>
+
+        <menuitem id="menu_logistics_delivery_document_type" name="Document Types"
+                  parent="menu_logistics_config" sequence="30"
+                  action="action_logistics_delivery_document_type"/>
+
+        <menuitem id="menu_logistics_journey_plan" name="Journey Plans"
+                  parent="menu_logistics_config" sequence="50"
+                  action="action_logistics_journey_plan"/>
+
+        <menuitem id="menu_logistics_target_sucf" name="Target SUCF"
+                  parent="menu_logistics_config" sequence="60"
+                  action="action_logistics_target_sucf"/>
+
+    </data>
+</odoo>

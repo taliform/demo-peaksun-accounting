@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_vmrs_config_settings" model="ir.ui.view">
+            <field name="name">view.vmrs.config.settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="fleet.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='fleet']">
+                    <h2>VMRS</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="vmrs">
+                            <div class="o_setting_right_pane" id="vmrs_settings">
+                                <label string="VMRS Code Keys" for="vmrs_code_key_1_id"/>
+                                <div class="text-muted">
+                                    Identify your VMRS Code Key records.
+                                </div>
+                                <div>
+                                    <div class="content-group mt16">
+                                        <label for="vmrs_code_key_1_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_1_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_14_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_14_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_15_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_15_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_18_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_18_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_31_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_31_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_32_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_32_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_33_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_33_id"/>
+                                    </div>
+                                    <div class="content-group">
+                                        <label for="vmrs_code_key_34_id" class="o_light_label"/>
+                                        <field name="vmrs_code_key_34_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+         <!-- Maintenance Request Form View Inherit -->
+        <record id="maintenance_request_view_form_inherit_logistics" model="ir.ui.view">
+            <field name="name">maintenance.request.form.view.inherit.logistics</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="delivery_order_id"/>
+                    <field name="trip_log_id" domain="[('delivery_order_id', '=', delivery_order_id)]"/>
+                </field>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

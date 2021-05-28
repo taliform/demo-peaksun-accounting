@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Relation Logistics Menu -->
+        <menuitem id="peec_hr_dh_logistics_menu" name="Logistics"
+          parent="ss_hris_emp_relations.menu_ss_hris_emp_relations_main"
+          sequence="26"/>
+
+        <menuitem name="Plant Accredition"
+			id="peec_hr_plant_acc_menu"
+			parent="peec_hr_dh_logistics_menu"
+			action="peec_hr_plant_acc_action" sequence="2"
+			groups="ss_hris_compben.group_hr_compben_manager"/>
+
+        <menuitem name="Plant Requirements"
+			id="peec_hr_plant_req_menu"
+			parent="peec_hr_dh_logistics_menu"
+			action="peec_hr_plant_req_action" sequence="3"
+			groups="ss_hris_compben.group_hr_compben_manager"/>
+
+		<menuitem name="Trainings"
+			id="peec_hr_training_acc_menu"
+			parent="peec_hr_dh_logistics_menu"
+			action="peec_hr_training_acc_action" sequence="4"
+			groups="ss_hris_compben.group_hr_compben_manager"/>
+
+		<menuitem name="Documents"
+			id="peec_hr_doc_acc_menu"
+			parent="peec_hr_dh_logistics_menu"
+			action="peec_hr_doc_acc_action" sequence="5"
+			groups="ss_hris_compben.group_hr_compben_manager"/>
+
+		<menuitem name="Licenses"
+			id="peec_hr_lic_acc_menu"
+			parent="peec_hr_dh_logistics_menu"
+			action="peec_hr_lic_acc_action" sequence="6"
+			groups="ss_hris_compben.group_hr_compben_manager"/>
+
+    </data>
+</odoo>

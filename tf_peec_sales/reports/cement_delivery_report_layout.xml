@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <template id="report_sale_delivery_order_pdf">
+            <t t-call="web.html_container">
+                <t t-foreach="records" t-as="rec">
+                    <div class="header" style="border-bottom: 2px solid black">
+                        <h2><t t-esc="company_name"/></h2>
+                        <t t-esc="company_address" style="font-size:10px"/>
+                        <br />
+                        <t t-esc="company_info" style="font-size:10px"/>
+                        <br />
+                        <t t-esc="company_tin" style="font-size:10px"/>
+                        <div class="row" style="text-align: center">
+                            <h3 t-if="rec['sale_type'] == 'cement'"><strong>Summary of Cement Deliveries</strong></h3>
+                            <h3 t-if="rec['sale_type'] == 'hauling'"><strong>Summary of Hauling Deliveries</strong></h3>
+                        </div>
+
+                         <table class="table table-condensed table-bordered" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th width="70%"></th>
+                                    <th width="30%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Customer</strong>:
+                                        <t t-esc="partner_id"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong>Sales Agreement</strong>:
+                                        <t t-esc="rec['sa_id']"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Order Date</strong>:
+                                        <t t-esc="rec['order_date']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong>Purchase Order</strong>:
+                                        <t t-esc="rec['po_id']"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Type</strong>:
+                                        <t t-esc="rec['type']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong>Quantity</strong>:
+                                        <t t-esc="rec['po_qty']"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="article">
+                        <table class="table table-condensed table-bordered" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th width="8%" style="text-align: center; background-color:black; color:white">#</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">W DATE</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">DELIVERY SITE</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">ATW</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">INV NO</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">QUANTITY</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white" t-if="rec['sale_type'] == 'cement'">DR NO</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">PRICE</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white" t-if="rec['sale_type'] == 'cement'">BRAND</th>
+                                    <th width="15%" style="text-align: center; background-color:black; color:white">DELIVER TO</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-foreach="lines" t-as="line">
+                                    <t t-if="line['rec_id'] == rec['rec_id']">
+                                        <tr>
+                                            <td>
+                                                <span t-esc="line['sequence']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="line['departure_date']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="line['delivery_site_id']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="line['atw_id']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="line['invoice_id']"/>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <span t-esc="line['quantity']"/>
+                                            </td>
+                                            <td class="text-center" t-if="rec['sale_type'] == 'cement'">
+                                                <span t-esc="line['delivery_receipt_id']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="line['price_unit']"/>
+                                            </td>
+                                            <td class="text-center" t-if="rec['sale_type'] == 'cement'">
+                                                <span t-esc="line['product_id']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="line['deliver_to_id']"/>
+                                            </td>
+                                        </tr>
+
+                                    </t>
+                                </t>
+                            </tbody>
+                            <tr >
+                                <td style="text-align: left; padding: 15px;" colspan="5"><strong>TOTAL DELIVERED</strong></td>
+                                <td width="15%" style="border-top: 3px solid black; text-align: right;"><strong><span t-esc="rec['total_delivered']"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; padding: 15px;" colspan="5"><strong>BALANCE</strong></td>
+                                <td width="10%" style="text-align: right;"><strong><span t-esc="rec['balance']"/></strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

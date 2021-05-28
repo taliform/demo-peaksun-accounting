@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_maintenance_request_user,maintenance_request_user,model_maintenance_request,group_maintenance_user,1,1,1,0
+access_maintenance_request_manager,maintenance_request_manager,model_maintenance_request,group_maintenance_manager,1,1,1,1
+access_maintenance_stage_user,maintenance_stage_user,model_maintenance_stage,group_maintenance_user,1,0,0,0
+access_maintenance_stage_manager,maintenance_stage_manager,model_maintenance_stage,group_maintenance_manager,1,1,1,1
+access_vmrs_code,vmrs_code_user,model_vmrs_code,,1,1,1,1
+access_vmrs_code_key,vmrs_code_key_user,model_vmrs_code_key,,1,1,1,1
+
+

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Rice Subsidy Form -->
+		<record id="peec_hr_rice_subsidy_config_form_view" model="ir.ui.view">
+			<field name="name">tf.hr.rice.subsidy.config.form.view</field>
+			<field name="model">tf.hr.rice.subsidy.config</field>
+			<field name="arch" type="xml">
+				<form string="Rice Subsidy Form">
+					<sheet>
+				    	<div class="oe_title">
+							<label for="name" string="Name"/>
+				            <h1>
+				                <field required="1" name="name"/>
+				            </h1>
+				        </div>
+						<group>
+							<field name="is_dh"/>
+						</group>
+				        <group>
+				            <group string="Rice Subsidy Qualifications">
+				                <field name="tenure_count" />
+				                <field name="attendance_count" />
+								<field name="meeting_count" />
+				                <field name="infraction_count" />
+								<field name="trips_count" />
+				            </group>
+				        </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+				</form>
+			</field>
+		</record>
+
+		<!-- Logistics Document Type Tree -->
+		<record id="peec_hr_rice_subsidy_config_tree_view" model="ir.ui.view">
+			<field name="name">tf.hr.rice.subsidy.config.tree.view</field>
+			<field name="model">tf.hr.rice.subsidy.config</field>
+			<field name="arch" type="xml">
+				<tree string="Rice Subsidy Tree">
+					<field name="name"/>
+					<field name="is_dh"/>
+					<field name="tenure_count" />
+					<field name="attendance_count" />
+					<field name="meeting_count" />
+					<field name="infraction_count" />
+					<field name="trips_count" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Rice Subsidy Action -->
+		<record id="peec_hr_rice_subsidy_config_action" model="ir.actions.act_window">
+			<field name="name">Rice Subsidy</field>
+			<field name="res_model">tf.hr.rice.subsidy.config</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Rice Subsidy Menu -->
+        <menuitem id="peec_hr_rice_subsidy_menu" name="Rice Subsidy"
+          parent="ss_hris_compben.menu_view_compben_config" action="peec_hr_rice_subsidy_config_action"
+          sequence="52" groups="ss_hris_compben.group_hr_compben_manager"/>
+
+    </data>
+</odoo>

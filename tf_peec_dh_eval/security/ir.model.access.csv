@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_dh_eval_config_user,access.hr.dh.eval.config.user,model_tf_dh_eval_config,base.group_user,1,0,0,0
+access_hr_dh_eval_config_officer,access.hr.dh.eval.config.officer,model_tf_dh_eval_config,hr_appraisal.group_hr_appraisal_user,1,1,1,1
+access_hr_dh_eval_config_prod_user,access.hr.dh.eval.prod.config.user,model_tf_dh_eval_prod_config,base.group_user,1,0,0,0
+access_hr_dh_eval_config_prod_officer,access.hr.dh.eval.prod.config.officer,model_tf_dh_eval_prod_config,hr_appraisal.group_hr_appraisal_user,1,1,1,1
+access_hr_dh_eval_config_corpo_user,access.hr.dh.eval.corpo.config.user,model_tf_dh_eval_corpo_config,base.group_user,1,0,0,0
+access_hr_dh_eval_config_corpo_officer,access.hr.dh.eval.corpo.config.officer,model_tf_dh_eval_corpo_config,hr_appraisal.group_hr_appraisal_user,1,1,1,1
+access_hr_dh_eval_config_grade_user,access.hr.dh.eval.grade.config.user,model_tf_dh_eval_grade_config,base.group_user,1,0,0,0
+access_hr_dh_eval_config_grade_officer,access.hr.dh.eval.grade.config.officer,model_tf_dh_eval_grade_config,hr_appraisal.group_hr_appraisal_user,1,1,1,1
+access_hr_dh_eval_user,access.hr.dh.eval.user,model_tf_dh_eval,base.group_user,1,0,0,0
+access_hr_dh_eval_officer,access.hr.dh.eval.officer,model_tf_dh_eval,hr_appraisal.group_hr_appraisal_user,1,1,1,1
+access_hr_dh_eval_line_user,access.hr.dh.eval.line.user,model_tf_dh_eval_line,base.group_user,1,0,0,0
+access_hr_dh_eval_line_officer,access.hr.dh.eval.line.officer,model_tf_dh_eval_line,hr_appraisal.group_hr_appraisal_user,1,1,1,1

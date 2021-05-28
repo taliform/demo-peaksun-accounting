@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Trip Log -->
+
+        <record id="logistics_log_trip_view_search" model="ir.ui.view">
+            <field name="name">logistics.log.trip.view.search</field>
+            <field name="model">logistics.log.trip</field>
+            <field name="arch" type="xml">
+                <search string="Search Trip Logs">
+                    <field name="name" string="Trip Log" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="delivery_order_id" string="Delivery Order"
+                           filter_domain="[('delivery_order_id.name', 'ilike', self)]"/>
+                    <field name="delivery_unit_id" string="Delivery Unit"
+                           filter_domain="[('delivery_unit_id.name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <!--                    <filter string="Unmatched" name="unmatched" domain="[('state', '=', 'unmatched')]"/>-->
+                    <!--                    <filter string="Matched" name="matched" domain="[('state', '=', 'matched')]"/>-->
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Delivery Unit" name="delivery_unit" domain="[]"
+                                context="{'group_by': 'delivery_unit_id'}"/>
+                        <filter string="Origin" name="origin" domain="[]"
+                                context="{'group_by': 'origin_id'}"/>
+                        <filter string="Destination" name="destination" domain="[]"
+                                context="{'group_by': 'destination_id'}"/>
+                        <filter string="Departure Date" name="departure" domain="[]"
+                                context="{'group_by': 'departure_date'}"/>
+                        <filter string="Arrival Date" name="arrival" domain="[]"
+                                context="{'group_by': 'arrival_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_log_trip_view_tree" model="ir.ui.view">
+            <field name="name">logistics.log.trip.view.tree</field>
+            <field name="model">logistics.log.trip</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="delivery_order_id"/>
+                    <field name="delivery_unit_id"/>
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="distance_travelled"/>
+                    <field name="time_elapsed"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_log_trip_view_form" model="ir.ui.view">
+            <field name="name">logistics.log.trip.view.form</field>
+            <field name="model">logistics.log.trip</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-money" type="object"
+                                    name="action_view_trip_expenses">
+                                <field name="expense_count" string="Trip Expenses" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="delivery_order_id"/>
+                                <field name="delivery_unit_id"/>
+                                <field name="is_inspection_done" widget="toggle_button"/>
+                                <field name="is_loaded" widget="toggle_button"/>
+                            </group>
+                            <group>
+                                <field name="origin_id"/>
+                                <field name="destination_id"/>
+                                <field name="journey_plan_id"/>
+                                <field name="target_sucf_id"/>
+                                <field name="target_sucf"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Time">
+                                <field name="departure_date"/>
+                                <field name="arrival_date"/>
+                                <field name="time_elapsed" widget="float_time"/>
+                            </group>
+                            <group string="Distance">
+                                <field name="start_odometer_id"/>
+                                <field name="end_odometer_id"/>
+                                <field name="distance_travelled"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('manual_reason', '=', False)]}">
+                            <field name="manual_reason"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_logistics_log_trip" model="ir.actions.act_window">
+            <field name="name">Trip Logs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.log.trip</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="logistics_log_trip_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Trip Log.
+                </p>
+            </field>
+        </record>
+
+        <!-- Trip Expense -->
+
+        <record id="logistics_log_expense_view_search" model="ir.ui.view">
+            <field name="name">logistics.log.expense.view.search</field>
+            <field name="model">logistics.log.expense</field>
+            <field name="arch" type="xml">
+                <search string="Search Trip Expenses">
+                    <field name="name" string="Trip Expense"
+                           filter_domain="['|', ('product_id.name', 'ilike', self), ('name', 'ilike', self)]"/>
+                    <field name="trip_log_id" string="Trip Log" filter_domain="[('trip_log_id.name', 'ilike', self)]"/>
+                    <field name="delivery_order_id" string="Delivery Order"
+                           filter_domain="[('delivery_order_id.name', 'ilike', self)]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Trip Log" name="trip_log" domain="[]"
+                                context="{'group_by': 'trip_log_id'}"/>
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Product" name="product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter string="Currency" name="currency" domain="[]"
+                                context="{'group_by': 'currency_id'}"/>
+                        <filter string="Expense Date" name="expense_date" domain="[]"
+                                context="{'group_by': 'expense_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_log_expense_view_tree" model="ir.ui.view">
+            <field name="name">logistics.log.expense.view.tree</field>
+            <field name="model">logistics.log.expense</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" expand="1" decoration-muted="sale_line_id != False and qty_invoiced != 0.0">
+                    <field name="trip_log_id" domain="[('delivery_order_id', '=', delivery_order_id)]"/>
+                    <field name="delivery_order_id" optional="hide"/>
+                    <field name="product_id" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}" domain="[('is_trip_expense', '=', True)]"/>
+                    <field name="name" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="expense_date" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="currency_id" groups="base.group_multi_currency" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="amount" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="is_billable" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="sale_line_id" optional="hide"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_log_expense_view_tree_root" model="ir.ui.view">
+            <field name="name">logistics.log.expense.view.tree.root</field>
+            <field name="model">logistics.log.expense</field>
+            <field name="arch" type="xml">
+                <tree create="0" editable="bottom" expand="1" decoration-muted="sale_line_id != False and qty_invoiced != 0.0">
+                    <field name="trip_log_id" invisible="1"/>
+                    <field name="delivery_order_id" optional="hide"/>
+                    <field name="product_id" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="name" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="expense_date" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="currency_id" groups="base.group_multi_currency" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="amount" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="is_billable" attrs="{'readonly': [('sale_line_id', '!=', False), ('qty_invoiced', '!=', 0.0)]}"/>
+                    <field name="sale_line_id" optional="hide"/>
+                    <field name="qty_invoiced" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_logistics_log_expense" model="ir.actions.act_window">
+            <field name="name">Trip Expenses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.log.expense</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="search_view_id" ref="logistics_log_expense_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Trip Expense.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_logistics_log_expense_root" model="ir.actions.act_window">
+            <field name="name">Trip Expenses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.log.expense</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="search_view_id" ref="logistics_log_expense_view_search"/>
+            <field name="context">{'search_default_delivery_order': 1}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Trip Expense.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_logistics_log_expense_root_tree" model="ir.actions.act_window.view" >
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="logistics_log_expense_view_tree_root"/>
+            <field name="act_window_id" ref="action_logistics_log_expense_root"/>
+        </record>
+
+        <!-- Trip Weight -->
+
+        <record id="logistics_log_weight_view_search" model="ir.ui.view">
+            <field name="name">logistics.log.weight.view.search</field>
+            <field name="model">logistics.log.weight</field>
+            <field name="arch" type="xml">
+                <search string="Search Weight Logs">
+                    <field name="name" string="Weight Log" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="delivery_order_id" string="Delivery Order"
+                           filter_domain="[('delivery_order_id.name', 'ilike', self)]"/>
+                    <field name="delivery_unit_id" string="Delivery Unit"
+                           filter_domain="[('delivery_unit_id.name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <!--                    <filter string="Unmatched" name="unmatched" domain="[('state', '=', 'unmatched')]"/>-->
+                    <!--                    <filter string="Matched" name="matched" domain="[('state', '=', 'matched')]"/>-->
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Delivery Unit" name="delivery_unit" domain="[]"
+                                context="{'group_by': 'delivery_unit_id'}"/>
+                        <filter string="Weighing Date" name="departure" domain="[]"
+                                context="{'group_by': 'weighing_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_log_weight_view_tree" model="ir.ui.view">
+            <field name="name">logistics.log.weight.view.tree</field>
+            <field name="model">logistics.log.weight</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="delivery_order_id"/>
+                    <field name="delivery_unit_id"/>
+                    <field name="weighing_date"/>
+                    <field name="tare_weight"/>
+                    <field name="gross_weight"/>
+                    <field name="net_weight"/>
+                    <field name="expected_weight" optional="hide"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_log_weight_view_form" model="ir.ui.view">
+            <field name="name">logistics.log.weight.view.form</field>
+            <field name="model">logistics.log.weight</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_approve" type="object" string="Approve" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('expected_weight', '&lt;=', 0), ('is_tolerance_exceeded', '=', False), ('state', '!=', 'normal'), ('load_state', '=', 'empty')]}"/>
+                        <button name="action_reject" type="object" string="Reject" class="btn-secondary" attrs="{'invisible': ['|', '|', '|', ('expected_weight', '&lt;=', 0), ('is_tolerance_exceeded', '=', False), ('state', '!=', 'normal'), ('load_state', '=', 'empty')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="normal,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="delivery_order_id"/>
+                                <field name="delivery_unit_id"/>
+                                <field name="checker_id" required="1"/>
+                                <field name="checker_name"/>
+                            </group>
+                            <group>
+                                <field name="weighing_date"/>
+                                <field name="load_state" widget="radio"/>
+                                <field name="product_id" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>
+                            </group>
+                        </group>
+                        <group string="Weight">
+                            <group>
+                                <label for="previous_gross_weight" attrs="{'invisible': [('previous_gross_weight', '=', 0)]}"/>
+                                <div class="o_row" attrs="{'invisible': [('previous_gross_weight', '=', 0)]}">
+                                    <field name="previous_gross_weight"/>
+                                    <field name="uom_id"/>
+                                </div>
+                                <label for="tare_weight"/>
+                                <div class="o_row">
+                                    <field name="tare_weight"/>
+                                    <field name="uom_id"/>
+                                </div>
+                                <label for="gross_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>
+                                <div class="o_row" attrs="{'invisible': [('load_state', '=', 'empty')]}">
+                                    <field name="gross_weight"/>
+                                    <field name="uom_id"/>
+                                </div>
+                                <label for="net_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>
+                                <div class="o_row" attrs="{'invisible': [('load_state', '=', 'empty')]}">
+                                    <field name="net_weight"/>
+                                    <field name="uom_id"/>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="bags_qty"/>
+                                <div class="o_row">
+                                    <field name="bags_qty"/>
+                                    <field name="bag_uom_id"/>
+                                </div>
+                                <label for="expected_weight" attrs="{'invisible': [('load_state', '=', 'loaded')]}"/>
+                                <div class="o_row" attrs="{'invisible': [('load_state', '=', 'loaded')]}">
+                                    <field name="expected_weight"/>
+                                    <field name="uom_id"/>
+                                </div>
+                                <field name="tolerance" attrs="{'invisible': [('load_state', '=', 'loaded')]}"/>
+                            </group>
+                        </group>
+                        <group string="Approval" attrs="{'invisible': [('is_tolerance_exceeded', '=', False)]}">
+                            <group>
+                                <field name="is_tolerance_exceeded"/>
+                            </group>
+                            <group>
+                                <field name="approver_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_logistics_log_weight" model="ir.actions.act_window">
+            <field name="name">Weight Logs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.log.weight</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="logistics_log_weight_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Weight Log.
+                </p>
+            </field>
+        </record>
+
+        <!-- Loading Log -->
+
+        <record id="logistics_log_loading_view_search" model="ir.ui.view">
+            <field name="name">logistics.log.loading.view.search</field>
+            <field name="model">logistics.log.loading</field>
+            <field name="arch" type="xml">
+                <search string="Search Loading Logs">
+                    <field name="name" string="Loading Log" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="delivery_order_id" string="Delivery Order"
+                           filter_domain="[('delivery_order_id.name', 'ilike', self)]"/>
+                    <field name="delivery_unit_id" string="Delivery Unit"
+                           filter_domain="[('delivery_unit_id.name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Delivery Unit" name="delivery_unit" domain="[]"
+                                context="{'group_by': 'delivery_unit_id'}"/>
+                        <filter string="Start Date" name="start_date" domain="[]"
+                                context="{'group_by': 'start_date'}"/>
+                        <filter string="End Date" name="end_date" domain="[]"
+                                context="{'group_by': 'end_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_log_loading_view_tree" model="ir.ui.view">
+            <field name="name">logistics.log.loading.view.tree</field>
+            <field name="model">logistics.log.loading</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" readonly="1"/>
+                    <field name="delivery_order_id"/>
+                    <field name="delivery_unit_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="time_elapsed" widget="float_time"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+<!--        <record id="logistics_log_loading_view_form" model="ir.ui.view">-->
+<!--            <field name="name">logistics.log.loading.view.form</field>-->
+<!--            <field name="model">logistics.log.loading</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form>-->
+<!--                    <header>-->
+<!--                        <button name="action_approve" type="object" string="Approve" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('expected_weight', '&lt;=', 0), ('is_tolerance_exceeded', '=', False), ('state', '!=', 'normal'), ('load_state', '=', 'empty')]}"/>-->
+<!--                        <button name="action_reject" type="object" string="Reject" class="btn-secondary" attrs="{'invisible': ['|', '|', '|', ('expected_weight', '&lt;=', 0), ('is_tolerance_exceeded', '=', False), ('state', '!=', 'normal'), ('load_state', '=', 'empty')]}"/>-->
+<!--                        <button name="action_test" type="object" string="Test"/>-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="normal,approved"/>-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                        </div>-->
+<!--                        <div class="oe_title">-->
+<!--                            <h1>-->
+<!--                                <field name="name" readonly="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="delivery_order_id"/>-->
+<!--                                <field name="delivery_unit_id"/>-->
+<!--                                <field name="checker_id"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="weighing_date"/>-->
+<!--                                <field name="load_state" widget="radio"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <group string="Weight">-->
+<!--                            <group>-->
+<!--                                <field name="tare_weight"/>-->
+<!--                                <field name="gross_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                                <field name="net_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="expected_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                                <field name="tolerance" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <group string="Approval" attrs="{'invisible': ['|', ('load_state', '=', 'empty'), ('is_tolerance_exceeded', '=', False)]}">-->
+<!--                            <group>-->
+<!--                                <field name="is_tolerance_exceeded"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="approver_id"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                        <field name="activity_ids" widget="mail_activity"/>-->
+<!--                        <field name="message_ids" widget="mail_thread"/>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="action_logistics_log_loading" model="ir.actions.act_window">
+            <field name="name">Loading Logs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.log.loading</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="logistics_log_loading_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Loading Log.
+                </p>
+            </field>
+        </record>
+
+        <!-- Unloading Log -->
+
+        <record id="logistics_log_unloading_view_search" model="ir.ui.view">
+            <field name="name">logistics.log.unloading.view.search</field>
+            <field name="model">logistics.log.unloading</field>
+            <field name="arch" type="xml">
+                <search string="Search Unloading Logs">
+                    <field name="name" string="Unloading Log" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="delivery_order_id" string="Delivery Order"
+                           filter_domain="[('delivery_order_id.name', 'ilike', self)]"/>
+                    <field name="delivery_unit_id" string="Delivery Unit"
+                           filter_domain="[('delivery_unit_id.name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Delivery Unit" name="delivery_unit" domain="[]"
+                                context="{'group_by': 'delivery_unit_id'}"/>
+                        <filter string="Start Date" name="start_date" domain="[]"
+                                context="{'group_by': 'start_date'}"/>
+                        <filter string="End Date" name="end_date" domain="[]"
+                                context="{'group_by': 'end_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_log_unloading_view_tree" model="ir.ui.view">
+            <field name="name">logistics.log.unloading.view.tree</field>
+            <field name="model">logistics.log.unloading</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" readonly="1"/>
+                    <field name="delivery_order_id"/>
+                    <field name="delivery_unit_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="time_elapsed" widget="float_time"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+<!--        <record id="logistics_log_unloading_view_form" model="ir.ui.view">-->
+<!--            <field name="name">logistics.log.unloading.view.form</field>-->
+<!--            <field name="model">logistics.log.unloading</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form>-->
+<!--                    <header>-->
+<!--                        <button name="action_approve" type="object" string="Approve" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('expected_weight', '&lt;=', 0), ('is_tolerance_exceeded', '=', False), ('state', '!=', 'normal'), ('load_state', '=', 'empty')]}"/>-->
+<!--                        <button name="action_reject" type="object" string="Reject" class="btn-secondary" attrs="{'invisible': ['|', '|', '|', ('expected_weight', '&lt;=', 0), ('is_tolerance_exceeded', '=', False), ('state', '!=', 'normal'), ('load_state', '=', 'empty')]}"/>-->
+<!--                        <button name="action_test" type="object" string="Test"/>-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="normal,approved"/>-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                        </div>-->
+<!--                        <div class="oe_title">-->
+<!--                            <h1>-->
+<!--                                <field name="name" readonly="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="delivery_order_id"/>-->
+<!--                                <field name="delivery_unit_id"/>-->
+<!--                                <field name="checker_id"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="weighing_date"/>-->
+<!--                                <field name="load_state" widget="radio"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <group string="Weight">-->
+<!--                            <group>-->
+<!--                                <field name="tare_weight"/>-->
+<!--                                <field name="gross_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                                <field name="net_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="expected_weight" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                                <field name="tolerance" attrs="{'invisible': [('load_state', '=', 'empty')]}"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <group string="Approval" attrs="{'invisible': ['|', ('load_state', '=', 'empty'), ('is_tolerance_exceeded', '=', False)]}">-->
+<!--                            <group>-->
+<!--                                <field name="is_tolerance_exceeded"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="approver_id"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                        <field name="activity_ids" widget="mail_activity"/>-->
+<!--                        <field name="message_ids" widget="mail_thread"/>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="action_logistics_log_unloading" model="ir.actions.act_window">
+            <field name="name">Unloading Logs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.log.unloading</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="logistics_log_unloading_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Unloading Log.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

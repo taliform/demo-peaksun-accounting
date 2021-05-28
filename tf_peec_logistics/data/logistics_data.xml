@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="delivery_order_state_unassigned" model="logistics.delivery.order.state">
+            <field name="name">unassigned</field>
+            <field name="display">Unassigned</field>
+        </record>
+
+        <record id="delivery_order_state_assigned" model="logistics.delivery.order.state">
+            <field name="name">assigned</field>
+            <field name="display">Assigned</field>
+        </record>
+
+        <record id="delivery_order_state_in_transit_cp" model="logistics.delivery.order.state">
+            <field name="name">in_transit_cp</field>
+            <field name="display">In Transit (CP)</field>
+        </record>
+
+        <record id="delivery_order_state_cp" model="logistics.delivery.order.state">
+            <field name="name">cp</field>
+            <field name="display">CP</field>
+        </record>
+
+        <record id="delivery_order_state_loading" model="logistics.delivery.order.state">
+            <field name="name">loading</field>
+            <field name="display">Loading</field>
+        </record>
+
+        <record id="delivery_order_state_loaded" model="logistics.delivery.order.state">
+            <field name="name">loaded</field>
+            <field name="display">Loaded</field>
+        </record>
+
+        <record id="delivery_order_state_in_transit_bp" model="logistics.delivery.order.state">
+            <field name="name">in_transit_cp</field>
+            <field name="display">In Transit (CP)</field>
+        </record>
+
+        <record id="delivery_order_state_bp" model="logistics.delivery.order.state">
+            <field name="name">bp</field>
+            <field name="display">BP</field>
+        </record>
+
+        <record id="delivery_order_state_unloading" model="logistics.delivery.order.state">
+            <field name="name">unloading</field>
+            <field name="display">Unloading</field>
+        </record>
+
+        <record id="delivery_order_state_unloaded" model="logistics.delivery.order.state">
+            <field name="name">unloaded</field>
+            <field name="display">Unloaded</field>
+        </record>
+
+        <record id="delivery_order_state_validation" model="logistics.delivery.order.state">
+            <field name="name">validation</field>
+            <field name="display">Validation</field>
+        </record>
+
+        <record id="delivery_order_state_closed" model="logistics.delivery.order.state">
+            <field name="name">closed</field>
+            <field name="display">Closed</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+    
+        <record id="tf_dh_eval_reject_view_form" model="ir.ui.view">
+            <field name="name">tf.dh.eval.reject.view.form</field>
+            <field name="model">tf.dh.eval.reject</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="eval_id" invisible="1"/>
+                        <field name="name" placeholder="Indicate reason for rejection..." required="1"/>
+                    </sheet>
+                    <footer>
+                        <button name="action_apply" string="Confirm" class="btn-primary" type="object"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

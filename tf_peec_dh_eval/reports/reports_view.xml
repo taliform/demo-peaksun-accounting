@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Trip Report Readonly Tree -->
+        <record id="logistics_trip_report_view_tree_readonly" model="ir.ui.view">
+            <field name="name">logistics.trip.report.view.tree.readonly</field>
+            <field name="model">logistics.trip.report</field>
+            <field name="inherit_id" ref="tf_peec_trip_report.logistics_trip_report_view_tree"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- DH Eval Line Search View -->
+		<record id="tf_dh_eval_report_search_tree" model="ir.ui.view">
+            <field name="name">DH Eval Search View</field>
+            <field name="model">tf.dh.eval.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Evaluations">
+                    <field name="employee_id"/>
+                    <field name="work_location"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Work Location" name="work_location" domain="[]" context="{'group_by': 'work_location'}"/>
+                        <filter string="Job Title" name="job_title" domain="[]" context="{'group_by': 'job_title'}"/>
+                        <filter string="Rank" name="rank_id" domain="[]" context="{'group_by': 'rank_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- DH Eval Line Summary Tree View -->
+        <record id="tf_dh_eval_summary_report_view_tree" model="ir.ui.view">
+            <field name="name">Summary Evaluation Report Tree View</field>
+            <field name="model">tf.dh.eval.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval Summary" create="false" editable="bottom" delete="false">
+                    <field name="employee_id" readonly="1"/>
+                    <field name="last_name" readonly="1"/>
+                    <field name="first_name" readonly="1"/>
+                    <field name="middle_name" readonly="1"/>
+                    <field name="work_location" readonly="1"/>
+                    <field name="prod_total"/>
+                    <field name="avg_trip"/>
+                    <field name="prod_score" widget="percentage"/>
+                    <field name="corpo_score" widget="percentage"/>
+                    <field name="skills_score" widget="percentage"/>
+                    <field name="accident_score" widget="percentage"/>
+                    <field name="speeding_score" widget="percentage"/>
+                    <field name="others_score" widget="percentage"/>
+                    <field name="leaves_score" widget="percentage"/>
+                    <field name="total_score" widget="percentage"/>
+                    <field name="rating"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- DH Eval Line Skills Tree View -->
+        <record id="tf_dh_eval_skills_report_view_tree" model="ir.ui.view">
+            <field name="name">Skills Evaluation Report Tree View</field>
+            <field name="model">tf.dh.eval.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval" create="false" editable="bottom" delete="false">
+                    <field name="employee_id" readonly="1"/>
+                    <field name="last_name" readonly="1"/>
+                    <field name="first_name" readonly="1"/>
+                    <field name="middle_name" readonly="1"/>
+                    <field name="work_location" readonly="1"/>
+                    <field name="skills_score" required="1" widget="percentage"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- DH Eval Line Prod Tree View -->
+        <record id="tf_dh_eval_prod_report_view_tree" model="ir.ui.view">
+            <field name="name">Productivity Evaluation Report Tree View</field>
+            <field name="model">tf.dh.eval.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval" create="false" edit="false" delete="false">
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_name"/>
+                    <field name="work_location"/>
+                    <field name="prod_month_1" invisible="1"/>
+                    <field name="prod_month_2" invisible="1"/>
+                    <field name="prod_month_3" invisible="1"/>
+                    <field name="prod_month_4" invisible="1"/>
+                    <field name="prod_month_5" invisible="1"/>
+                    <field name="prod_month_6" invisible="1"/>
+                    <field name="prod_month_7" invisible="1"/>
+                    <field name="prod_month_8" invisible="1"/>
+                    <field name="prod_month_9" invisible="1"/>
+                    <field name="prod_month_10" invisible="1"/>
+                    <field name="prod_month_11" invisible="1"/>
+                    <field name="prod_month_12" invisible="1"/>
+                    <field name="prod_total"/>
+                    <button name="action_view_trips" string="View Trip Summary" type="object" icon="fa-arrow-right"/>
+                    <field name="avg_trip"/>
+                    <field name="prod_score" widget="percentage"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- DH Eval Line Corpo Tree View -->
+        <record id="tf_dh_eval_corpo_report_view_tree" model="ir.ui.view">
+            <field name="name">Corporate Evaluation Report Tree View</field>
+            <field name="model">tf.dh.eval.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="DH Eval" create="false" edit="false" delete="false" class="normal_wrap">
+                    <field name="employee_id"/>
+                    <field name="last_name"/>
+                    <field name="first_name"/>
+                    <field name="middle_name"/>
+                    <field name="work_location"/>
+                    <!-- Accidents -->
+                    <field name="accident_month_1" invisible="1"/>
+                    <field name="accident_month_2" invisible="1"/>
+                    <field name="accident_month_3" invisible="1"/>
+                    <field name="accident_month_4" invisible="1"/>
+                    <field name="accident_month_5" invisible="1"/>
+                    <field name="accident_month_6" invisible="1"/>
+                    <field name="accident_month_7" invisible="1"/>
+                    <field name="accident_month_8" invisible="1"/>
+                    <field name="accident_month_9" invisible="1"/>
+                    <field name="accident_month_10" invisible="1"/>
+                    <field name="accident_month_11" invisible="1"/>
+                    <field name="accident_month_12" invisible="1"/>
+                    <field name="accident_total"/>
+                    <button name="action_view_accident" string="View Accidents Summary" type="object" icon="fa-arrow-right"/>
+                    <field name="avg_accident"/>
+                    <field name="acc_sus_days"/>
+                    <field name="accident_score" widget="percentage"/>
+                    <!-- Speeding -->
+                    <field name="speeding_month_1" invisible="1"/>
+                    <field name="speeding_month_2" invisible="1"/>
+                    <field name="speeding_month_3" invisible="1"/>
+                    <field name="speeding_month_4" invisible="1"/>
+                    <field name="speeding_month_5" invisible="1"/>
+                    <field name="speeding_month_6" invisible="1"/>
+                    <field name="speeding_month_7" invisible="1"/>
+                    <field name="speeding_month_8" invisible="1"/>
+                    <field name="speeding_month_9" invisible="1"/>
+                    <field name="speeding_month_10" invisible="1"/>
+                    <field name="speeding_month_11" invisible="1"/>
+                    <field name="speeding_month_12" invisible="1"/>
+                    <field name="speeding_total"/>
+                    <button name="action_view_speeding" string="View Speeding Summary" type="object" icon="fa-arrow-right"/>
+                    <field name="avg_speeding"/>
+                    <field name="spd_sus_days"/>
+                    <field name="speeding_score" widget="percentage"/>
+                    <!-- Others -->
+                    <field name="others_month_1" invisible="1"/>
+                    <field name="others_month_2" invisible="1"/>
+                    <field name="others_month_3" invisible="1"/>
+                    <field name="others_month_4" invisible="1"/>
+                    <field name="others_month_5" invisible="1"/>
+                    <field name="others_month_6" invisible="1"/>
+                    <field name="others_month_7" invisible="1"/>
+                    <field name="others_month_8" invisible="1"/>
+                    <field name="others_month_9" invisible="1"/>
+                    <field name="others_month_10" invisible="1"/>
+                    <field name="others_month_11" invisible="1"/>
+                    <field name="others_month_12" invisible="1"/>
+                    <field name="others_total"/>
+                    <button name="action_view_others" string="View Other Infractions Summary" type="object" icon="fa-arrow-right"/>
+                    <field name="avg_others"/>
+                    <field name="other_sus_days"/>
+                    <field name="others_score" widget="percentage"/>
+                    <!-- Leaves -->
+                    <field name="leaves_month_1" invisible="1"/>
+                    <field name="leaves_month_2" invisible="1"/>
+                    <field name="leaves_month_3" invisible="1"/>
+                    <field name="leaves_month_4" invisible="1"/>
+                    <field name="leaves_month_5" invisible="1"/>
+                    <field name="leaves_month_6" invisible="1"/>
+                    <field name="leaves_month_7" invisible="1"/>
+                    <field name="leaves_month_8" invisible="1"/>
+                    <field name="leaves_month_9" invisible="1"/>
+                    <field name="leaves_month_10" invisible="1"/>
+                    <field name="leaves_month_11" invisible="1"/>
+                    <field name="leaves_month_12" invisible="1"/>
+                    <field name="leaves_total"/>
+                    <button name="action_view_leaves" string="View Leaves Summary" type="object" icon="fa-arrow-right"/>
+                    <field name="leaves_score" widget="percentage"/>
+                </tree>
+            </field>
+        </record>
+
+        <template id="assets_backend" name="tf_dh_eval_css" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/tf_peec_dh_eval/static/src/scss/tf_peec_dh_eval_style.css"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

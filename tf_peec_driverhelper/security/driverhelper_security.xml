@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Security -->
+        <record id="module_category_hr_dh_logistics_config" model="ir.module.category">
+            <field name="name">DH Logistics</field>
+            <field name="sequence">18</field>
+            <field name="parent_id" ref="base.module_category_human_resources"/>
+        </record>
+
+        <record id="group_hr_dh_dashboard_user" model="res.groups">
+            <field name="name">DH Dashboard Officer</field>
+            <field name="category_id" ref="tf_peec_driverhelper.module_category_hr_dh_logistics_config"/>
+            <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+        </record>
+
+        <record id="group_hr_dh_dashboard_approver" model="res.groups">
+            <field name="name">DH Dashboard Approver</field>
+            <field name="category_id" ref="tf_peec_driverhelper.module_category_hr_dh_logistics_config"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_dh_dashboard_user'))]"/>
+        </record>
+
+        <record id="group_hr_dh_dashboard_manager" model="res.groups">
+            <field name="name">DH Dashboard Manager</field>
+            <field name="category_id" ref="tf_peec_driverhelper.module_category_hr_dh_logistics_config"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_dh_dashboard_approver'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="tf_hr_dh_attendance_own_attendance" model="ir.rule">
+            <field name="name">DH Attendance: Own Attendance</field>
+            <field ref="model_tf_hr_dh_attendance" name="model_id"/>
+            <field name="domain_force">[('employee_id', '=', user.employee_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user')), (4, ref('tf_peec_logistics.group_logistics_driver'))]"/>
+        </record>
+
+        <record id="tf_hr_dh_attendance_all" model="ir.rule">
+            <field name="name">DH Attendance: All Attendances</field>
+            <field ref="model_tf_hr_dh_attendance" name="model_id"/>
+            <field name="domain_force">[]</field>
+            <field name="groups" eval="[(4, ref('tf_peec_driverhelper.group_hr_dh_dashboard_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

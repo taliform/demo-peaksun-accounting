@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Partner Customization -->
+        <record id="res_partner_form_inherit_tf_hr_dh_dashboard" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.tf.hr.dh.dashboard</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='others']" position="after">
+                    <page name="plant" string="Plant">
+                        <group string="Requirement List"/>
+                        <group string="Trainings">
+                            <field name="training_ids" nolabel="0">
+                                <tree>
+                                    <field name="training_id"/>
+                                    <field name="course_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Documents">
+                            <field name="document_ids" nolabel="0">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="certification_authority"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Licenses">
+                            <field name="license_ids" nolabel="0">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="certification_authority"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

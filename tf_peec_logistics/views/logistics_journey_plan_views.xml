@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Journey Plan -->
+
+        <record id="logistics_journey_plan_view_search" model="ir.ui.view">
+            <field name="name">logistics.journey.plan.view.search</field>
+            <field name="model">logistics.journey.plan</field>
+            <field name="arch" type="xml">
+                <search string="Search Trip Logs">
+                    <field name="name" string="Trip Log" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="origin_id" string="Origin"
+                           filter_domain="[('origin_id.name', 'ilike', self)]"/>
+                    <field name="destination_id" string="Destination"
+                           filter_domain="[('destination_id.name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Origin" name="origin" domain="[]"
+                                context="{'group_by': 'origin_id'}"/>
+                        <filter string="Destination" name="destination" domain="[]"
+                                context="{'group_by': 'destination_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_journey_plan_view_tree" model="ir.ui.view">
+            <field name="name">logistics.journey.plan.view.tree</field>
+            <field name="model">logistics.journey.plan</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_journey_plan_view_form" model="ir.ui.view">
+            <field name="name">logistics.journey.plan.view.form</field>
+            <field name="model">logistics.journey.plan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="origin_id"/>
+                                <field name="destination_id"/>
+                            </group>
+                            <group>
+                                <field name="write_date"/>
+                                <field name="write_uid"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="navigation_by_directions"/>
+                            <field name="driver_comments"/>
+                            <field name="hazards"/>
+                            <field name="special_instructions"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_logistics_journey_plan" model="ir.actions.act_window">
+            <field name="name">Journey Plans</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.journey.plan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="logistics_journey_plan_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Journey Plan.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

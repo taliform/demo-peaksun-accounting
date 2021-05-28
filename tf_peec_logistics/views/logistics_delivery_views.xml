@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Deliver Order -->
+
+        <record id="logistics_delivery_order_view_search" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.view.search</field>
+            <field name="model">logistics.delivery.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Delivery Order">
+                    <field name="name" string="Delivery Order" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="vendor_dr_no" string="Vendor DR No."
+                           filter_domain="[('vendor_dr_no', 'ilike', self)]"/>
+                    <separator/>
+                    <filter string="Unassigned" name="unassigned" domain="[('state', '=', 'unassigned')]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Unit" name="delivery_unit" domain="[]"
+                                context="{'group_by': 'delivery_unit_id'}"/>
+                        <filter string="Cement Product" name="product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter string="Sales Order" name="sale_order" domain="[]"
+                                context="{'group_by': 'sale_id'}"/>
+                        <filter string="Customer" name="customer" domain="[]"
+                                context="{'group_by': 'customer_id'}"/>
+                        <filter string="Schedule Date" name="schedule" domain="[]"
+                                context="{'group_by': 'schedule_date'}"/>
+                        <filter string="Departure Date" name="departure" domain="[]"
+                                context="{'group_by': 'departure_date'}"/>
+                        <filter string="Return Date" name="return" domain="[]" context="{'group_by': 'return_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_delivery_order_view_tree" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.view.tree</field>
+            <field name="model">logistics.delivery.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="state == 'unassigned'">
+                    <field name="name"/>
+                    <field name="schedule_date"/>
+                    <field name="delivery_unit_id"/>
+                    <field name="product_id"/>
+                    <field name="sale_id"/>
+                    <field name="customer_id"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_delivery_order_view_form" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.view.form</field>
+            <field name="model">logistics.delivery.order</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_assign" type="object" string="Assign" class="oe_highlight"
+                                states="unassigned"/>
+                        <button name="action_start_trip_cp" type="object" string="Start Trip To CP" class="oe_highlight"
+                                states="assigned"/>
+                        <button name="action_end_trip_cp" type="object" string="End Trip To CP" class="oe_highlight"
+                                states="in_transit_cp"/>
+                        <button name="action_start_loading" type="object" string="Start Loading" class="oe_highlight"
+                                states="cp"/>
+                        <button name="action_end_loading" type="object" string="End Loading" class="oe_highlight"
+                                states="loading"/>
+                        <button name="action_start_trip_bp" type="object" string="Start Trip To BP" class="oe_highlight"
+                                states="loaded" attrs="{'invisible': ['|', '|', ('batching_plant_id', '=', False), ('is_loaded_weighed', '=', False)]}"/>
+                        <button name="action_end_trip_bp" type="object" string="End Trip To BP" class="oe_highlight"
+                                states="in_transit_bp"/>
+                        <button name="action_start_unloading" type="object" string="Start Unloading" class="oe_highlight"
+                                states="bp"/>
+                        <button name="action_end_unloading" type="object" string="End Unloading" class="oe_highlight"
+                                states="unloading"/>
+                        <button name="action_for_validation" type="object" string="For Validation" class="oe_highlight"
+                                states="unloaded" attrs="{'invisible': ['|',('is_unloaded_weighed', '=', False)]}"/>
+                        <button name="action_validate" type="object" string="Validate" class="oe_highlight"
+                                states="validation"
+                                attrs="{'invisible': ['|',('validated_by', '!=', False)]}"
+                                groups="tf_peec_logistics.group_logistics_validator"/>
+                        <button name="action_close" type="object" string="Close" class="oe_highlight"
+                                states="validation"
+                                attrs="{'invisible': ['|',('validated_by', '=', False)]}"/>
+                        <button name="action_start_trip_garage" type="object" string="Return To Garage" class="oe_highlight"
+                                states="loaded" attrs="{'invisible': ['|', '|', '|', ('batching_plant_id', '=', True), ('is_returning', '=', True), ('is_loaded_weighed', '=', False)]}"/>
+                        <button name="action_start_trip_garage" type="object" string="Return To Garage" class="btn-secondary"
+                                states="unloaded,validation" attrs="{'invisible': ['|', '|', ('is_returning', '=', True), ('is_unloaded_weighed', '=', False)]}"/>
+                        <button name="action_end_trip_garage" type="object" string="End Trip To Garage" class="oe_highlight"
+                                states="loaded" attrs="{'invisible': ['|', '|', ('trip_log_id', '=', False), ('is_returning', '=', False)]}"/>
+                        <button name="action_end_trip_garage" type="object" string="End Trip To Garage" class="btn-secondary"
+                                states="unloaded,validation" attrs="{'invisible': ['|', '|', ('trip_log_id', '=', False), ('is_returning', '=', False)]}"/>
+                        <button name="action_log_weight" type="object" string="Log Weight" class="oe_highlight"
+                                states="loaded"
+                                attrs="{'invisible': ['|', ('is_loaded_weighed', '=', True)]}"
+                                context="{'cp_load': True}"/>
+                        <button name="action_log_weight" type="object" string="Log Weight" class="oe_highlight"
+                                states="unloaded"
+                                attrs="{'invisible': ['|', ('is_unloaded_weighed', '=', True)]}"
+                                context="{'bp_unload': True}"/>
+                        <button name="action_log_weight" type="object" string="Log Weight" class="btn-secondary" attrs="{'invisible': [('state', 'in', ['unassigned', 'loaded', 'unloaded', 'closed'])]}"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="unassigned,assigned,in_transit_cp,cp,in_transit_bp,bp,validation,closed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-location-arrow" type="object"
+                                    name="action_view_trip_logs">
+                                <field name="trip_count" string="Trip Logs" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-money" type="object"
+                                    name="action_view_trip_expenses">
+                                <field name="expense_count" string="Trip Expenses" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-balance-scale" type="object"
+                                    name="action_view_weight_logs">
+                                <field name="weight_count" string="Weight Logs" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-level-up" type="object"
+                                    name="action_view_loading_logs">
+                                <field name="loading_count" string="Loading Logs" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-level-down" type="object"
+                                    name="action_view_unloading_logs">
+                                <field name="unloading_count" string="Unloading Logs" widget="statinfo"/>
+                            </button>
+                        </div>
+
+                        <widget name="web_ribbon" title="Validated" attrs="{'invisible': [('validated_by', '=', False)]}"/>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <label for="delivery_unit_id" attrs="{'invisible': [('delivery_unit_id', '=', False)]}"/>
+                                <div class="o_row" attrs="{'invisible': [('delivery_unit_id', '=', False)]}">
+                                    <field name="delivery_unit_id"/>
+                                    <button name="action_reassign" type="object"
+                                            string="Reassign Delivery Unit"
+                                            icon="fa-refresh"
+                                            class="btn-link"
+                                            attrs="{'invisible': ['|', '|', '|', ('is_returning', '=', True), ('state', 'in', ['in_transit_cp', 'in_transit_bp', 'closed']), ('delivery_unit_id', '=', False), ('trip_log_id', '!=', False)]}"/>
+                                </div>
+                                <field name="trip_log_id" attrs="{'invisible': [('trip_log_id', '=', False)]}"/>
+                                <field name="garage_id" attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="order_date" readonly="1"/>
+                                <field name="schedule_date" attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                                <field name="company_id" groups="base.group_multi_company"
+                                       attrs="{'readonly': [('state', '!=', 'unassigned')]}"/>
+                            </group>
+                        </group>
+                        <group string="Vendor">
+                            <group>
+                                <label for="atw_id"/>
+                                <div class="o_row">
+                                    <field name="atw_id"
+                                           domain="['|', ('delivery_order_id', '=', active_id), ('delivery_order_id', '=', False)]"
+                                           context="{'default_delivery_order_id': active_id, 'default_cement_plant_id': cement_plant_id, 'default_quantity': requested_load}"
+                                           attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                                    <button name="action_create_atw" type="object" string="Create ATW"
+                                            class="btn-primary" attrs="{'invisible': [('atw_id', '!=', False)]}"/>
+                                </div>
+                                <field name="product_id" attrs="{'readonly': [('state', '!=', 'unassigned')]}"/>
+                                <field name="vendor_dr_no"/>
+                                <field name="picking_id"/>
+                            </group>
+                            <group>
+                                <field name="cement_plant_id"
+                                       context="{'show_address': 1, 'default_is_cement_plant': True}"
+                                       options="{'always_reload': True}"
+                                       domain="[('is_cement_plant', '=', True)]"
+                                       attrs="{'readonly': [('state', 'not in', ['unassigned', 'assigned'])]}"/>
+                                <label for="received_qty" attrs="{'invisible': [('picking_id', '=', False)]}"/>
+                                <div class="o_row" attrs="{'invisible': [('picking_id', '=', False)]}">
+                                    <field name="received_qty" readonly="1"/>
+                                    <field name="uom_id" readonly="1"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group string="Customer">
+                            <group>
+                                <field name="sale_id"
+                                       domain="[('state', '=', 'sale')]"
+                                       attrs="{'readonly': [('state', 'not in', ['unassigned', 'assigned', 'in_transit_cp', 'cp', 'loading', 'loaded'])]}"/>
+                                <field name="customer_id"/>
+                                <field name="picking_out_id"/>
+                                <label for="is_multiple_sale" class="oe_edit_only"/>
+                                <div>
+                                    <field name="is_multiple_sale" class="oe_edit_only" attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                                </div>
+                                <field name="next_sale_id" readonly="1" attrs="{'invisible': [('is_multiple_sale', '=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="batching_plant_id"
+                                       context="{'show_address': 1, 'default_is_batching_plant': True}"
+                                       options="{'always_reload': True}"
+                                       domain="[('is_batching_plant', '=', True)]"
+                                       attrs="{'readonly': [('state', 'not in', ['unassigned', 'assigned', 'in_transit_cp', 'cp', 'loading', 'loaded'])], 'required': [('sale_id', '!=', False)]}"/>
+                                <label for="delivered_qty" attrs="{'invisible': [('picking_out_id', '=', False)]}"/>
+                                <div class="o_row" attrs="{'invisible': [('picking_out_id', '=', False)]}">
+                                    <field name="delivered_qty" readonly="1"/>
+                                    <field name="uom_id" readonly="1"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group string="Allocation" attrs="{'invisible': [('is_multiple_sale', '=', False)]}">
+                            <field name="allocation_ids" nolabel="1">
+                                <tree editable="bottom" decoration-muted="state == 'done'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="sale_id" domain="[('state', '=', 'sale')]"/>
+                                    <field name="requested_load"/>
+                                    <field name="uom_id"/>
+                                    <field name="batching_plant_id" domain="[('is_batching_plant', '=', True)]"/>
+                                    <field name="picking_id" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Load Limits">
+                            <group>
+                                <label for="requested_load"/>
+                                <div class="o_row">
+                                    <field name="requested_load" attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                                    <field name="uom_id" attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group string="Documents" attrs="{'invisible': [('name', '=', 'New')]}">
+                            <field name="document_ids" nolabel="1" attrs="{'readonly': [('state', 'in', ['closed'])]}">
+                                <tree editable="bottom" delete="0">
+                                    <field name="type_id" string="Document Type"
+                                           attrs="{'readonly': [('required', '=', True)]}" options="{'no_open': True}"
+                                           domain="[('required', '=', False)]"/>
+                                    <field name="required" invisible="1"/>
+                                    <field name="picture1" widget="image"/>
+                                    <field name="picture2" widget="image"/>
+                                    <field name="picture3" widget="image"/>
+                                    <field name="submitted" widget="toggle_button"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="type_id" string="Document Type" options="{'no_open': True}"/>
+                                        <field name="submitted" widget="toggle_button"/>
+                                        <field name="picture1" attrs="{'invisible': [('picture1', '=', False)]}"
+                                               widget="image"/>
+                                        <field name="picture2" attrs="{'invisible': [('picture2', '=', False)]}"
+                                               widget="image"/>
+                                        <field name="picture3" attrs="{'invisible': [('picture3', '=', False)]}"
+                                               widget="image"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="validated_by" readonly="1" attrs="{'invisible': [('state', 'not in', ['validation', 'closed'])]}"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="departure_date" readonly="1"/>
+                                <field name="return_date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="estimated_return_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="remarks" placeholder="Additional information..." attrs="{'readonly': [('state', 'in', ['closed'])]}"/>
+                        </group>
+                        <group name="invisible_fields" string="Debug Fields" groups="base.group_no_one">
+                            <field name="is_loaded_weighed"/>
+                            <field name="is_unloaded_weighed"/>
+                            <field name="is_returning"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_logistics_delivery_order" model="ir.actions.act_window">
+            <field name="name">Delivery Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.delivery.order</field>
+            <field name="view_mode">tree,form,pivot,graph,activity</field>
+            <field name="search_view_id" ref="logistics_delivery_order_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Delivery Order.
+                </p>
+            </field>
+        </record>
+
+        <!-- Delivery Unit -->
+        <record id="logistics_delivery_unit_view_search" model="ir.ui.view">
+            <field name="name">logistics.delivery.unit.view.search</field>
+            <field name="model">logistics.delivery.unit</field>
+            <field name="arch" type="xml">
+                <search string="Search Delivery Unit">
+                    <field name="name" string="Delivery Unit" filter_domain="[('name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                    <filter string="Inactive" name="inactive" domain="[('state', '=', 'inactive')]"/>
+                    <separator/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Last Location" name="last_location" domain="[]"
+                                context="{'group_by': 'location_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_delivery_unit_view_tree" model="ir.ui.view">
+            <field name="name">logistics.delivery.unit.view.tree</field>
+            <field name="model">logistics.delivery.unit</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state == 'inactive'">
+                    <field name="name"/>
+                    <field name="tractor_head_id"/>
+                    <field name="trailer_id"/>
+                    <field name="driver_ids" widget="many2many_tags_avatar"/>
+                    <field name="helper_ids" widget="many2many_tags_avatar"/>
+                    <field name="delivery_order_id"/>
+                    <field name="state" readonly="2"/>
+                    <field name="tractor_head_availability" widget="toggle_button" readonly="1"/>
+                    <field name="trailer_availability" widget="toggle_button" readonly="1"/>
+                    <field name="driver_availability" widget="toggle_button" readonly="1"/>
+                    <field name="helper_availability" widget="toggle_button" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_delivery_unit_view_form" model="ir.ui.view">
+            <field name="name">logistics.delivery.unit.view.form</field>
+            <field name="model">logistics.delivery.unit</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="delivery_order_id"/>
+                                <field name="delivery_order_state"/>
+                            </group>
+                            <group>
+                                <field name="location_id"/>
+                                <field name="status" widget="state_selection"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Vehicle Pairing">
+                                <field name="tractor_head_id" domain="[('delivery_unit_id', '=', False)]"/>
+                                <field name="trailer_id" domain="[('delivery_unit_id', '=', False)]"/>
+                            </group>
+                            <group string="Personnel">
+                                <field name="driver_domain_ids" invisible="1"/>
+                                <field name="helper_domain_ids" invisible="1"/>
+                                <field name="driver_ids" widget="many2many_tags_avatar" domain="[('delivery_unit_id', '=', False), ('id', 'in', driver_domain_ids)]"/>
+                                <field name="helper_ids" widget="many2many_tags_avatar" domain="[('delivery_unit_id', '=', False), ('id', 'in', helper_domain_ids)]"/>
+                            </group>
+                        </group>
+                        <group string="Availability">
+                            <group>
+                                <field name="tractor_head_availability" string="Tractor Head" widget="toggle_button"
+                                       readonly="1"/>
+                                <field name="trailer_availability" string="Trailer" widget="toggle_button"
+                                       readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="driver_availability" string="Driver" widget="toggle_button" readonly="1"/>
+                                <field name="helper_availability" string="Helpers" widget="toggle_button" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="unavailable_personnel" widget="many2many_tags" attrs="{'invisible': [('unavailable_personnel', '=', [])]}"/>
+                                <field name="unavailable_vehicles" widget="many2many_tags" attrs="{'invisible': [('unavailable_vehicles', '=', [])]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_logistics_delivery_unit" model="ir.actions.act_window">
+            <field name="name">Delivery Units</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.delivery.unit</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Delivery Unit.
+                </p>
+            </field>
+        </record>
+
+        <!-- Driver/Helper Pairing -->
+
+        <record id="logistics_dh_pairing_view_tree" model="ir.ui.view">
+            <field name="name">logistics.dh.pairing.view.tree</field>
+            <field name="model">logistics.dh.pairing</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="driver_domain_ids" invisible="1"/>
+                    <field name="helper_domain_ids" invisible="1"/>
+                    <field name="driver_ids" widget="many2many_tags_avatar" domain="[('id', 'in', driver_domain_ids)]"/>
+                    <field name="helper_ids" widget="many2many_tags_avatar" domain="[('id', 'in', helper_domain_ids)]"/>
+                    <field name="remarks"/>
+                </tree>
+            </field>
+        </record>
+
+<!--        <record id="logistics_dh_pairing_view_form" model="ir.ui.view">-->
+<!--            <field name="name">logistics.dh.pairing.view.form</field>-->
+<!--            <field name="model">logistics.dh.pairing</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form>-->
+<!--                    <header>-->
+<!--                        <field name="state" widget="statusbar"/>-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                        </div>-->
+<!--                        <div class="oe_title">-->
+<!--                            <h1>-->
+<!--                                <field name="name" readonly="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="delivery_order_id"/>-->
+<!--                                <field name="delivery_order_state"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="location_id"/>-->
+<!--                                <field name="status" widget="state_selection"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <group string="Vehicle Pairing">-->
+<!--                                <field name="tractor_head_id"/>-->
+<!--                                <field name="trailer_id"/>-->
+<!--                            </group>-->
+<!--                            <group string="Personnel">-->
+<!--                                <field name="driver_ids" widget="many2many_tags_avatar"/>-->
+<!--                                <field name="helper_ids" widget="many2many_tags_avatar"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <group string="Availability">-->
+<!--                            <group>-->
+<!--                                <field name="tractor_head_availability" string="Tractor Head" widget="toggle_button"-->
+<!--                                       readonly="1"/>-->
+<!--                                <field name="trailer_availability" string="Trailer" widget="toggle_button"-->
+<!--                                       readonly="1"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="driver_availability" string="Driver" widget="toggle_button" readonly="1"/>-->
+<!--                                <field name="helper_availability" string="Helpers" widget="toggle_button" readonly="1"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                        <field name="activity_ids" widget="mail_activity"/>-->
+<!--                        <field name="message_ids" widget="mail_thread"/>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="action_logistics_dh_pairing" model="ir.actions.act_window">
+            <field name="name">D/H Pairings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.dh.pairing</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new D/H Pairing.
+                </p>
+            </field>
+        </record>
+
+        <!-- Delivery Document Type -->
+
+        <record id="logistics_delivery_document_type_view_tree" model="ir.ui.view">
+            <field name="name">logistics.delivery.document.type.view.tree</field>
+            <field name="model">logistics.delivery.document.type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                    <field name="required"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_logistics_delivery_document_type" model="ir.actions.act_window">
+            <field name="name">Document Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.delivery.document.type</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Delivery Document Type.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

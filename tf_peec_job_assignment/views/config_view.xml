@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Job Assignments Type Form -->
+		<record id="peec_hr_job_assignment_config_form_view" model="ir.ui.view">
+			<field name="name">tf.hr.job_assignment.config.form.view</field>
+			<field name="model">tf.hr.job_assignment.config</field>
+			<field name="arch" type="xml">
+				<form string="Job Assignment Form">
+					<sheet>
+				    	<div class="oe_title">
+							<label for="name" string="Temporary Job Assignment"/>
+				            <h1>
+				                <field required="1" name="name"/>
+				            </h1>
+				        </div>
+				        <group>
+				            <group string="Applies To">
+				                <field name="effective_date" />
+				                <field name="position_id" widget="many2many_tags" />
+								<field name="attendance_status" />
+				                <field name="type_id" />
+								<field name="expiration_time" widget="float_time"/>
+				            </group>
+							<group string="Matrix">
+								<field name="task_detail_ids" nolabel="1">
+									<tree editable="bottom">
+										<field name="task"/>
+										<field name="description"/>
+										<field name="rate_per_day"/>
+									</tree>
+								</field>
+								<group>
+									<field name="work_hour_ids" nolabel="1">
+										<tree editable="bottom">
+											<field name="range_hours"/>
+											<field name="range_duration"/>
+										</tree>
+									</field>
+								</group>
+							</group>
+				        </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+				</form>
+			</field>
+		</record>
+
+		<!-- Job Assignments Type Tree -->
+		<record id="peec_hr_job_assignment_config_tree_view" model="ir.ui.view">
+			<field name="name">tf.hr.job_assignment.config.tree.view</field>
+			<field name="model">tf.hr.job_assignment.config</field>
+			<field name="arch" type="xml">
+				<tree string="Job Assignment Tree">
+					<field name="name"/>
+					<field name="effective_date" />
+					<field name="position_id" />
+					<field name="attendance_status" />
+					<field name="type_id" />
+					<field name="expiration_time" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Job Assignments Action -->
+		<record id="peec_hr_job_assignment_config_action" model="ir.actions.act_window">
+			<field name="name">Job Assignment</field>
+			<field name="res_model">tf.hr.job_assignment.config</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Job Assignments Menu -->
+        <menuitem id="peec_hr_job_assignment_config_menu" name="Job Assignment"
+          parent="ss_hris_compben.menu_view_compben_config" action="peec_hr_job_assignment_config_action"
+          sequence="53" groups="ss_hris_compben.group_hr_compben_manager"/>
+
+    </data>
+</odoo>

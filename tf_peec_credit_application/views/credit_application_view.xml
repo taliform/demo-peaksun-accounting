@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="credit_application_view_form" model="ir.ui.view">
+            <field name="name">credit.application.view.form</field>
+            <field name="model">credit.application</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" class="btn-primary"
+                                states="draft"/>
+                        <button name="action_for_investigation" string="For Investigation" type="object"
+                                class="btn-primary" states="confirmed"/>
+                        <button name="action_for_approval" string="For Approval" type="object" class="btn-primary"
+                                states="investigation"/>
+                        <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                                states="approval"
+                                groups="tf_peec_credit_application.group_credit_application_approver"/>
+                        <button name="action_reject" string="Reject" type="object" class="btn" states="approval"
+                                groups="tf_peec_credit_application.group_credit_application_approver"/>
+                        <button name="action_cancel" string="Cancel" type="object" class="btn"
+                                states="confirmed,investigation,approval"/>
+                        <field name="state" widget="statusbar" string="State"
+                               statusbar_visible="draft,confirmed,investigation,approval,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="requested_credit_line" string="Requested Credit Line"/>
+                                <label for="requested_credit_term" string="Requested Credit Term"/>
+                                <div class="o_row">
+                                    <field name="requested_credit_term"/>
+                                    <field name="requested_credit_term_measure"/>
+                                </div>
+                            </group>
+                            <group name="approved_credit">
+                                <field name="approved_credit_line" string="Approved Credit Line"/>
+                                <label for="approved_credit_term" string="Approved Credit Term"/>
+                                <div class="o_row">
+                                    <field name="approved_credit_term"/>
+                                    <field name="approved_credit_term_measure"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="application_date"/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                            </group>
+                        </group>
+                        <group string="Customer Information">
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="trade_name"/>
+                                <field name="nature_id"/>
+                                <field name="year_business_started"/>
+                            </group>
+                            <group>
+                                <field name="vat"/>
+                                <label for="volume"/>
+                                <div class="o_row">
+                                    <field name="volume"/>
+                                    <span># of Bags / Mo.</span>
+                                </div>
+                                <field name="telephone" widget="phone"/>
+                                <field name="fax" widget="phone"/>
+                                <field name="email" widget="email"/>
+                            </group>
+                        </group>
+                        <group string="Collection">
+                            <group>
+                                <field name="collection_day"/>
+                                <field name="collection_time" widget="float_time"/>
+                            </group>
+                            <group>
+                                <field name="collection_address"/>
+                                <field name="mode_of_payment"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="details" string="Details">
+                                <group string="Company Officers">
+                                    <field name="officer_ids"
+                                           domain="[('is_company_officer', '=', True), ('parent_id', '=', partner_id)]"
+                                           context="{'default_credit_application_id': active_id, 'default_is_company_officer': True, 'default_parent_id': partner_id}"
+                                           nolabel="1">
+                                        <tree>
+                                            <field name="name" string="Name of Officer"/>
+                                            <field name="function"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Check Signatories">
+                                    <field name="signatory_ids"
+                                           domain="[('is_check_signatory', '=', True), ('parent_id', '=', partner_id)]"
+                                           context="{'default_credit_application_id': active_id, 'default_is_check_signatory': True, 'default_parent_id': partner_id}"
+                                           nolabel="1">
+                                        <tree>
+                                            <field name="name" string="Name of Officer"/>
+                                            <field name="function"/>
+                                            <field name="signature" widget="signature" width="100px"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Major Projects">
+                                    <field name="project_ids"
+                                           domain="[('parent_id', '=', partner_id)]"
+                                           context="{'default_credit_application_id': active_id, 'default_partner_id': partner_id}"
+                                           nolabel="1"/>
+                                </group>
+                                <group string="Outstanding Loans">
+                                    <field name="loan_ids" context="{'default_credit_application_id': active_id}"
+                                           nolabel="1">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="nature_of_loan"/>
+                                            <field name="outstanding_loan_amount"/>
+                                            <field name="collateral"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </tree>
+                                        <form>
+                                            <div class="oe_title">
+                                                <h1>
+                                                    <field name="name" placeholder="Name of Creditor"/>
+                                                </h1>
+                                            </div>
+                                            <group>
+                                                <group>
+                                                    <field name="credit_application_id" invisible="1"/>
+                                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                                    <field name="outstanding_loan_amount"/>
+                                                </group>
+                                                <group>
+                                                    <field name="nature_of_loan"/>
+                                                    <field name="collateral"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </group>
+                                <group string="Trade References">
+                                    <field name="trade_reference_ids"
+                                           context="{'default_credit_application_id': active_id}" nolabel="1">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="items_purchased"/>
+                                            <field name="approved_credit_line"/>
+                                            <field name="approved_credit_term_display" string="Approved Credit Term"/>
+                                            <field name="comments"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </tree>
+                                        <form>
+                                            <div class="oe_title">
+                                                <h1>
+                                                    <field name="name" placeholder="Name of Supplier"/>
+                                                </h1>
+                                            </div>
+                                            <group>
+                                                <group>
+                                                    <field name="contact_person"/>
+                                                    <field name="position"/>
+                                                </group>
+                                                <group>
+                                                    <field name="telephone_no" widget="phone"/>
+                                                    <field name="email_address" widget="email"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="credit_application_id" invisible="1"/>
+                                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                                    <field name="approved_credit_line"/>
+                                                    <label for="approved_credit_term"/>
+                                                    <div class="o_row">
+                                                        <field name="approved_credit_term"/>
+                                                        <field name="approved_credit_term_measure"/>
+                                                    </div>
+                                                </group>
+                                                <group>
+                                                    <field name="items_purchased"/>
+                                                    <field name="relationship_length"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="has_bounced_cheques"/>
+                                                    <field name="bounced_cheques_count"
+                                                           attrs="{'invisible': [('has_bounced_cheques', '=', False)]}"/>
+                                                    <field name="has_stop_payments"/>
+                                                    <field name="stop_payments_count"
+                                                           attrs="{'invisible': [('has_stop_payments', '=', False)]}"/>
+                                                </group>
+                                                <group>
+                                                    <field name="has_daif"/>
+                                                    <field name="daif_count"
+                                                           attrs="{'invisible': [('has_daif', '=', False)]}"/>
+                                                    <field name="has_delayed_payments"/>
+                                                    <field name="delayed_payments_count"
+                                                           attrs="{'invisible': [('has_delayed_payments', '=', False)]}"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="comments"/>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="ci_done_by"/>
+                                                </group>
+                                                <group>
+                                                    <field name="ci_done_on"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </group>
+                                <group string="Bank References">
+                                    <field name="bank_reference_ids"
+                                           context="{'default_credit_application_id': active_id}" nolabel="1">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="branch_name"/>
+                                            <field name="account_type"/>
+                                            <field name="account_no"/>
+                                            <field name="ave_monthly_balance"/>
+                                            <field name="comments"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </tree>
+                                        <form>
+                                            <div class="oe_title">
+                                                <h1>
+                                                    <field name="name" placeholder="Name of Bank"/>
+                                                </h1>
+                                                <h2>
+                                                    <field name="branch_name" placeholder="Branch"/>
+                                                </h2>
+                                            </div>
+                                            <group>
+                                                <group>
+                                                    <field name="account_no"/>
+                                                </group>
+                                                <group>
+                                                    <field name="account_type"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="contact_person"/>
+                                                    <field name="position"/>
+                                                </group>
+                                                <group>
+                                                    <field name="telephone_no" widget="phone"/>
+                                                    <field name="email_address" widget="email"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="credit_application_id" invisible="1"/>
+                                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                                    <field name="ave_monthly_balance"/>
+                                                </group>
+                                                <group>
+                                                    <field name="relationship_length"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="has_bounced_payments"/>
+                                                    <field name="bounced_payments_count"
+                                                           attrs="{'invisible': [('has_bounced_payments', '=', False)]}"/>
+                                                    <field name="has_stop_payments"/>
+                                                    <field name="stop_payments_count"
+                                                           attrs="{'invisible': [('has_stop_payments', '=', False)]}"/>
+                                                </group>
+                                                <group>
+                                                    <field name="has_daif"/>
+                                                    <field name="daif_count"
+                                                           attrs="{'invisible': [('has_daif', '=', False)]}"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="comments"/>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="bi_done_by"/>
+                                                </group>
+                                                <group>
+                                                    <field name="bi_done_on"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="authorized_person_id"/>
+                                        <field name="authorized_designation"/>
+                                    </group>
+                                    <group>
+                                        <field name="authorized_signature" widget="signature"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="checklist" string="Checklist">
+                                <group>
+                                    <div/>
+                                    <field name="latest_gis_for_corporations"/>
+                                    <field name="updated_financial_statements"/>
+                                    <field name="bir_form_2303"/>
+                                    <field name="authorization_letter_for_bank_references"/>
+                                </group>
+                            </page>
+                            <page name="approvers" string="Approvers"
+                                  attrs="{'invisible': [('state', 'in', ['draft', 'confirmed', 'investigation'])]}">
+                                <group>
+                                    <field name="approver_ids" nolabel="1">
+                                        <tree create="false" edit="false" delete="false">
+                                            <field name="user_id"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="credit_application_view_tree" model="ir.ui.view">
+            <field name="name">credit.application.view.tree</field>
+            <field name="model">credit.application</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="trade_name"/>
+                    <field name="volume"/>
+                    <field name="requested_credit_line"/>
+                    <field name="requested_credit_term"/>
+                    <field name="application_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_credit_application" model="ir.actions.act_window">
+            <field name="name">Credit Applications</field>
+            <field name="res_model">credit.application</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="credit_application_view_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a Credit Application
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_credit_application" id="menu_crm_credit_application"
+                  parent="crm.crm_menu_root" sequence="10"/>
+
+        <!-- Credit Application Approvers -->
+        <record id="credit_application_approval_configuration_view_tree" model="ir.ui.view">
+            <field name="name">credit.application.approval.configuration.view.tree</field>
+            <field name="model">credit.application.approval.configuration</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="user_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_credit_application_approval_configuration" model="ir.actions.act_window">
+            <field name="name">Credit Application Approvers</field>
+            <field name="res_model">credit.application.approval.configuration</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="credit_application_approval_configuration_view_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a Credit Application Approver
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_credit_application_approval_configuration"
+                  id="menu_crm_config_credit_application_approval_configuration"
+                  parent="crm.crm_menu_config" sequence="40"/>
+
+    </data>
+</odoo>
+
+

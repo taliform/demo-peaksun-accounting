@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tyrecheck_tire_user,access.tyrecheck.tire.user,model_tyrecheck_tire,base.group_user,1,0,0,0
+access_tyrecheck_tire_manager,access.tyrecheck.tire.manager,model_tyrecheck_tire,tf_peec_tyrecheck.group_tyrecheck_manager,1,1,1,1
+access_tyrecheck_product_user,access.tyrecheck.product.user,model_tyrecheck_product,base.group_user,1,0,0,0
+access_tyrecheck_product_manager,access.tyrecheck.product.manager,model_tyrecheck_product,tf_peec_tyrecheck.group_tyrecheck_manager,1,1,1,1
+access_tyrecheck_vehicle_user,access.tyrecheck.vehicle.user,model_tyrecheck_vehicle,base.group_user,1,0,0,0
+access_tyrecheck_vehicle_manager,access.tyrecheck.vehicle.manager,model_tyrecheck_vehicle,tf_peec_tyrecheck.group_tyrecheck_manager,1,1,1,1
+access_tyrecheck_service_center_user,access.tyrecheck.service.center.user,model_tyrecheck_service_center,base.group_user,1,0,0,0
+access_tyrecheck_service_center_manager,access.tyrecheck.service.center.manager,model_tyrecheck_service_center,tf_peec_tyrecheck.group_tyrecheck_manager,1,1,1,1
+access_tyrecheck_company_user,access.tyrecheck.company.user,model_tyrecheck_company,base.group_user,1,0,0,0
+access_tyrecheck_company_manager,access.tyrecheck.company.manager,model_tyrecheck_company,tf_peec_tyrecheck.group_tyrecheck_manager,1,1,1,1
+access_tyrecheck_deferred_expense_user,access.tyrecheck.deferred.expense.user,model_tyrecheck_deferred_expense,base.group_user,1,0,0,0
+access_tyrecheck_deferred_expense_manager,access.tyrecheck.deferred.expense.manager,model_tyrecheck_deferred_expense,tf_peec_tyrecheck.group_tyrecheck_manager,1,1,1,1

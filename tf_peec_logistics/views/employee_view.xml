@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="hr_employee_form_inherit_tf_peec_logistics" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.tf.peec.logistics</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='identification_group']">
+                    <field name="dh_availability"/>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="delivery_unit_id"/>
+                    <field name="delivery_unit_state"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

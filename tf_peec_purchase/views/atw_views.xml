@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_atw_view_form_inherit_purchase" model="ir.ui.view">
+            <field name="name">logistics.atw.view.form.inherit.purchase</field>
+            <field name="model">logistics.atw</field>
+            <field name="inherit_id" ref="tf_peec_logistics.logistics_atw_view_form"/>
+            <field name="arch" type="xml">
+                <field name="purchase_id" position="attributes">
+                    <attribute name="context">{'form_view_ref': 'tf_peec_purchase.peec_purchase_order_cement_form'}</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

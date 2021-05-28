@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- VMRS Code Form View -->
+    <record id='vmrs_code_form_view' model='ir.ui.view'>
+        <field name="name">vmrs.code.form</field>
+        <field name="model">vmrs.code</field>
+        <field name="arch" type="xml">
+            <form string="VMRS Code">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code" required="1"/>
+                            <field name="code_key_id"/>
+                            <field name="parent_id"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- VMRS Code Tree View -->
+    <record id="vmrs_code_tree_view" model="ir.ui.view">
+        <field name="name">vmrs.code.tree</field>
+        <field name="model">vmrs.code</field>
+        <field name="arch" type="xml">
+            <tree string="VMRS Code" editable="bottom">
+                <field name="code" required="1"/>
+                <field name="code_key_id"/>
+                <field name="parent_id"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- VMRS Code Key Form View -->
+    <record id='vmrs_code_key_form_view' model='ir.ui.view'>
+        <field name="name">vmrs.code.key.form</field>
+        <field name="model">vmrs.code.key</field>
+        <field name="arch" type="xml">
+            <form string="VMRS Code Key">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code" required="1"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- VMRS Code Key Tree View -->
+    <record id="vmrs_code_key_tree_view" model="ir.ui.view">
+        <field name="name">vmrs.code.key.tree</field>
+        <field name="model">vmrs.code.key</field>
+        <field name="arch" type="xml">
+            <tree string="VMRS Code" editable="bottom">
+                <field name="code" required="1"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--  VMRS Code Actions  -->
+    <record id="action_vmrs_code" model="ir.actions.act_window">
+        <field name="name">VMRS Code</field>
+        <field name="res_model">vmrs.code</field>
+        <field name="context"></field>
+        <field name="domain"></field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!--  VMRS Code Key Actions  -->
+    <record id="action_vmrs_code_keys" model="ir.actions.act_window">
+        <field name="name">VMRS Code Key</field>
+        <field name="res_model">vmrs.code.key</field>
+        <field name="context"></field>
+        <field name="domain"></field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- VMRS Menu in Repair -->
+    <menuitem id="repair_vmrs_code" name="VMRS Code" parent="repair.repair_menu_config" action="action_vmrs_code"
+              sequence="1"/>
+    <menuitem id="repair_vmrs_code_keys" name="VMRS Code Keys" parent="repair.repair_menu_config"
+              action="action_vmrs_code_keys" sequence="2"/>
+
+    <!-- VMRS Menu in Maintenance -->
+    <menuitem id="maintenance_vmrs_code" name="VMRS Code" parent="fleet.fleet_configuration" action="action_vmrs_code"
+              sequence="100"/>
+    <menuitem id="maintenance_vmrs_code_keys" name="VMRS Code Keys" parent="fleet.fleet_configuration"
+              action="action_vmrs_code_keys" sequence="110"/>
+</odoo>

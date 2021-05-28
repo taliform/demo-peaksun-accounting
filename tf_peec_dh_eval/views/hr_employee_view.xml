@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+<!--        &lt;!&ndash; Employee Badges Tree View &ndash;&gt;-->
+<!--        <record id="peec_hr_employee_badges_view_tree" model="ir.ui.view">-->
+<!--            <field name="name">DH Employee Badges Tree View</field>-->
+<!--            <field name="model">hr.employee.badge</field>-->
+<!--            <field name="type">tree</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Employee Badges" create="false" edit="false">-->
+<!--                    <field name="employee_id"/>-->
+<!--                    <field name="badge_id" />-->
+<!--                    <field name="date_granted" />-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!-- Employee Badges Smart Button -->
+        <record id="peec_hr_employee_badges_view_form_dh_inherit" model="ir.ui.view">
+            <field name="name">DH Employee Badges Form Inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_open_evaluations" type="object" class="oe_stat_button" icon="fa-list" attrs="{'invisible':[('is_dh','=',False)]}">
+                        <field name="evaluation_count" widget="statinfo" />
+                    </button>
+<!--                    <button name="action_open_badges" type="object" class="oe_stat_button" icon="fa-level-up" attrs="{'invisible':[('is_dh','=',False)]}">-->
+<!--                        <field name="badge_count" widget="statinfo" />-->
+<!--                    </button>-->
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

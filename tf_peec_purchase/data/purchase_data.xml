@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+	    <!-- Sequence for peec.purchase.request -->
+        <record id="seq_purchase_order" model="ir.sequence">
+            <field name="name">Purchase Request</field>
+            <field name="code">peec.purchase.request</field>
+            <field name="prefix">PR</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence for peec.canvass.sheet -->
+        <record id="seq_canvass_sheet" model="ir.sequence">
+            <field name="name">Canvass Sheet</field>
+            <field name="code">peec.canvass.sheet</field>
+            <field name="prefix">CS</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="model_purchase_request_create_canvass_sheet" model="ir.actions.server">
+            <field name="name">Create Canvass Sheet 2</field>
+            <field name="model_id" ref="tf_peec_purchase.model_peec_canvass_sheet_create_wizard"/>
+            <field name="binding_model_id" ref="tf_peec_purchase.model_peec_purchase_request_line"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_create_canvass_sheet()</field>
+        </record>
+
+	</data>
+
+</odoo>

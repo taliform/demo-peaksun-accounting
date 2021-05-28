@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Logistics Document Type Form -->
+		<record id="peec_hr_logistic_doc_type_form_view" model="ir.ui.view">
+			<field name="name">tf.hr.logistic_doc.type.form.view</field>
+			<field name="model">tf.hr.logistic_doc.type</field>
+			<field name="arch" type="xml">
+				<form string="Document Type Form">
+					<sheet>
+				    	<div class="oe_title">
+				            <h1>
+				                <field required="1" name="name" placeholder="Document Name..."/>
+				            </h1>
+				            <h2>
+				                <field name="certification_authority" placeholder="Certification Authority"/>
+				            </h2>
+				        </div>
+				        <group>
+				            <group>
+				                <field name="create_uid" readonly="1"/>
+				                <field name="write_uid" readonly="1"/>
+				            </group>
+				            <group>
+				                <field name="create_date" readonly="1"/>
+				                <field name="write_date" readonly="1"/>
+				            </group>
+				        </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+				</form>
+			</field>
+		</record>
+
+		<!-- Logistics Document Type Tree -->
+		<record id="peec_hr_logistic_doc_type_tree_view" model="ir.ui.view">
+			<field name="name">tf.hr.logistic_doc.type.tree.view</field>
+			<field name="model">tf.hr.logistic_doc.type</field>
+			<field name="arch" type="xml">
+				<tree string="Document Type Tree">
+					<field name="name"/>
+	    			<field name="certification_authority"/>
+	    			<field name="create_uid"/>
+	    			<field name="create_date"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Logistics Document Type Action -->
+		<record id="peec_hr_logistic_doc_type_action" model="ir.actions.act_window">
+			<field name="name">Document Types</field>
+			<field name="res_model">tf.hr.logistic_doc.type</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!-- Logistics License Type Form -->
+		<record id="peec_hr_logistic_license_type_form_view" model="ir.ui.view">
+			<field name="name">tf.hr.logistic_license.type.form.view</field>
+			<field name="model">tf.hr.logistic_license.type</field>
+			<field name="arch" type="xml">
+				<form string="License Type Form">
+					<sheet>
+				    	<div class="oe_title">
+				            <h1>
+				                <field required="1" name="name" placeholder="License Name..."/>
+				            </h1>
+				            <h2>
+				                <field name="certification_authority" placeholder="Certification Authority"/>
+				            </h2>
+				        </div>
+				        <group>
+				            <group>
+				                <field name="create_uid" readonly="1"/>
+				                <field name="write_uid" readonly="1"/>
+				            </group>
+				            <group>
+				                <field name="create_date" readonly="1"/>
+				                <field name="write_date" readonly="1"/>
+				            </group>
+				        </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+				</form>
+			</field>
+		</record>
+
+		<!-- Tree -->
+		<record id="peec_hr_logistic_license_type_tree_view" model="ir.ui.view">
+			<field name="name">tf.hr.logistic_license.type.tree.view</field>
+			<field name="model">tf.hr.logistic_license.type</field>
+			<field name="arch" type="xml">
+				<tree string="License Type Tree">
+					<field name="name"/>
+	    			<field name="certification_authority"/>
+	    			<field name="create_uid"/>
+	    			<field name="create_date"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Action -->
+		<record id="peec_hr_logistic_license_type_config_action" model="ir.actions.act_window">
+			<field name="name">License Types</field>
+			<field name="res_model">tf.hr.logistic_license.type</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<!-- Plants Action -->
+		<record id="peec_hr_logistic_plants_action" model="ir.actions.act_window">
+			<field name="name">Plants</field>
+			<field name="res_model">res.partner</field>
+			<field name="context">{'default_is_company': True}</field>
+			<field name="domain">['|', ('is_cement_plant', '=', True), ('is_batching_plant', '=', True)]</field>
+			<field name="view_mode">kanban,tree,form,activity</field>
+			<field name="search_view_id" ref="base.view_res_partner_filter"/>
+		</record>
+
+		<!-- Config Menu Items -->
+		<menuitem name="Logistics"
+			id="menu_ss_hris_emp_relations_config_logistics"
+			parent="ss_hris_emp_relations.menu_ss_hris_emp_relations_config"
+			sequence="20"
+			groups="ss_hris_compben.group_hr_compben_manager"/>
+
+		<menuitem name="Document Types"
+			id="menu_ss_hris_emp_relations_config_logistics_doc_type"
+			parent="menu_ss_hris_emp_relations_config_logistics"
+			action="peec_hr_logistic_doc_type_action" sequence="10"/>
+
+		<menuitem name="License Types"
+			id="menu_ss_hris_emp_relations_config_logistics_license_type"
+			parent="menu_ss_hris_emp_relations_config_logistics"
+			action="peec_hr_logistic_license_type_config_action" sequence="20"/>
+
+		<menuitem name="Plants"
+			id="menu_ss_hris_emp_relations_config_logistics_plants"
+			parent="menu_ss_hris_emp_relations_config_logistics"
+			action="peec_hr_logistic_plants_action" sequence="30"/>
+
+    </data>
+</odoo>

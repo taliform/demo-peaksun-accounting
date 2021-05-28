@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_tyrecheck" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.tyrecheck</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="5"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='base_geolocalize']" position="after">
+                <div class="col-12 col-lg-6 o_setting_box" id="tyrecheck">
+                    <div class="o_setting_right_pane" id="tyrecheck_settings">
+                        <label string="TyreCheck Integration" for="tyrecheck_host"/>
+                        <div class="text-muted">
+                            Integrate Odoo with TyreCheck
+                        </div>
+                        <div>
+                            <div class="content-group mt16">
+                                <label for="tyrecheck_host" class="o_light_label"/>
+                                <field name="tyrecheck_host" placeholder="https://democp.tyrecheck.com"/>
+                            </div>
+                            <div class="content-group">
+                                <label for="tyrecheck_username" class="o_light_label"/>
+                                <field name="tyrecheck_username"/>
+                            </div>
+                            <div class="content-group">
+                                <label for="tyrecheck_password" class="o_light_label"/>
+                                <field name="tyrecheck_password" password="True" widget="password"/>
+                            </div>
+                            <div class="content-group">
+                                <label for="tyrecheck_tread_depth_cost_type_id" class="o_light_label"/>
+                                <field name="tyrecheck_tread_depth_cost_type_id"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_config_settings_view_form_tyrecheck_deferred_expense" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.tyrecheck.deferred.expense</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="5"/>
+        <field name="inherit_id" ref="fleet.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='fleet']" position="inside">
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="tread_depth_expense">
+                        <div class="o_setting_right_pane" id="tread_depth_expense_settings">
+                            <label string="Tread Depth Expense" for="tyrecheck_host"/>
+                            <div class="text-muted">
+                                Accounting entries for the expense of tread depth consumption
+                            </div>
+                            <div>
+                                <div class="content-group mt16">
+                                    <label for="tread_depth_expense_journal_id" string="Journal" class="o_light_label"/>
+                                    <field name="tread_depth_expense_journal_id"/>
+                                </div>
+                                <div class="content-group">
+                                    <label for="tread_depth_expense_credit_account_id" string="Credit Account" class="o_light_label"/>
+                                    <field name="tread_depth_expense_credit_account_id"/>
+                                </div>
+                                <div class="content-group">
+                                    <label for="tread_depth_expense_debit_account_id" string="Debit Account" class="o_light_label"/>
+                                    <field name="tread_depth_expense_debit_account_id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

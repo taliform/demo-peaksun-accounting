@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_request_user,access.purchase.request.user,model_peec_purchase_request,purchase.group_purchase_user,1,1,1,1
+access_purchase_request_line_user,access.purchase.request.line.user,model_peec_purchase_request_line,purchase.group_purchase_user,1,1,1,1
+access_canvass_sheet_user,access.canvass.sheet.user,model_peec_canvass_sheet,purchase.group_purchase_user,1,1,1,1
+access_canvass_sheet_line_user,access.canvass.sheet.line.user,model_peec_canvass_sheet_line,purchase.group_purchase_user,1,1,1,1
+access_canvass_sheet_vendor_user,access.canvass.sheet.vendor.user,model_peec_canvass_sheet_vendor,purchase.group_purchase_user,1,1,1,1
+access_po_po_add_user,access.pr.po.add.user,model_peec_pr_po_add,purchase.group_purchase_user,1,1,1,1

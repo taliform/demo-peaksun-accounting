@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_view_tire_Services" model="ir.actions.act_window">
+            <field name="res_model">purchase.order.line</field>
+            <field name="name">Tire Services</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('serial_id', '=', active_id)]</field>
+        </record>
+
+        <!-- Stock Production Lot Form View Inherit -->
+        <record id="peec_view_production_lot_form_inherit" model="ir.ui.view">
+            <field name="name">peec.view.production.lot.form.inherit</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button name="%(action_view_tire_Services)d" type="action"
+                            icon="fa-wrench" class="oe_stat_button"
+                            help="Opens a list view of all purchase order lines where the lot / serial number was referenced.">
+                        <field string="Tire Services" name="tire_services_count" widget="statinfo" />
+                    </button>
+                </div>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

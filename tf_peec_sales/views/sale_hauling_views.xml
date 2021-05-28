@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!--Sale Order (Hauling)-->
+
+        <!--Form Views-->
+
+        <!--Tree Views-->
+
+        <!--Actions-->
+        <record id="peec_orders_sale_hauling_action_view" model="ir.actions.act_window">
+            <field name="name">Sales Orders (Hauling)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_order_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_sales_order_ch_view_form')})]"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale"/>
+            <field name="context">{'default_sale_type': 'hauling'}</field>
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')),('sale_type','=', 'hauling')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new quotation, the first step of a new sale!
+                </p><p>
+                    Once the quotation is confirmed, it becomes a sales order.
+                    <br/> You will be able to create an invoice and collect the payment.
+                </p>
+            </field>
+        </record>
+
+        <record id="peec_quotation_sale_hauling_action_view" model="ir.actions.act_window">
+            <field name="name">Quotations (Hauling)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_quotation_tree_with_onboarding')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_sales_order_ch_view_form')})]"/>
+            <field name="view_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="context">{'search_default_my_quotation': 1,'default_sale_type': 'hauling'}</field>
+            <field name="domain">[('sale_type','=', 'hauling')]</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new quotation, the first step of a new sale!
+              </p><p>
+                Once the quotation is confirmed by the customer, it becomes a sales order.
+                <br/> You will be able to create an invoice and collect the payment.
+              </p>
+            </field>
+        </record>
+
+        <!--Menu Items-->
+        <menuitem id="menu_sale_hauling" name="Hauling"
+                  parent="sale.sale_order_menu" sequence="200"
+                  groups="sales_team.group_sale_salesman"/>
+
+        <menuitem id="menu_sale_hauling_quotation" name="Quotations"
+                  parent="menu_sale_hauling" sequence="10"
+                  action="peec_quotation_sale_hauling_action_view"
+                  groups="sales_team.group_sale_salesman"/>
+
+        <menuitem id="menu_sale_hauling_orders" name="Orders"
+                  parent="menu_sale_hauling" sequence="20"
+                  action="peec_orders_sale_hauling_action_view"
+                  groups="sales_team.group_sale_salesman"/>
+    </data>
+</odoo>

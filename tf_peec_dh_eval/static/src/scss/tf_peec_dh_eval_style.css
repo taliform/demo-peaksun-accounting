@@ -1,0 +1,226 @@
+/*@import "/addons/web/static/src/scss/list_view.scss";*/
+
+.o_list_table > thead > tr > th:not(.o_list_record_selector) {
+    white-space: normal !important;
+}
+/*ACCIDENTS*/
+.normal_wrap [data-name="accident_month_1"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_2"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_3"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_4"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_5"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_6"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_7"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_8"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_9"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_10"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_11"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_month_12"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_total"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="action_view_accident"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="avg_accident"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="accident_score"]{
+  background-color: #6CC1ED; !important;
+}
+.normal_wrap [data-name="acc_sus_days"]{
+  background-color: #6CC1ED; !important;
+}
+/*SPEEDING*/
+.normal_wrap [data-name="speeding_month_1"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_2"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_3"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_4"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_5"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_6"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_7"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_8"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_9"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_10"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_11"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_month_12"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_total"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="spd_sus_days"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_ids"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="avg_speeding"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="speeding_score"]{
+  background-color: #b39ddb; !important;
+}
+.normal_wrap [data-name="action_view_speeding"]{
+  background-color: #b39ddb; !important;
+}
+/*OTHERS*/
+.normal_wrap [data-name="others_month_1"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_2"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_3"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_4"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_5"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_6"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_7"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_8"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_9"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_10"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_11"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_month_12"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_total"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="other_sus_days"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="avg_others"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="others_score"]{
+  background-color: #00FF00; !important;
+}
+.normal_wrap [data-name="action_view_others"]{
+  background-color: #00FF00; !important;
+}
+/*LEAVES*/
+.normal_wrap [data-name="leaves_month_1"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_2"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_3"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_4"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_5"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_6"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_7"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_8"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_9"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_10"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_11"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_month_12"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_total"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="action_view_leaves"] {
+  background-color: #FFFF66; !important;
+}
+.normal_wrap [data-name="leaves_score"] {
+  background-color: #FFFF66; !important;
+}
+/*SUMMARY*/
+.summary_wrap [data-name="prod_score"] {
+  background-color: #bf766e; !important;
+}
+.summary_wrap [data-name="corpo_score"] {
+  background-color: #bf766e; !important;
+}
+.summary_wrap [data-name="skills_score"] {
+  background-color: #bf766e; !important;
+}
+.summary_wrap [data-name="total_score"] {
+  background-color: #bf766e; !important;
+}
+.summary_wrap [data-name="rating"] {
+  background-color: #bf766e; !important;
+}

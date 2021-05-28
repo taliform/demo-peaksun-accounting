@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Job Assignment Views-->
+        <record id="peec_hr_job_assignment_tree_view" model="ir.ui.view">
+            <field name="name">Job Assignment Tree View</field>
+            <field name="model">tf.hr.job_assignment</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="requestor_id"/>
+                    <field name="date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_hr_job_assignment_form_view" model="ir.ui.view">
+            <field name="name">Job Assignment Form View</field>
+            <field name="model">tf.hr.job_assignment</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_done" string="Done" class="oe_highlight" type="object" states="in_progress"
+								groups="tf_peec_job_assignment.group_hr_job_assignment_user"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="in_progress"
+								groups="tf_peec_job_assignment.group_hr_job_assignment_user"/>
+                        <button name="action_generate_sa"
+                                type="object" string="Generate Salary Adjustment"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','!=','in_progress')]}"/>
+                        <field name="state" widget="statusbar" type="object" statusbar_visible="draft,in_progress,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </h1>
+                            <label for="employee_id" class="oe_edit_only" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <h2>
+                                <field name="employee_id" attrs="{'readonly':[('state','!=','draft')],'required':True}" options="{'no_create': True}"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="requestor_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="adjustment_date" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="job_config_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="date" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="details" string="Details">
+                                <field name="assignment_line_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="task_id" options="{'no_create': True}"/>
+                                        <field name="description"/>
+                                        <field name="rates"/>
+                                        <field name="is_done"/>
+                                        <field name="state"/>
+                                        <field name="job_assignment_state" invisible="1"/>
+                                        <button name="%(tf_peec_job_assignment.action_tf_hr_job_assignment_approve_wizard)d" type="action"
+												icon="fa-check" context="{'default_task_id': task_id,'default_start_time': start_time,'default_end_time': end_time}"
+                                                attrs="{'invisible':['|',('state','!=','pending'),('job_assignment_state','in',['cancel','done'])]}" groups="ss_hris_leave.group_hr_leave_request_approver"/>
+<!--                                       <button name="open_approve_wizard" string="Approve" type="object" attrs="{'invisible':[('state','!=','pending')]}"-->
+<!--                                                icon="fa-check" groups="ss_hris_leave.group_hr_leave_request_approver"/>-->
+                                        <button name="action_decline" string="Cancel" type="object"
+                                                attrs="{'invisible':['|',('state','!=','pending'),('job_assignment_state','in',['cancel','done'])]}"
+                                                confirm="Are you sure you want to cancel this job assignment line?"
+                                                icon="fa-times" groups="ss_hris_leave.group_hr_leave_request_approver"/>
+                                        <button name="%(tf_peec_job_assignment.action_tf_hr_job_assignment_logoff_wizard)d" string="Log-Off" type="action"
+                                                attrs="{'invisible':['|',('state','!=','pending'),('job_assignment_state','in',['cancel','done'])]}"
+                                                context="{'default_end_time': end_time,'default_is_done': is_done,}"
+                                                class="oe_highlight" groups="ss_hris_leave.group_hr_leave_request_approver"/>
+                                        <field name="adjustment_id" options="{'no_create': True}"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="charged_amount" string="Summary">
+                                    <field name="estimated_amount" readonly="1"/>
+		                            <field name="confirmed_amount" readonly="1"/>
+                                    <field name="unprocessed_amount" readonly="1"/>
+                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                        <label for="charged_amount"/>
+                                    </div>
+                                    <field name="charged_amount" nolabel="1" class="oe_subtotal_footer_separator"/>
+		                        </group>
+                                <field name="remarks" class="oe_inline" placeholder="Additional Information..." attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                <div class="oe_clear"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+	      				<field name="message_follower_ids" widget="mail_followers"/>
+	      				<field name="message_ids" widget="mail_thread"/>
+	    			</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Job Assignment Action -->
+		<record id="peec_hr_job_assignment_action" model="ir.actions.act_window">
+			<field name="name">Temporary Job Assignment</field>
+			<field name="res_model">tf.hr.job_assignment</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+    </data>
+</odoo>

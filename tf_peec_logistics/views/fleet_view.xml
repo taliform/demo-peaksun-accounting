@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Fleet Vehicle Log Fuel Form View Inherit -->
+        <record id="peec_fleet_vehicle_log_fuel_view_form_inherit_logistics" model="ir.ui.view">
+            <field name="name">peec.fleet.vehicle.log.fuel.view.form.inherit.logistics</field>
+            <field name="model">fleet.vehicle.log.fuel</field>
+            <field name="inherit_id" ref="tf_peec_fleet.peec_fleet_vehicle_log_fuel_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <field name="inspector_id" position="before">
+                    <field name="trip_log_id" domain="['|', ('delivery_unit_id.tractor_head_id', '=', vehicle_id), ('delivery_unit_id.trailer_id', '=', vehicle_id)]"/>
+                </field>
+                <field name="inspector_id" position="after">
+                    <field name="target_sucf"/>
+                    <field name="actual_sucf"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="peec_fleet_vehicle_view_form_inherit_logistics" model="ir.ui.view">
+            <field name="name">peec.fleet.vehicle.view.form.inherit.logistics</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="tf_peec_fleet.peec_fleet_vehicle_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='others']/group[1]" position="inside">
+                    <field name="delivery_unit_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

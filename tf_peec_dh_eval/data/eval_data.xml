@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+	    <!-- Sequence for  -->
+        <record id="tf_seq_dh_eval" model="ir.sequence">
+            <field name="name">Driver/Helper Evaluation Sequence</field>
+            <field name="code">tf.dh.eval</field>
+            <field name="prefix">DHE</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+	</data>
+
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_logistics_trip_allowance_employee_officer,access.logistics.trip.allowance.employee.officer,model_tf_hr_dh_trip_allowance,hr.group_hr_user,1,1,1,1
+access_logistics_trip_allowance_line_employee_officer,access.logistics.trip.allowance.line.employee.officer,model_tf_hr_dh_trip_allowance_line,hr.group_hr_user,1,1,1,1
+access_logistics_trip_allowance_rate_employee_officer,access.logistics.trip.allowance.rate.employee.officer,model_tf_hr_dh_trip_allowance_rate,hr.group_hr_user,1,0,0,0
+access_logistics_trip_allowance_rate_employee_manager,access.logistics.trip.allowance.rate.employee.manager,model_tf_hr_dh_trip_allowance_rate,hr.group_hr_manager,1,1,1,1

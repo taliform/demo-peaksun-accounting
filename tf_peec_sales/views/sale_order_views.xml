@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!--Default Sales Order-->
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')), ('sale_type','=', 'standard')]</field>
+        </record>
+
+        <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="domain">[('sale_type','=', 'standard')]</field>
+        </record>
+
+        <!--Default Form View-->
+        <record id="peec_sales_order_view_inherit_form" model="ir.ui.view">
+            <field name="name">peec.sales.order.view.inherit.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button name="action_quotation_send" position="after">
+                    <button name="action_close" string="Close" class="oe_highlight"
+                            confirm="Are you sure you want to close this sales order?"
+                            attrs="{'invisible': ['|',('invoice_status', '!=', 'invoiced'),('state','!=','sale')]}"
+                            type="object"/>"
+                </button>
+                <field name="order_line" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','closed','cancel'))]}</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="peec_sales_stock_view_inherit_form" model="ir.ui.view">
+            <field name="name">peec.sales.stock.view.inherit.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <field name="delivery_count" position="attributes">
+                    <attribute name="string">Inventory</attribute>
+                </field>
+                <xpath expr="//button[@name='action_view_delivery']" position="before">
+                    <field name="delivery_order_ids" invisible="1"/>
+                    <button type="object"
+                        name="action_view_delivery_orders"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        attrs="{'invisible': [('delivery_order_count', '=', 0)]}" groups="base.group_user">
+                        <field name="delivery_order_count" widget="statinfo" string="Delivery Orders"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_sale_order_pivot" model="ir.ui.view">
+            <field name="name">sale.order.pivot.inherit.peec</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sale_order_pivot"/>
+            <field name="arch" type="xml">
+                <field name="amount_total" position="after">
+                    <field name="amount_qty"/>
+                    <field name="amount_invoiced"/>
+                    <field name="amount_intransit"/>
+                    <field name="amount_balance"/>
+                </field>
+            </field>
+        </record>
+
+        <!--Cement/Hauling Sales Order-->
+        <record id="peec_sales_order_ch_view_form" model="ir.ui.view">
+            <field name="name">peec.sales.order.ch.view.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_invoice']" position="after">
+                    <field name="offhire_ids" invisible="1"/>
+                    <button type="object"
+                        name="action_view_offhire"
+                        class="oe_stat_button"
+                        icon="fa-minus-circle"
+                        attrs="{'invisible': [('sale_type', '!=', 'hauling')]}" groups="base.group_user">
+                        <field name="offhire_count" widget="statinfo" string="Offhire"/>
+                    </button>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]/button[@name='action_view_delivery']" position="replace">
+                    <!-- replace smart button -->
+                    <field name="picking_ids" invisible="1"/>
+                    <button type="object" name="action_view_delivery" class="oe_stat_button" icon="fa-cube" attrs="{'invisible': [('delivery_count', '=', 0)]}" groups="base.group_user">
+                        <field name="delivery_count" widget="statinfo" string="Stock"/>
+                    </button>
+                    <button type="object" name="action_view_delivery_orders" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('delivery_order_ids','=',[])]}">
+                        <field name="delivery_order_count" widget="statinfo" string="Delivery Orders" help="Delivery Orders"/>
+                        <field name="delivery_order_ids" invisible="1"/>
+                    </button>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <!-- replace smart button -->
+                    <button type="object" name="action_view_atws" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('atw_ids','=',[])]}">
+                        <field name="atw_count" widget="statinfo" string="ATWs" help="Authority To Withdraw"/>
+                        <field name="atw_ids" invisible="1"/>
+                    </button>
+                </xpath>
+                <button name="payment_action_void" position="after">
+                    <button string="Create Delivery Order" type="action"
+                            name="%(tf_peec_sales.peec_sale_delivery_order_view_action)d"
+                            context="{'from_sale_order_form': True ,'default_cement_plant_id': cement_plant_id, 'default_batching_plant_id': batching_plant_id, 'default_sale_type': sale_type}"
+                            attrs="{'invisible': ['|',('for_do_logistics','=',False),'|',('state','!=','sale'),('sale_operation','!=','cif')]}"
+                            class="oe_highlight"/>
+                    <button string="Create ATW" type="object"
+                            name="action_create_atw"
+                            context="{'from_sale_order_form': True}"
+                            attrs="{'invisible': ['|',('for_do_logistics','=',False),'|',('state','!=','sale'),('sale_operation','!=','fob')]}"
+                            class="oe_highlight"/>
+                </button>
+                 <button name="action_cancel" position="before">
+                    <button string="Update Offhire" type="object"
+                            name="update_offhire"
+                            context="{'from_sale_order_form': True}"
+                            attrs="{'invisible': [('sale_type','!=','hauling')]}"
+                            />
+                </button>
+                <field name="partner_id" position="replace">
+                    <field name="partner_id" widget="res_partner_many2one"
+                           context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                           attrs="{'readonly': ['|',('sales_agreement_id', '!=', False),('state','in',('sale','closed','cancel'))]}"
+                           options="{'always_reload': True}"
+                           force_save="1"/>
+                </field>
+                <field name="partner_shipping_id" position="after">
+                    <field name="project_id" attrs="{'readonly': [('state','in',('sale','closed','cancel'))], 'required': [('sale_type','in',('cement','hauling'))]}"/>
+                    <field name="batching_plant_id"  context="{'default_is_batching_plant': True}"
+                           options="{'always_reload': True}"
+                           domain="[('is_batching_plant', '=', True)]"
+                           attrs="{'readonly': [('state','in',('sale','closed','cancel'))], 'required': [('sale_type','=','cement')]}"/>
+                    <field name="cement_plant_id" context="{'default_is_cement_plant': True}"
+                           options="{'always_reload': True}"
+                           domain="[('is_cement_plant', '=', True)]"
+                           attrs="{'readonly': [('state','in',('sale','closed','cancel'))], 'required': [('sale_type','=','cement')]}"/>
+                </field>
+                <field name="payment_term_id" position="after">
+                    <field name="sale_operation" attrs="{'readonly': [('state','in',('sale','closed','cancel'))], 'invisible': [('sale_type','!=','cement')]}"/>
+                    <field name="sales_agreement_id" attrs="{'readonly': [('state','in',('sale','closed','cancel'))], 'invisible': [('sale_type','!=','cement')]}"
+                           domain="[('state', '=', 'ongoing'), ('partner_id', 'in', (partner_id, False)), ('company_id', '=', company_id)]"
+                           options="{'no_create_edit': True}"/>
+                    <field name="hauling_type" attrs="{'readonly': [('state','in',('sale','closed','cancel'))], 'invisible': [('sale_type','!=','hauling')]}"/>
+                    <field name="mnt_privilege" attrs="{'invisible': [('sale_type','!=','hauling')],'readonly': [('state','in',('closed','cancel'))]}"/>
+                    <field name="rate_table_id" readonly="1"/>
+                    <field name="sale_type" invisible="1"/>
+                    <field name="for_do_logistics" invisible="1"/>
+                    <field name="offhire_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="delivery_order_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="do_so_order_date" invisible="1"/>
+                </field>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]" position="attributes">
+                    <attribute name="editable"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='qty_invoiced']" position="after">
+                    <field name="scheduled" attrs="{'column_invisible': [('parent.sale_type', '!=', 'cement')],'invisible': ['|','|',('product_type','=','service'),('is_do_trip_exp','=',True),('is_offhire','=',True)]}"/>
+                    <field name="in_transit" attrs="{'column_invisible': [('parent.sale_type', '!=', 'cement')],'invisible': ['|','|',('product_type','=','service'),('is_do_trip_exp','=',True),('is_offhire','=',True)]}"/>
+                    <field name="balance" attrs="{'column_invisible': [('parent.sale_type', '!=', 'cement')],'invisible': ['|','|',('product_type','=','service'),('is_do_trip_exp','=',True),('is_offhire','=',True)]}"/>
+                    <field name="is_offhire" invisible="1"/>
+                    <field name="is_do_trip_exp" invisible="1"/>
+                    <field name="do_merge_alloc" invisible="1"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='name']" position="after">
+                    <field name="delivery_order_id" attrs="{'column_invisible': [('parent.hauling_type','!=','voyage')]}" options="{'always_reload': True}"/>
+                    <field name="vendor_dr_no" string="Vendor DR No" attrs="{'column_invisible': [('parent.hauling_type','!=','voyage')]}" options="{'always_reload': True}"/>
+                    <field name="no_bags" attrs="{'column_invisible': [('parent.hauling_type','!=','voyage')]}" options="{'always_reload': True}" readony="1"/>
+                    <field name="delivery_order_ids" widget="many2many_tags" attrs="{'column_invisible': [('parent.hauling_type', '!=', 'voyage')]}" invisible="1"/>
+                </xpath>
+                <field name="order_line" position="attributes">
+                    <attribute name="context">{'default_cement_plant_id': cement_plant_id}</attribute>
+                </field>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/form[1]/group[1]/group[1]" position="inside">
+                    <field name="cement_plant_id"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/form[1]/group[1]" position="after">
+                    <group name="rate_table">
+                        <field name="rate_table_id" options="{'no_create_edit': True}"
+                               domain="[('type', 'in', (parent.sale_type, False))]"
+                               attrs="{'invisible': [('parent.sale_operation','!=','cif')]}"/>
+                        <field name="travel_route_ids" string="Travel Routes" widget="one2many_tags"
+                               attrs="{'invisible': ['|',('parent.sale_type','!=','cement'),('parent.sale_operation','!=','cif')]}">
+                            <tree editable="bottom">
+                                <field name="origin_id"/>
+                                <field name="destination_id"/>
+                                <field name="distance"/>
+                            </tree>
+                        </field>
+                        <!--<div class="oe_grey" colspan="2">
+                           Default Travel Routes are based on the Sales Order's Cement Plant and Batching Plant.
+                        </div>-->
+                    </group>
+                    <group name="rate_comp" colspan="2" attrs="{'invisible': ['|',('parent.sale_type','!=','cement'),('parent.sale_operation','!=','cif')]}">
+                        <group name="section1">
+                            <field name="total_distance"/>
+                            <field name="rate_id" options="{'no_create_edit': True}"/>
+                        </group>
+                        <group name="section2">
+                            <field name="logistics_rate" readonly="1"/>
+                            <field name="cement_price" readonly="1"/>
+                            <field name="suggested_price" readonly="1"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page name="reserved_units" string="Reserved Units" attrs="{'invisible': [('sale_type','!=','hauling')]}">
+                        <group name="section1">
+                            <field name="no_reserved_units" readonly="1"/>
+                        </group>
+                        <group name="section2">
+                            <field name="reserved_unit_ids" widget="one2many_tags" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="tractor_head_id"/>
+                                    <field name="trailer_id"/>
+                                    <field name="driver_ids" widget="many2many_tags_avatar"/>
+                                    <field name="helper_ids" widget="many2many_tags_avatar"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

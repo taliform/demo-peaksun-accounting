@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+    
+        <record id="peec_purchase_request_reject_form_view" model="ir.ui.view">
+            <field name="name">peec.purchase.request.reject.form.view</field>
+            <field name="model">peec.purchase.request.reject</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="request_id" invisible="1"/>
+                        <field name="name" placeholder="Indicate reason for rejection..." required="1"/>
+                    </sheet>
+                    <footer>
+                        <button name="action_apply" string="Confirm" class="btn-primary" type="object"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_po_single_create_form_view" model="ir.ui.view">
+            <field name="name">peec.purchase.request.po.single.create.form.view</field>
+            <field name="model">peec.purchase.request.po.create</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div role="alert" class="alert alert-info">
+                            <h3>Tag Vendors</h3>
+                            <span class="text-muted">Please identify the vendors of the request lines before proceeding.</span>
+                            <field name="line_ids">
+                                <tree create="false" edit="true" delete="false" editable="bottom">
+                                    <field name="request_id" readonly="True"/>
+                                    <field name="product_id" readonly="True"/>
+                                    <field name="product_qty" readonly="True"/>
+                                    <field name="unit_cost" readonly="True"/>
+                                    <field name="vendor_id" required="True"/>
+                                </tree>
+                            </field>
+                        </div>
+                        <group>
+                            <field name="create_option"/>
+                        </group>
+                        <div attrs="{'invisible':[('create_option', '!=', 'add')]}">
+                            <div role="alert" class="alert alert-info">
+                                <h3>Tag Purchase Orders</h3>
+                                <span class="text-muted">Please identify the draft purchase orders the the lines will be added to.</span>
+                                <field name="add_po_ids">
+                                    <tree create="false" edit="true" delete="false" editable="bottom">
+                                        <field name="vendor_id" />
+                                        <field name="po_id" required="True" domain="[('partner_id','=',vendor_id),('state','=','draft')]"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" class="btn-primary" type="object"
+                                context="{'single':True}"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_po_multi_create_form_view" model="ir.ui.view">
+            <field name="name">peec.purchase.request.po.multi.create.form.view</field>
+            <field name="model">peec.purchase.request.po.create</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div role="alert" class="alert alert-info">
+                            <h3>Tag Vendors</h3>
+                            <span class="text-muted">Please identify the vendors of the request lines before proceeding.</span>
+                            <field name="line_ids">
+                                <tree create="false" edit="true" delete="false" editable="bottom">
+                                    <field name="request_id" readonly="True"/>
+                                    <field name="product_id" readonly="True"/>
+                                    <field name="product_qty" readonly="True"/>
+                                    <field name="unit_cost" readonly="True"/>
+                                    <field name="vendor_id" required="True"/>
+                                </tree>
+                            </field>
+                        </div>
+                        <group>
+                            <field name="create_option"/>
+                            <field name="consolidate_prod"/>
+                            <field name="consolidate_desc"/>
+                        </group>
+                        <div attrs="{'invisible':[('create_option', '!=', 'add')]}">
+                            <div role="alert" class="alert alert-info">
+                                <h3>Tag Purchase Orders</h3>
+                                <span class="text-muted">Please identify the draft purchase orders the the lines will be added to. New purchase orders will be created for vendors without a tag</span>
+                                <field name="add_po_ids">
+                                    <tree create="false" edit="true" delete="false" editable="bottom">
+                                        <field name="vendor_id" />
+                                        <field name="po_id" domain="[('partner_id','=',vendor_id),('state','=','draft')]"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </div>
+                        <div class="text-muted">
+                            <span>Note:</span><br/>
+                            <ol>
+                                <li>Request lines will be consolidated if they have the same product, supplier, analytic account and cost unit.</li>
+                                <li>Tick "Consolidated Description" if you want to consolidate the description of the consolidated products. Otherwise, the first product description will be used.</li>
+                            </ol>
+                        </div>
+                    </sheet>
+
+                    <footer>
+                        <button name="action_confirm" string="Confirm" class="btn-primary" type="object"
+                                context="{'multi':True}"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Create Purchase Order"
+            res_model="peec.purchase.request.po.create" binding_model="peec.purchase.request.line"
+            view_mode="form" binding_views="list"
+            view_id="peec_purchase_request_po_multi_create_form_view" target="new"
+            id="action_purchase_request_line_create_po_multi"
+            context = "{'default_line_ids': active_ids}"
+        />
+
+
+    </data>
+</odoo>

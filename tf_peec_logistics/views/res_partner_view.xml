@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Partner Customization -->
+        <record id="res_partner_form_inherit_tf_peec_logistics" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.tf.peec.logistics</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="tf_peec_partner.res_partner_form_inherit_tf_peec_partner"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='others']" position="inside">
+                    <group string="Plant Information" attrs="{'invisible': [('is_cement_plant', '=', False), ('is_batching_plant', '=', False)]}">
+                        <label for="maximum_load"/>
+                        <div class="o_row">
+                            <field name="maximum_load"/>
+                            <field name="maximum_load_uom_id"/>
+                        </div>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='others']/group[1]/group[1]/field[@name='is_check_signatory']" position="after">
+                    <field name="is_weight_checker"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='child_ids']/form[1]/sheet[1]/group[2]/group[1]/field[@name='is_check_signatory']" position="after">
+                    <field name="is_weight_checker"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="tf_hr_job_assignment_sa_wizard_view" model="ir.ui.view">
+            <field name="name">tf.hr.job_assignment.sa.wizard.view</field>
+            <field name="model">tf.hr.job_assignment.sa.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Generate Salary Adjustment">
+                    <group>
+                        <group>
+                            <field name="adjustment_date"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_tf_hr_job_assignment_sa_wizard" model="ir.actions.act_window">
+            <field name="name">Job Assignment Salary Adjustment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tf.hr.job_assignment.sa.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="tf_peec_job_assignment.tf_hr_job_assignment_sa_wizard_view"/>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+        </record>
+
+    </data>
+</odoo>

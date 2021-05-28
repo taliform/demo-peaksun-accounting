@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_partner_form_inherit_tf_peec_purchase" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.tf.peec.purchase</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='sales_purchases']" position="inside">
+                    <group string="Cement Products" attrs="{'invisible': [('is_cement_plant', '=', False)]}">
+                        <field name="cement_product_ids" nolabel="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

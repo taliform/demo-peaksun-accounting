@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Sequences-->
+        <record id="tf_peec_credit_application_seq" model="ir.sequence">
+            <field name="name">Credit Application</field>
+            <field name="code">credit.application</field>
+            <field name="prefix">CAPP</field>
+            <field name="padding">5</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+        </record>
+
+        <!-- Activities -->
+        <record id="mail_act_capp_approval" model="mail.activity.type">
+            <field name="name">Credit Application Approval</field>
+            <field name="icon">fa-file-text-o</field>
+            <field name="res_model_id" ref="tf_peec_credit_application.model_credit_application"/>
+        </record>
+
+    </data>
+</odoo>

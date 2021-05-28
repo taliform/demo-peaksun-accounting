@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_delivery_order_assign_view_form_inherit_dh" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.assign.view.form.inherit.dh</field>
+            <field name="model">logistics.delivery.order.assign</field>
+            <field name="inherit_id" ref="tf_peec_logistics.logistics_delivery_order_assign_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="replace">
+                    <form>
+                        <group string="Qualified Delivery Units" attrs="{'invisible': [('qualified_ids', '=', [])]}">
+                            <field name="qualified_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="driver_ids" widget="many2many_tags_avatar"/>
+                                    <field name="helper_ids" widget="many2many_tags_avatar"/>
+                                    <field name="delivery_order_id"/>
+                                    <field name="location_id"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Qualified Delivery Units" attrs="{'invisible': [('qualified_ids', '!=', [])]}">
+                            <div>
+                                <p attrs="{'invisible': [('searched', '=', False)]}">No Delivery Units qualified for your criteria. Create a new Delivery Unit or wait for a qualified one to be available.</p>
+                                <p attrs="{'invisible': [('searched', '=', True)]}">Please perform search to find qualified delivery units based on given criteria.</p>
+                            </div>
+                        </group>
+                        <separator string="Search Criteria"/>
+                        <group string="Plant Accreditations">
+                            <group>
+                                <field name="req_plant_driver" string="Require Driver"/>
+                            </group>
+                            <group>
+                                <field name="req_plant_helper" string="Require Helper"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('req_plant_driver', '=', False), ('req_plant_helper', '=', False)]}">
+                            <field name="req_plant_ids" nolabel="1"/>
+                        </group>
+                        <group string="Required Documents">
+                            <group>
+                                <field name="req_doc_driver" string="Require Driver"/>
+                            </group>
+                            <group>
+                                <field name="req_doc_helper" string="Require Helper"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('req_doc_driver', '=', False), ('req_doc_helper', '=', False)]}">
+                            <field name="req_doc_ids" nolabel="1"/>
+                        </group>
+                        <group string="Required Licenses">
+                            <group>
+                                <field name="req_license_driver" string="Require Driver"/>
+                            </group>
+                            <group>
+                                <field name="req_license_helper" string="Require Helper"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('req_license_driver', '=', False), ('req_license_helper', '=', False)]}">
+                            <field name="req_license_ids" nolabel="1"/>
+                        </group>
+                        <group string="Allowed Trucks">
+                            <group>
+                                <field name="req_truck_driver" string="Require Driver"/>
+                            </group>
+                            <group>
+                                <field name="req_truck_helper" string="Require Helper"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('req_truck_driver', '=', False), ('req_truck_helper', '=', False)]}">
+                            <field name="req_truck_ids" nolabel="1"/>
+                        </group>
+                        <group>
+                            <field name="delivery_unit_id"
+                                   options="{'limit': 10, 'search_more':true, 'no_create_edit': True}"
+                                   domain="[('id', 'in', qualified_ids)]"
+                                   string="Selected Delivery Unit"/>
+                        </group>
+                        <field name="delivery_order_id" invisible="1"/>
+                        <field name="searched" invisible="1"/>
+                        <footer>
+                            <button name="action_search" type="object" string="Search" class="oe_highlight"/>
+                            <button name="action_assign" type="object" string="Assign" class="oe_highlight"/>
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </form>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

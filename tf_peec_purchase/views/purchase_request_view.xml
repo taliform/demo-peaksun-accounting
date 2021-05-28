@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Purchase Request -->
+        <record id="peec_purchase_request_view_search" model="ir.ui.view">
+            <field name="name">peec.purchase.request.view.search</field>
+            <field name="model">peec.purchase.request</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Requests">
+                    <field name="name" string="Request"
+                        filter_domain="['|', ('name', 'ilike', self), ('requester_id', 'child_of', self)]"/>
+                    <field name="requester_id" operator="child_of"/>
+                    <field name="approver_id" operator="child_of"/>
+                    <field name="product_id"/>
+                    <filter name="my_requests" string="My Requests" domain="[('requester_id', '=', uid)]"/>
+                    <filter name="my_approvals" string="My Approvals" domain="[('approver_id', '=', uid)]"/>
+                    <filter name="open" string="Open" domain="[('state', 'not in', ['cancel','done'])]"/>
+                    <separator/>
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="confirm" string="Confirmed" domain="[('state', '=', 'confirm')]"/>
+                    <filter name="approval" string="Waiting Approval" domain="[('state', '=', 'approval')]"/>
+                    <filter name="approve" string="Approved" domain="[('state', '=', 'approve')]"/>
+                    <filter name="in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <filter name="reject" string="For Revision" domain="[('state', '=', 'reject')]"/>
+                    <separator/>
+                    <filter name="create_date" string="Creation Date" date="create_date"/>
+                    <filter name="approve_date" string="Approval Date" date="approve_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Requester" name="requester_id" domain="[]" context="{'group_by': 'requester_id'}"/>
+                        <filter string="Approver" name="approver_id" domain="[]" context="{'group_by': 'approver_id'}"/>
+                        <filter string="Creation Date" name="group_create_date" domain="[]" context="{'group_by': 'create_date'}"/>
+                        <filter string="Approval Date" name="group_approve_date" domain="[]" context="{'group_by': 'approve_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_view_tree" model="ir.ui.view">
+            <field name="name">peec.purchase.request.view.tree</field>
+            <field name="model">peec.purchase.request</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Request" decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('confirm','approval','approve','in_progress')" class="o_purchase_order">
+                    <field name="name"/>
+                    <field name="requester_id"/>
+                    <field name="create_date"/>
+                    <field name="approver_id" optional="hide"/>
+                    <field name="approve_date" optional="hide"/>
+                    <field name="state"/>
+                    <field name="message_unread" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_view_form" model="ir.ui.view">
+            <field name="name">peec.purchase.request.view.form</field>
+            <field name="model">peec.purchase.request</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request" class="o_purchase_order">
+                    <header>
+                        <button name="action_confirm" states="draft" string="Confirm" type="object" class="oe_highlight"/>
+                        <button name="action_for_approval" states="confirm" string="For Approval" type="object" class="oe_highlight"/>
+                        <button name="action_approve" states="approval" string="Approve" type="object" class="oe_highlight"/>
+                        <button name="action_reject_wizard" states="approval" string="Reject" type="object"/>
+                        <button name="action_in_progress" states="approve" string="In Progress" type="object" class="oe_highlight"/>
+                        <button name="action_create_canvass_sheet" string="Create Canvass Sheet" type="object" class="oe_highlight"
+                                attrs="{'invisible':['|',('state','!=','in_progress'),('all_poed','=',True)]}"/>
+                        <button name="action_create_purchase_order" string="Create Purchase Order" type="object" class="oe_highlight"
+                                attrs="{'invisible':['|',('state','!=','in_progress'),('all_poed','=',True)]}"/>
+                        <button name="action_force_done" states="in_progress" string="Force Done" type="object"/>
+                        <button name="action_draft" states="confirm,reject" string="Return to Draft" type="object"/>
+                        <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', 'in', ['draft', 'done','cancel'])]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approval,approve,in_progress,done" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_cs"
+                                    type="object" icon="fa-table" class="oe_stat_button">
+                                <field name="cs_nbr" string="Canvass Sheets" widget="statinfo"/>
+                            </button>
+                            <button name="action_view_pos"
+                                    type="object" icon="fa-shopping-cart" class="oe_stat_button">
+                                <field name="po_nbr" string="Purchase Orders" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <span class="o_form_label" >Purchase Request</span>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <div name="reject_warning" class="alert alert-danger" role="alert" attrs="{'invisible':[('state','!=','reject')]}" style="margin-top: 10px;">
+                            <p><label for="reject_reason"/><field name="reject_reason" class="oe_inline"/></p>
+                        </div>
+                        <group>
+                            <group name="left">
+                                <field name="requester_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="warehouse_id"/>
+                            </group>
+                            <group name="right">
+                                <field name="create_date"/>
+                                <field name="all_poed" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="requests" string="Requests">
+                                <field name="line_ids" attrs="{'readonly': [('state','!=','draft')]}">
+                                    <tree editable="bottom" name="request_tree">
+                                        <field name="product_id"/>
+                                        <field name="name" widget="text"/>
+                                        <field name="product_qty"/>
+                                        <field name="uom_id"/>
+                                        <field name="unit_cost"/>
+                                        <field name="vendor_id"/>
+                                        <field name="state"/>
+                                        <field name="product_uom_category_id" invisible="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <group name="remarks">
+                                    <field name="remarks"/>
+                                </group>
+                            </page>
+                            <page name="other" string="Other Information">
+                                <group name="other_info">
+                                    <group name="approver_info">
+                                        <field name="approver_id"/>
+                                        <field name="approve_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_action" model="ir.actions.act_window">
+            <field name="name">Purchase Requests</field>
+            <field name="res_model">peec.purchase.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
+            <field name="target">current</field>
+            <field name="context">{'search_default_open': 1}</field>
+        </record>
+
+        <menuitem id="peec_requests_menu" name="Requests" parent="purchase.menu_procurement_management"
+                  sequence="28"/>
+
+        <menuitem id="peec_purchase_request_menu" name="Purchase Request" parent="peec_requests_menu"
+                  sequence="7" action="peec_purchase_request_action"/>
+
+        <!-- Purchase Request Line-->
+        <record id="peec_purchase_request_line_view_search" model="ir.ui.view">
+            <field name="name">peec.purchase.request.line.view.search</field>
+            <field name="model">peec.purchase.request.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Request Lines">
+                    <field name="name" string="Request"
+                        filter_domain="['|', '|', ('name', 'ilike', self), ('product_id', 'ilike', self), ('requester_id', 'child_of', self)]"/>
+                    <field name="requester_id" operator="child_of"/>
+                    <field name="product_id"/>
+                    <separator/>
+                    <filter name="unapproved" string="Unapproved" domain="[('state', '=', 'unapproved')]"/>
+                    <filter name="waiting" string="Waiting" domain="[('state', '=', 'waiting')]"/>
+                    <filter name="canvass" string="Canvass Sheet" domain="[('state', '=', 'canvass')]"/>
+                    <filter name="po" string="Purchase Order" domain="[('state', '=', 'po')]"/>
+                    <filter name="partial" string="Partially Delivered" domain="[('state', '=', 'partial')]"/>
+                    <filter name="delivered" string="Delivered" domain="[('state', '=', 'delivered')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Purchase Request" name="request_id" domain="[]" context="{'group_by': 'request_id'}"/>
+                        <filter string="Product" name="product_id" domain="[]" context="{'group_by': 'product_id'}"/>
+                        <filter string="Description" name="name" domain="[]" context="{'group_by': 'name'}"/>
+                        <filter string="Preferred Vendor" name="name" domain="[]" context="{'group_by': 'vendor_id'}"/>
+                        <filter string="State" name="group_state" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_line_view_form" model="ir.ui.view">
+            <field name="name">peec.purchase.request.line.view.form</field>
+            <field name="model">peec.purchase.request.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="unapproved,approve,waiting,canvass,po,partial,delivered,done,cancel" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="request_id"/>
+                                <field name="product_id"/>
+                                <field name="name"/>
+                                <field name="product_qty" />
+                                <field name="unit_cost" />
+                            </group>
+                            <group>
+                                <field name="vendor_id" />
+                                <field name="cs_id"/>
+                                <field name="cs_line_id"/>
+                                <field name="po_id"/>
+                                <field name="po_line_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_line_view_tree" model="ir.ui.view">
+            <field name="name">peec.purchase.request.line.view.tree</field>
+            <field name="model">peec.purchase.request.line</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Request Lines" decoration-muted="state=='cancel'" decoration-info="state in ('unapproved','waiting','canvass','po','partial','delivered')" create="false" edit="false" delete="false">
+                    <field name="request_id"/>
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="product_qty" />
+                    <field name="unit_cost" />
+                    <field name="vendor_id" />
+                    <field name="po_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_purchase_request_line_action" model="ir.actions.act_window">
+            <field name="name">Purchase Request Lines</field>
+            <field name="res_model">peec.purchase.request.line</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('state','=','waiting')]</field>
+            <field name="view_id" ref="peec_purchase_request_line_view_tree" />
+            <field name="target">current</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem id="peec_purchase_request_line_menu" name="Purchase Request Lines" parent="peec_requests_menu"
+                  sequence="8" action="peec_purchase_request_line_action"/>
+
+    </data>
+</odoo>

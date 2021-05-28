@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <!-- Purchase Order Merge Wizard -->
+        <record id="peec_purchase_order_merge_view_form" model="ir.ui.view">
+            <field name="name">peec.purchase.order.merge.view.form</field>
+            <field name="model">peec.purchase.order.merge</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <form>
+                    <h3><label for="po_ids"/></h3>
+                    <field name="res_ids" invisible="1"/>
+                    <field name="po_ids"/>
+                    <group>
+                        <group>
+                            <field name="truck_load" required="True"/>
+                            <field name="partner_id" />
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="product_id" required="True"/>
+                            <field name="new_unit_price" required="True"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_merge" string="Merge" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Purchase Order Merge"
+            res_model="peec.purchase.order.merge" binding_model="purchase.order"
+            view_mode="form" binding_views="list"
+            view_id="peec_purchase_order_merge_view_form" target="new"
+            id="peec_purchase_order_merge_action_multi"
+            context="{
+                'default_res_ids': active_ids,
+            }"
+        />
+
+        <record id="peec_purchase_cement_merge_action" model="ir.actions.act_window">
+            <field name="name">Merge Purchase Orders (Cement)</field>
+            <field name="res_model">peec.purchase.order.merge</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="peec_purchase_order_merge_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{'retrieve_all':True}</field>
+        </record>
+
+        <menuitem id="peec_purchase_order_cement_merge_menu" name="Merge Purchase Orders"
+                  parent="peec_purchase_order_cement_menu" action="peec_purchase_cement_merge_action" sequence="30"/>
+        
+    </data>
+</odoo>

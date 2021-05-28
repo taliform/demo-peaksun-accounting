@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="tyrecheck_tire_view_tree" model="ir.ui.view">
+            <field name="name">tyrecheck.tire.view.tree</field>
+            <field name="model">tyrecheck.tire</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="tyrecheck_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tyrecheck_tire" model="ir.actions.act_window">
+            <field name="name">Tires</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tyrecheck.tire</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please sync Odoo with TyreCheck.
+                </p>
+            </field>
+        </record>
+
+        <record id="model_tyrecheck_tire_action_update" model="ir.actions.server">
+            <field name="name">Update Tires</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_tire"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_tire"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_update()</field>
+        </record>
+
+        <record id="tyrecheck_vehicle_view_tree" model="ir.ui.view">
+            <field name="name">tyrecheck.vehicle.view.tree</field>
+            <field name="model">tyrecheck.vehicle</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="tyrecheck_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tyrecheck_vehicle" model="ir.actions.act_window">
+            <field name="name">Vehicles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tyrecheck.vehicle</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please sync Odoo with TyreCheck.
+                </p>
+            </field>
+        </record>
+
+        <record id="model_tyrecheck_vehicle_action_update" model="ir.actions.server">
+            <field name="name">Update Vehicles</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_vehicle"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_vehicle"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_update()</field>
+        </record>
+
+        <record id="tyrecheck_product_view_tree" model="ir.ui.view">
+            <field name="name">tyrecheck.product.view.tree</field>
+            <field name="model">tyrecheck.product</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="tyrecheck_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tyrecheck_product" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tyrecheck.product</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please sync Odoo with TyreCheck.
+                </p>
+            </field>
+        </record>
+
+        <record id="model_tyrecheck_product_action_update" model="ir.actions.server">
+            <field name="name">Update Products</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_product"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_product"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_update()</field>
+        </record>
+
+        <record id="tyrecheck_service_center_view_tree" model="ir.ui.view">
+            <field name="name">tyrecheck.service.center.view.tree</field>
+            <field name="model">tyrecheck.service.center</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="tyrecheck_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tyrecheck_service_center" model="ir.actions.act_window">
+            <field name="name">Service Centers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tyrecheck.service.center</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please sync Odoo with TyreCheck.
+                </p>
+            </field>
+        </record>
+
+        <record id="model_tyrecheck_service_center_action_update" model="ir.actions.server">
+            <field name="name">Update Service Centers</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_service_center"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_service_center"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_update()</field>
+        </record>
+
+        <record id="tyrecheck_company_view_tree" model="ir.ui.view">
+            <field name="name">tyrecheck.company.view.tree</field>
+            <field name="model">tyrecheck.company</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="tyrecheck_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tyrecheck_company" model="ir.actions.act_window">
+            <field name="name">Companies</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tyrecheck.company</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please sync Odoo with TyreCheck.
+                </p>
+            </field>
+        </record>
+
+        <record id="model_tyrecheck_company_action_update" model="ir.actions.server">
+            <field name="name">Update Companies</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_company"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_company"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_update()</field>
+        </record>
+
+        <record id="model_tyrecheck_action_update_all" model="ir.actions.server">
+            <field name="name">Update All</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_company"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_company"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = env['tyrecheck.company'].action_update_all()</field>
+        </record>
+
+        <record id="tyrecheck_deferred_expense_view_search" model="ir.ui.view">
+            <field name="name">tyrecheck.deferred.expense.view.search</field>
+            <field name="model">tyrecheck.deferred.expense</field>
+            <field name="arch" type="xml">
+                <search string="Search Tire Deferred Expenses">
+                    <filter string="Unposted" name="unposted" domain="[('posted', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="tyrecheck_deferred_expense_view_tree" model="ir.ui.view">
+            <field name="name">tyrecheck.deferred.expense.view.tree</field>
+            <field name="model">tyrecheck.deferred.expense</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" decoration-muted="posted == True">
+                    <field name="tyrecheck_vehicle_id"/>
+                    <field name="create_date"/>
+                    <field name="amount" required="1"/>
+                    <field name="posted"/>
+                    <field name="cost_id" optional="show"/>
+                    <field name="move_id" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_tyrecheck_deferred_expense" model="ir.actions.act_window">
+            <field name="name">Deferred Expenses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tyrecheck.deferred.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_unposted': True}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <record id="model_tyrecheck_deferred_expense_action_post" model="ir.actions.server">
+            <field name="name">Post Expense</field>
+            <field name="model_id" ref="tf_peec_tyrecheck.model_tyrecheck_deferred_expense"/>
+            <field name="binding_model_id" ref="tf_peec_tyrecheck.model_tyrecheck_deferred_expense"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_post_expense()</field>
+        </record>
+
+    </data>
+</odoo>

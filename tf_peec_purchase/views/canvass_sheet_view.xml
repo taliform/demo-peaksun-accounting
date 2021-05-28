@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Canvass Sheet -->
+        <record id="peec_canvass_sheet_view_search" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.view.search</field>
+            <field name="model">peec.canvass.sheet</field>
+            <field name="arch" type="xml">
+                <search string="Search Canvass Sheets">
+                    <field name="name" string="Canvass Sheet"
+                        filter_domain="['|', ('name', 'ilike', self), ('responsible_id', 'child_of', self)]"/>
+                    <field name="responsible_id" operator="child_of"/>
+                    <field name="approver_id" operator="child_of"/>
+                    <field name="product_id"/>
+                    <field name="vendor_id"/>
+                    <filter name="my_canvasses" string="My Canvasses" domain="[('responsible_id', '=', uid)]"/>
+                    <filter name="my_approvals" string="My Approvals" domain="[('approver_id', '=', uid)]"/>
+                    <filter name="open" string="Open" domain="[('state', 'not in', ['cancel','done'])]"/>
+                    <separator/>
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="confirm" string="Confirmed" domain="[('state', '=', 'confirm')]"/>
+                    <filter name="rfq" string="RFQ Sent" domain="[('state', '=', 'rfq')]"/>
+                    <filter name="bid" string="Bid Received" domain="[('state', '=', 'bid')]"/>
+                    <filter name="approval" string="Waiting Approval" domain="[('state', '=', 'approval')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <filter name="reject" string="For Revision" domain="[('state', '=', 'reject')]"/>
+                    <separator/>
+                    <filter name="create_date" string="Creation Date" date="create_date"/>
+                    <filter name="approve_date" string="Approval Date" date="approve_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Responsible" name="responsible_id" domain="[]" context="{'group_by': 'responsible_id'}"/>
+                        <filter string="Approver" name="approver_id" domain="[]" context="{'group_by': 'approver_id'}"/>
+                        <filter string="Creation Date" name="group_create_date" domain="[]" context="{'group_by': 'create_date'}"/>
+                        <filter string="Approval Date" name="group_approve_date" domain="[]" context="{'group_by': 'approve_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="peec_canvass_sheet_view_tree" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.view.tree</field>
+            <field name="model">peec.canvass.sheet</field>
+            <field name="arch" type="xml">
+                <tree string="Canvass Sheet" decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('confirm','approval','approve','in_progress')" class="o_purchase_order">
+                    <field name="name"/>
+                    <field name="responsible_id"/>
+                    <field name="create_date"/>
+                    <field name="approver_id" optional="hide"/>
+                    <field name="approve_date" optional="hide"/>
+                    <field name="state"/>
+                    <field name="message_unread" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_canvass_sheet_view_tree_readonly" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.view.tree.readonly</field>
+            <field name="model">peec.canvass.sheet</field>
+            <field name="inherit_id" ref="tf_peec_purchase.peec_canvass_sheet_view_tree"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="peec_canvass_sheet_view_form" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.view.form</field>
+            <field name="model">peec.canvass.sheet</field>
+            <field name="arch" type="xml">
+                <form string="Canvass Sheet" class="o_purchase_order">
+                    <header>
+                        <button name="action_confirm" states="draft" string="Confirm" type="object" class="oe_highlight"/>
+                        <button name="action_rfq" states="confirm" string="Send RFQ" type="object" class="oe_highlight"/>
+                        <button name="action_bid" states="rfq" string="Bid Received" type="object" class="oe_highlight"/>
+                        <button name="action_approval" states="bid" string="For Approval" type="object" class="oe_highlight"
+                                confirm="Please confirm that the canvass sheet matrix has been updated before sending for approval. Proceed?"/>
+                        <button name="action_approve" states="approval" string="Approve" type="object" class="oe_highlight"
+                                confirm="A purchase order will bre created based on the canvass sheet matrix. Proceed?"/>
+                        <button name="action_reject_wizard" states="approval" string="Reject" type="object"/>
+                        <button name="action_rfq" states="reject" string="Revise" type="object" class="oe_highlight"/>
+                        <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', 'in', ['draft', 'done','cancel'])]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,rfq,bid,approval,done" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="view_canvass_sheet" type="object" string="View CS Matrix" class="oe_stat_button"
+                                    icon="fa-pencil-square-o" attrs="{'invisible': [('state','in',['draft','confirm'])]}"/>
+                            <button name="action_view_po" attrs="{'invisible': [('state','!=','done')]}"
+                                    type="object" icon="fa-folder-open" class="oe_stat_button">
+                                <field name="po_nbr" string="Purchase Orders" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <span class="o_form_label" >Canvass Sheet</span>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <div name="reject_warning" class="alert alert-danger" role="alert" attrs="{'invisible':[('state','!=','reject')]}" style="margin-top: 10px;">
+                            <p><label for="reject_reason"/><field name="reject_reason" class="oe_inline"/></p>
+                        </div>
+                        <group>
+                            <group name="left">
+                                <field name="responsible_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            </group>
+                            <group name="right">
+                                <field name="create_date"/>
+                                <field name="origin" readonly="1"/>
+                                <field name="all_poed" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="products" string="Products">
+                                <field name="line_ids" attrs="{'readonly': [('state','in',['done','done','cancel','reject'])]}">
+                                    <tree editable="bottom" name="canvass_tree">
+                                        <field name="product_id"/>
+                                        <field name="name" widget="text"/>
+                                        <field name="product_qty"/>
+                                        <field name="uom_id"/>
+                                        <field name="lpp"/>
+                                        <field name="lpv_id"/>
+                                        <field name="lpd" widget="date"/>
+                                        <field name="product_uom_category_id" invisible="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <div class="oe_grey oe_right">
+                                    <span>Legend LPP = Last Purchase Price, LPV = Last Purchase Vendor, LPD = Last Purchase Date</span>
+                                </div>
+                                <group name="remarks">
+                                    <field name="remarks"/>
+                                </group>
+                            </page>
+                            <page name="vendors" string="Vendors">
+                                <field name="vendor_ids" attrs="{'readonly': [('state','not in',['draft','confirm','rfq'])]}">
+                                    <tree editable="bottom" name="vendor_tree">
+                                        <field name="vendor_id" required="True"/>
+                                        <field name="deliver_to_id" required="True"/>
+                                        <field name="payment_term_id" required="True"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                </field>
+                                <field name="vendor_domain_ids" widget="many2many_tags" invisible="1"/>
+                            </page>
+                            <page name="purchase_orders" string="Purchase Orders" attrs="{'invisible': [('state','in',['draft','confirm'])]}">
+                                <div colspan="4" class="alert alert-info" role="alert"
+                                         attrs="{'invisible': [('state','!=','rfq')]}">
+                                    <p>
+                                        While Canvass Sheet is in <em>RFQ</em> state, please process the
+                                            requests
+                                            manually for each supplier by using <strong>[Send RFQ by Email]
+                                            </strong> or <strong>[Print RFQ]</strong>. After receiving the
+                                            quotations
+                                            from
+                                            the vendors, please update the RFQ details with the vendors'
+                                            provided
+                                            information. Once finished updating a RFQ, press <strong>[Bid Received]
+                                            </strong> to
+                                            signify the RFQ as already up-to-date with quoted prices.
+                                    </p>
+                                </div>
+
+                                <field name="purchase_ids" nolabel="1">
+                                    <tree create="false" decoration-muted="state=='cancel'">
+                                            <button name="action_rfq_send" states="draft,sent" icon="fa-envelope-o"
+                                                    help="Send RFQ by Email" type="object" context="{'send_rfq':True}"
+                                                    groups="base.group_user"/>
+                                            <button name="print_quotation" help="Print RFQ" type="object"
+                                                    icon="fa-print" states="draft,sent" groups="base.group_user"/>
+                                            <field name="name" string="Reference"/>
+                                            <field name="date_order"/>
+                                            <field name="partner_id"/>
+                                            <field name="company_id" groups="base.group_multi_company"
+                                                   options="{'no_create': True}"/>
+                                            <field name="date_planned"
+                                                   invisible="context.get('quotation_only', False)"/>
+                                            <field name="origin" invisible="1"/>
+                                            <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed"
+                                                   widget="monetary"/>
+                                            <field name="amount_total" sum="Total amount" widget="monetary"/>
+                                            <field name="currency_id" invisible="1"/>
+                                            <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="other" string="Other Information">
+                                <group name="other_info">
+                                    <group name="approver_info">
+                                        <field name="approver_id"/>
+                                        <field name="approve_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_canvass_sheet_action" model="ir.actions.act_window">
+            <field name="name">Canvass Sheets</field>
+            <field name="res_model">peec.canvass.sheet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
+            <field name="target">current</field>
+            <field name="context">{'search_default_open': 1}</field>
+        </record>
+
+        <record id="peec_canvass_sheet_rfq_action" model="ir.actions.act_window">
+            <field name="name">Canvass Sheets</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('canvass_id','!=',False)]</field>
+            <field name="target">current</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem id="peec_canvassing_menu" name="Canvassing" parent="purchase.menu_procurement_management"
+                  sequence="29"/>
+        <menuitem id="peec_canvass_sheet_menu" name="Canvass Sheets" parent="peec_canvassing_menu"
+                  sequence="5" action="peec_canvass_sheet_action"/>
+        <menuitem id="peec_canvass_sheet_rfq_menu" name="Canvass Sheet RFQs" parent="peec_canvassing_menu"
+                  sequence="10" action="peec_canvass_sheet_rfq_action"/>
+
+        <!-- Canvass Sheet Line-->
+        <record id="peec_canvass_sheet_line_view_form" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.line.view.form</field>
+            <field name="model">peec.canvass.sheet.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="canvass_id"/>
+                                <field name="product_id"/>
+                                <field name="name"/>
+                                <field name="product_qty" />
+                            </group>
+                            <group>
+                                <field name="lpv_id" />
+                                <field name="lpp" />
+                                <field name="lpd" />
+                                <field name="request_line_ids"/>
+                                <field name="po_line_ids"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Canvass Sheet Matrix -->
+        <record id="peec_canvass_sheet_matrix_view_form" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.matrix.view.form</field>
+            <field name="model">peec.canvass.sheet</field>
+            <field name="priority" eval="50"/>
+            <field name="arch" type="xml">
+                <form string='Canvass Sheet Matrix'>
+                    <header>
+                        <button name="retrieve_rfq_values" type="object" string="Refresh Bids"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approval,approve,in_progress,done" readonly="1"/>
+                    </header>
+					<field name="currency_id" invisible="1"/>
+					<field name="vendor_ids" invisible="1"/>
+					<div class="oe_title">
+                        <span class="o_form_label" >Canvass Sheet</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+					<field name="line_ids" attrs="{'readonly': [('state','in',['done','cancel','approval'])]}">
+						<tree editable="bottom" create="false" delete="false" class="normal_wrap">
+                            <field name="product_id" readonly="1"/>
+                            <field name="name" widget="text" readonly="1"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="uom_id" readonly="1"/>
+                            <field name="lpp" readonly="1"/>
+                            <field name="lpv_id" readonly="1"/>
+                            <field name="lpd" widget="date" readonly="1"/>
+                            <field name="product_uom_category_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+
+                            <field name="schedule_date_one" invisible="1" />
+                            <field name="tax_one_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="vendor_qty_one" invisible="1" sum="Total Qty."/>
+				  	      	<field name="vendor_price_one" invisible="1"/>
+                            <field name="awarded_qty_one" invisible="1" sum="Total Awarded Qty."/>
+                            <field name="subtotal_one" invisible="1"/>
+
+                            <field name="schedule_date_two" invisible="1"/>
+                            <field name="tax_two_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="vendor_qty_two" invisible="1" sum="Total Qty."/>
+				  	      	<field name="vendor_price_two" invisible="1"/>
+                            <field name="awarded_qty_two" invisible="1" sum="Total Awarded Qty."/>
+                            <field name="subtotal_two" invisible="1"/>
+
+                            <field name="schedule_date_three" invisible="1"/>
+                            <field name="tax_three_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="vendor_qty_three" invisible="1" sum="Total Qty."/>
+				  	      	<field name="vendor_price_three" invisible="1"/>
+                            <field name="awarded_qty_three" invisible="1" sum="Total Awarded Qty."/>
+                            <field name="subtotal_three" invisible="1"/>
+
+                            <field name="schedule_date_four" invisible="1"/>
+                            <field name="tax_four_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="vendor_qty_four" invisible="1" sum="Total Qty."/>
+				  	      	<field name="vendor_price_four" invisible="1"/>
+                            <field name="awarded_qty_four" invisible="1" sum="Total Awarded Qty."/>
+                            <field name="subtotal_four" invisible="1"/>
+
+                            <field name="schedule_date_five" invisible="1"/>
+                            <field name="tax_five_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="vendor_qty_five" invisible="1" sum="Total Qty."/>
+				  	      	<field name="vendor_price_five" invisible="1"/>
+                            <field name="awarded_qty_five" invisible="1" sum="Total Awarded Qty."/>
+                            <field name="subtotal_five" invisible="1"/>
+			   		    </tree>
+		   		    </field>
+                    <group name="remarks">
+                        <field name="remarks"/>
+                    </group>
+				</form>
+            </field>
+        </record>
+
+<!--        <template id="assets_backend" name="account assets" inherit_id="web.assets_backend">-->
+<!--            <xpath expr="." position="inside">-->
+<!--                <link rel="stylesheet" type="text/scss" href="/tf_peec_purchase/static/src/scss/tf_utils.scss"/>-->
+<!--            </xpath>-->
+<!--        </template>-->
+        <template id="assets_backend" name="peec_matrix_css" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/tf_peec_purchase/static/src/scss/tf_peec_purchase_style.css"/>
+            </xpath>
+        </template>
+
+
+    </data>
+</odoo>

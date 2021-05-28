@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_delivery_order_view_form_inherit_trip_report" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.view.form.inherit.trip.report</field>
+            <field name="model">logistics.delivery.order</field>
+            <field name="inherit_id" ref="tf_peec_logistics.logistics_delivery_order_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='invisible_fields']" position="inside">
+                    <field name="is_reported"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

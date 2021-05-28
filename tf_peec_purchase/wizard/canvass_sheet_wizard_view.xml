@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+    
+        <record id="peec_canvass_sheet_reject_form_view" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.reject.form.view</field>
+            <field name="model">peec.canvass.sheet.reject</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="canvass_id" invisible="1"/>
+                        <field name="name" placeholder="Indicate reason for rejection..." required="1"/>
+                    </sheet>
+                    <footer>
+                        <button name="action_apply" string="Confirm" class="btn-primary" type="object"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_canvass_sheet_create_wizard_form_view" model="ir.ui.view">
+            <field name="name">peec.canvass.sheet.create.wizard.form.view</field>
+            <field name="model">peec.canvass.sheet.create.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div role="alert" class="alert alert-info">
+                            <h3>Purchase Request Lines</h3>
+                            <span class="text-muted">A canvass sheet will be created for these request lines.</span>
+                            <field name="line_ids">
+                                <tree create="false" edit="false" delete="true" editable="bottom">
+                                    <field name="request_id" readonly="True"/>
+                                    <field name="product_id" readonly="True"/>
+                                    <field name="product_qty" readonly="True"/>
+                                    <field name="unit_cost" readonly="True"/>
+                                </tree>
+                            </field>
+                            <group>
+                                <field name="consolidate_prod"/>
+                                <field name="consolidate_desc"/>
+                            </group>
+                        </div>
+                        <hr/>
+                        <div role="alert" class="alert alert-info">
+                            <h3>Vendors</h3>
+                            <span class="text-muted">Please select the vendors to canvas from.</span>
+                            <field name="vendor_ids">
+                                <tree editable="bottom">
+                                    <field name="display_name" readonly="True"/>
+                                    <field name="phone" readonly="True"/>
+                                    <field name="email" readonly="True"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" class="btn-primary" type="object"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Create Canvass Sheet"
+            res_model="peec.canvass.sheet.create.wizard" binding_model="peec.purchase.request.line"
+            view_mode="form" binding_views="list"
+            view_id="peec_canvass_sheet_create_wizard_form_view" target="new"
+            id="peec_canvass_sheet_create_wizard_action"
+            context = "{'default_line_ids': active_ids}"
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Security -->
+        <record id="module_category_hr_rice_subsidy_config" model="ir.module.category">
+			<field name="name">Rice Subsidy</field>
+			<field name="sequence">18</field>
+			<field name="parent_id" ref="base.module_category_human_resources" />
+		</record>
+        
+        <record id="group_hr_rice_subsidy_user" model="res.groups">
+            <field name="name">Rice Subsidy Officer</field>
+            <field name="category_id" ref="tf_peec_rice_subsidy.module_category_hr_rice_subsidy_config"/>
+            <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+        </record>
+
+        <record id="group_hr_rice_subsidy_approver" model="res.groups">
+            <field name="name">Rice Subsidy Approver</field>
+            <field name="category_id" ref="tf_peec_rice_subsidy.module_category_hr_rice_subsidy_config"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_rice_subsidy_user'))]"/>
+        </record>
+
+        <record id="group_hr_rice_subsidy_manager" model="res.groups">
+            <field name="name">Rice Subsidy Manager</field>
+            <field name="category_id" ref="tf_peec_rice_subsidy.module_category_hr_rice_subsidy_config"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_rice_subsidy_approver'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="ir_cron_plant_acc_scheduler_status" forcecreate="True" model="ir.cron">
+            <field name="name">Plant Accreditation Scheduler Status</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field ref="model_tf_hr_plant_accreditation" name="model_id"/>
+            <field name="code">model.scheduler_status()</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=1,second=0,minute=0) + timedelta(days=1,hours=-8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="ir_cron_plant_req_scheduler_status" forcecreate="True" model="ir.cron">
+            <field name="name">Plant Requirement Scheduler Status</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field ref="model_tf_hr_logistic_plant_requirements" name="model_id"/>
+            <field name="code">model.scheduler_status()</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=1,second=0,minute=0) + timedelta(days=1,hours=-8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="ir_cron_doc_acc_scheduler_status" forcecreate="True" model="ir.cron">
+            <field name="name">Documents Accreditation Scheduler Status</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field ref="model_tf_hr_doc_accreditation" name="model_id"/>
+            <field name="code">model.scheduler_status()</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=1,second=0,minute=0) + timedelta(days=1,hours=-8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="ir_cron_license_acc_scheduler_status" forcecreate="True" model="ir.cron">
+            <field name="name">Licenses Accreditation Scheduler Status</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field ref="model_tf_hr_license_accreditation" name="model_id"/>
+            <field name="code">model.scheduler_status()</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=1,second=0,minute=0) + timedelta(days=1,hours=-8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="ir_cron_training_acc_scheduler_status" forcecreate="True" model="ir.cron">
+            <field name="name">Trainings Accreditation Scheduler Status</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field ref="model_tf_hr_training_accreditation" name="model_id"/>
+            <field name="code">model.scheduler_status()</field>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(hour=1,second=0,minute=0) + timedelta(days=1,hours=-8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="ir_cron_dh_attendance" model="ir.cron">
+            <field name="name">Driver/Helper: Update Attendance</field>
+            <field name="model_id" ref="model_tf_hr_dh_attendance"/>
+            <field name="state">code</field>
+            <field name="code">model.set_dh_availability()</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=1,second=0,minute=0) + timedelta(days=1,hours=-8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field eval="False" name="doall" />
+        </record>
+
+    </data>
+</odoo>

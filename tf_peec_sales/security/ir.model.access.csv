@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_rate_manager,access.sale.rate.manager,model_sale_rate,sales_team.group_sale_manager,1,1,1,1
+access_sale_rate_line_manager,access.sale.rate.line.manager,model_sale_rate_line,sales_team.group_sale_manager,1,1,1,1
+access_sale_rate_dp_manager,access.sale.rate.dp.manager,model_sale_rate_dp,sales_team.group_sale_manager,1,1,1,1
+access_sale_rate_rate_manager,access.sale.rate.rate.manager,model_sale_rate_rate,sales_team.group_sale_manager,1,1,1,1
+access_sale_location_manager,access.sale.location.manager,model_sale_location,sales_team.group_sale_manager,1,1,1,1
+access_target_sucf_manager,access.target.suf.manager,tf_peec_logistics.model_logistics_target_sucf,sales_team.group_sale_manager,1,1,1,1
+access_sale_rate_user,access.sale.rate.user,model_sale_rate,sales_team.group_sale_salesman,1,1,0,0
+access_sale_rate_line_user,access.sale.rate.line.user,model_sale_rate_line,sales_team.group_sale_salesman,1,1,0,0
+access_sale_rate_dp_user,access.sale.rate.dp.user,model_sale_rate_dp,sales_team.group_sale_salesman,1,1,0,0
+access_sale_rate_rate_user,access.sale.rate.rate.user,model_sale_rate_rate,sales_team.group_sale_salesman,1,1,0,0
+access_sale_agreement_user,access.sale.agreement.user,model_sale_agreement,sales_team.group_sale_salesman,1,1,1,1
+access_sale_agreement_line_user,access.sale.agreement.line.user,model_sale_agreement_line,sales_team.group_sale_salesman,1,1,1,1
+access_sale_offhire_user,access.sale.offhire.user,model_sale_offhire,sales_team.group_sale_salesman,1,1,1,1
+access_sale_location_user,access.sale.location.user,model_sale_location,sales_team.group_sale_salesman,1,1,0,0
+access_target_sucf_user,access.target.suf.user,tf_peec_logistics.model_logistics_target_sucf,sales_team.group_sale_salesman,1,1,0,0
+access_sale_order_line_do_allocation_user,access.sale.order.line.do.allocation.user,model_sale_order_line_do_allocation,sales_team.group_sale_salesman,1,1,1,1

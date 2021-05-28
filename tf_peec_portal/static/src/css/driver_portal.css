@@ -1,0 +1,111 @@
+.button-large {
+    width: 100%;
+    font-size: 1.4rem;
+    height: 4.5rem;
+    padding: 0 2rem;
+}
+
+.mt1 {
+    margin-top: 1rem;
+}
+
+.mt2 {
+    margin-top: 2rem;
+}
+
+.mt3 {
+    margin-top: 3rem;
+}
+
+.mt4 {
+    margin-top: 4rem;
+}
+
+.user-info {
+    background-color: #F9F9F9;
+    font-size: 1.4rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.center {
+    text-align: center;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.75); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border: 1px solid #888;
+    width: 90%;
+}
+
+/* The Close Button */
+.modal-close {
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: -15px;
+    padding: 0;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.badge {
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background-color: #875A7B;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.error {
+    background-color: #f8e1e0;
+    border-color: #f5d5d4;
+    color: #723735;
+}
+
+.success {
+    background-color: #ccecdb;
+    border-color: #b8e4cc;
+    color: #005326;
+}
+
+.pager ul li {
+    display: inline-block;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+form.compact {
+    margin: 0;
+}
+
+.hide {
+    display: none;
+}

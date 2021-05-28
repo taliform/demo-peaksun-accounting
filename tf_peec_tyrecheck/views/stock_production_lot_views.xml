@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Lot / Serial Number -->
+
+        <record id="stock_product_lot_view_form" model="ir.ui.view">
+            <field name="name">stock.production.lot.view.form</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="action_tyrecheck_sync" string="TyreCheck Sync" type="object" class="btn-secondary"
+                                attrs="{'invisible': [('is_tire', '=', False)]}"/>
+                        <button name="action_tyrecheck_test" string="TyreCheck Test" type="object" class="btn-secondary"
+                                attrs="{'invisible': [('is_tire', '=', False)]}"/>
+                    </header>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_deferred_expenses" icon="fa-money" class="oe_stat_button" string="Deferred Expenses" type="object"/>
+                </xpath>
+                <xpath expr="//group[@name='main_group']" position="inside">
+                    <group>
+                        <field name="is_tire"/>
+                        <field name="tyrecheck_id" attrs="{'invisible': [('is_tire', '=', False)]}"/>
+<!--                        <field name="tyrecheck_product_id" attrs="{'invisible': [('is_tire', '=', False)]}"/>-->
+<!--                        <field name="tyrecheck_service_center_id" attrs="{'invisible': [('is_tire', '=', False)]}"/>-->
+<!--                        <field name="tyrecheck_company_id" attrs="{'invisible': [('is_tire', '=', False)]}"/>-->
+                        <field name="tyrecheck_last_vehicle" attrs="{'invisible': [('is_tire', '=', False)]}"/>
+                        <field name="tyrecheck_last_vehicle_tyre" attrs="{'invisible': [('is_tire', '=', False)]}"/>
+                        <field name="tyrecheck_last_sync" attrs="{'invisible': [('is_tire', '=', False)]}"/>
+                        <label for="tyrecheck_current_tread_depth" attrs="{'invisible': [('is_tire', '=', False)]}"/>
+                        <div class="o_row" attrs="{'invisible': [('is_tire', '=', False)]}">
+                            <field name="tyrecheck_current_tread_depth"/> 1/32 inch
+                        </div>
+                        <field name="tyrecheck_value"/>
+                    </group>
+                    <group>
+                        <field name="currency_id"/>
+                        <field name="purchase_price"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

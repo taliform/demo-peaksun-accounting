@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem name="Job Assignments" id="peec_hr_job_assignment_main_menu"
+			parent="ss_hris_compben.ss_hris_compben" sequence="39"/>
+
+		<menuitem action="peec_hr_job_assignment_action" string="Temp. Job Assignments" id="peec_hr_job_assignment_menu"
+			parent="peec_hr_job_assignment_main_menu" sequence="1"/>
+
+    </data>
+</odoo>

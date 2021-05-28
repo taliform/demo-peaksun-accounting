@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Maintenance Request Form View Inherit -->
+        <record id="peec_maintenance_request_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Maintenance Request Form View Inherit</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+            <field name="arch" type="xml">
+                <field name="equipment_id" position="replace">
+                    <field name="to_maintain" widget="radio"/>
+                    <field name="equipment_id"
+                           attrs="{'required': [('to_maintain', '=', 'equipment')], 'invisible': [('to_maintain','!=', 'equipment')]}"/>
+                    <field name="vehicle_id"
+                           attrs="{'required': [('to_maintain', '=', 'vehicle')], 'invisible': [('to_maintain','!=', 'vehicle')]}"/>
+                    <field name="product_id"
+                           attrs="{'required': [('to_maintain', '=', 'product')], 'invisible': [('to_maintain','!=', 'product')]}"/>
+                    <field name="prod_lot_serial_num"
+                           attrs="{'required': [('to_maintain', '=', 'product')], 'invisible': [('to_maintain','!=', 'product')]}"/>
+                    <field name="repair_order_count" invisible="1"/>
+                    <field name="can_create_repair_order" invisible="1"/>
+                </field>
+
+                <xpath expr="//button[@name='archive_equipment_request']" position="before">
+                    <button name="action_create_repair_order" class="btn btn-primary"
+                            confirm="This will create a repair order for this maintenance request record"
+                            string="Create Repair Order"
+                            type="object" groups="tf_peec_maintenance.group_maintenance_user"
+                            attrs="{'invisible': [('can_create_repair_order', '=', False)]}"/>
+                </xpath>
+
+                <xpath expr="//sheet/div[1]" position="after">
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-wrench" type="object"
+                                name="action_view_repair_orders"
+                                context="{'default_maintenance_request_id': active_id}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="repair_order_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                </span>
+                                <span class="o_stat_text">Repair Orders</span>
+                            </div>
+                        </button>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Maintenance Stages List View Inherit -->
+        <record id="peec_maintenance_request_list_view_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Maintenance Stages List View Inherit</field>
+            <field name="model">maintenance.stage</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_stage_view_tree"/>
+            <field name="arch" type="xml">
+
+                <field name="done" position="after">
+                    <field name="cancel"/>
+                    <field name="repair_order_stage"/>
+                    <field name="vehicle_status"/>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="peec_maintenance_request_view_kanban_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Maintenance Request Knaban View Inherit</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_request_view_kanban"/>
+            <field name="arch" type="xml">
+                <field name="activity_state" position="after">
+                    <field name="vehicle_id"/>
+                    <field name="to_maintain"/>
+                </field>
+                <xpath expr="//div[@class='o_kanban_record_body']" position="inside">
+                    <span class="oe_grey"
+                          t-if="record.vehicle_id.raw_value and record.to_maintain.raw_value == 'vehicle'">
+                        <field name="vehicle_id"/>
+                    </span>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="maintenance.menu_maintenance_stage_configuration" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('tf_peec_maintenance.group_maintenance_manager'))]"/>
+        </record>
+    </data>
+</odoo>

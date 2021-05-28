@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Summary of Cement Deliveries-->
+        <record id="peec_sale_delivery_report_view_form" model="ir.ui.view">
+            <field name="name">peec.sale.delivery.order.report.pdf.view.form</field>
+            <field name="model">sale.delivery.order.report.pdf</field>
+            <field name="arch" type="xml">
+                <form string="Summary of Deliveries Report">
+                    <group name="cement_report">
+                        <group name="period">
+                            <field name="partner_id" required="1" widget="res_partner_many2one"
+                                       context="{'res_partner_search_mode': 'customer'}"
+                                       options='{"always_reload": True}'/>
+                            <field name="date_from" string="From"/>
+                            <field name="date_to" string="To"/>
+                        </group>
+                        <group name="others">
+                            <field name="po_id" required="1"
+                                   options="{'no_create_edit': True}"/>
+                            <field name="batching_plant_id" required="1"
+                                   domain="[('is_batching_plant', '=', True)]"
+                                   options="{'no_create_edit': True}"/>
+                            <field name="packaging" required="1"/>
+                            <field name="sale_type" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="so_ids" tags="one2many_tags" readonly="1"/>
+                    <footer>
+                        <button name="action_generate"
+                            string="Generate"
+                            type="object"
+                            class="btn-primary"/>
+                        <button string="Discard"
+                            class="btn-secondary"
+                            special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="peec_sale_cement_delivery_report_view_action" model="ir.actions.act_window">
+            <field name="name">Cement Deliveries Report Generation</field>
+            <field name="res_model">sale.delivery.order.report.pdf</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="peec_sale_delivery_report_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{'retrieve_all':True, 'sale_type':'cement'}</field>
+        </record>
+
+        <record id="peec_sale_hauling_delivery_report_view_action" model="ir.actions.act_window">
+            <field name="name">Hauling Deliveries Report Generation</field>
+            <field name="res_model">sale.delivery.order.report.pdf</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="peec_sale_delivery_report_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{'retrieve_all':True, 'sale_type':'hauling'}</field>
+        </record>
+
+        <act_window name="Summary of Cement Deliveries Report"
+            res_model="sale.delivery.order.report.pdf"
+            binding_model="sale.order" binding_views="list"
+            view_mode="form" target="new"
+            view_id="tf_peec_sales.peec_sale_delivery_report_view_form"
+            id="peec_sale_cement_delivery_report_view_action_multi"
+            context="{'sale_type': 'cement'}"/>
+
+
+        <act_window name="Summary of Hauling Deliveries Report"
+            res_model="sale.delivery.order.report.pdf"
+            binding_model="sale.order" binding_views="list"
+            view_mode="form" target="new"
+            view_id="tf_peec_sales.peec_sale_delivery_report_view_form"
+            id="peec_sale_hauling_delivery_report_view_action_multi"
+            context="{'sale_type': 'hauling'}"/>
+
+
+        <!--Menu Items-->
+        <menuitem id="menu_sale_cement_report" name="Summary of Cement Deliveries Report"
+                  parent="menu_sale_cement" sequence="40"
+                  action="peec_sale_cement_delivery_report_view_action"
+                  groups="sales_team.group_sale_salesman"/>
+
+        <!--Menu Items-->
+        <menuitem id="menu_sale_hauling_report" name="Summary of Hauling Deliveries Report"
+                  parent="menu_sale_hauling" sequence="40"
+                  action="peec_sale_hauling_delivery_report_view_action"
+                  groups="sales_team.group_sale_salesman"/>
+    </data>
+</odoo>

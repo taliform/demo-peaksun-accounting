@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="tf_peec_view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">tf.peec.view.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="after">
+                    <div class="alert alert-warning" role="alert" attrs="{'invisible': [('show_in_destination_warning', '=', False)]}">
+                        <span class="fa fa-info-circle"/>
+                        Warning: Source Location may not be the same with the Internal Destination Location.
+                    </div>
+                    <div class="alert alert-warning" role="alert" attrs="{'invisible': [('show_destination_warning', '=', False)]}">
+                        <span class="fa fa-info-circle"/>
+                        Warning: Source Location may not be the same with the Destination Location.
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="after">
+                    <field name="is_internal_out" invisible="1"/>
+                    <field name="show_destination_warning" invisible="1"/>
+                    <field name="show_in_destination_warning" invisible="1"/>
+                    <field name="loc_internal_dest_id" options="{'no_create': True}"
+                           groups="stock.group_stock_multi_locations"
+                           attrs="{'invisible': ['|',('picking_type_code', '=', 'outgoing'),('is_internal_out', '=', False)]}"/>
+                </xpath>
+                <field name="origin" position="after">
+                    <field name="incoming_picking_id" attrs="{'invisible': [('incoming_picking_id','=',False)]}"/>
+                    <field name="outgoing_picking_id" attrs="{'invisible': [('outgoing_picking_id','=',False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="tf_peec_view_location_form_inherit" model="ir.ui.view">
+            <field name="name">tf.peec.view.picking.form.inherit</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="before">
+                    <field name="vehicle_id"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <!-- Purchase Order Cement Over Under Wizard -->
+        <record id="peec_po_over_under_view_form" model="ir.ui.view">
+            <field name="name">peec.po.over.under.view.form</field>
+            <field name="model">peec.po.over.under</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <form>
+                    <h3><label for="po_ids"/></h3>
+                    <field name="res_ids" invisible="1"/>
+                    <field name="po_ids"/>
+
+                    <label for="date_start" string="Period"/>
+                    <div>
+                        <field name="date_from"/> -
+                        <field name="date_to"/>
+                    </div>
+
+                    <footer>
+                        <button name="action_generate" string="Generate Report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Cement Over Under Report"
+            res_model="peec.po.over.under" binding_model="purchase.order"
+            view_mode="form" binding_views="list"
+            view_id="peec_po_over_under_view_form" target="new"
+            id="peec_po_over_under_action_multi"
+            context="{
+                'default_res_ids': active_ids,
+            }"
+        />
+
+        <record id="peec_po_over_under_action" model="ir.actions.act_window">
+            <field name="name">Cement Over Under Report Generation</field>
+            <field name="res_model">peec.po.over.under</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="peec_po_over_under_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{'retrieve_all':True}</field>
+        </record>
+
+        <menuitem id="peec_po_over_under_menu" name="Cement Over Under Report"
+                  parent="peec_purchase_order_cement_menu" action="peec_po_over_under_action" sequence="40"/>
+        
+    </data>
+</odoo>

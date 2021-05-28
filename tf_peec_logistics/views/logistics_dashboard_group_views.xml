@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Dashboard Group -->
+        <record id="logistics_dashboard_group_view_tree" model="ir.ui.view">
+            <field name="name">logistics.dashboard.group.view.tree</field>
+            <field name="model">logistics.dashboard.group</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="model"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_dashboard_group_view_tree" model="ir.ui.view">
+            <field name="name">logistics.dashboard.group.view.tree</field>
+            <field name="model">logistics.dashboard.group</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="model"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_dashboard_group_view_form" model="ir.ui.view">
+            <field name="name">logistics.dashboard.group.view.form</field>
+            <field name="model">logistics.dashboard.group</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="model"/>
+                        </group>
+                        <group string="Filter">
+                            <group>
+                                <field name="at_locations" widget="many2many_tags"/>
+                                <field name="in_states" widget="many2many_tags"/>
+                                <field name="is_under_repair"/>
+                            </group>
+                            <group>
+                                <field name="is_loaded"/>
+                                <field name="is_unassigned"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    >
+                </form>
+            </field>
+        </record>
+
+        <record id="logistics_dashboard_group_view_kanban" model="ir.ui.view">
+            <field name="name">logistics.dashboard.group.view.kanban</field>
+            <field name="model">logistics.dashboard.group</field>
+            <field name="arch" type="xml">
+                <kanban string="Logistics Dashboard" create="false" edit="false" delete="false">
+                    <field name="model"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div t-attf-class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <h4>
+                                                <field name="name"/>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_content">
+                                    <button name="action_open_records" type="object" class="btn btn-primary">
+                                        <field name="count"/>
+                                        <t t-if="record.model.raw_value == 'delivery_order'">Orders</t>
+                                        <t t-if="record.model.raw_value == 'delivery_unit'">Units</t>
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_logistics_dashboard_group_menu" model="ir.actions.act_window">
+            <field name="name">Dashboard Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.dashboard.group</field>
+            <field name="view_mode">kanban</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Dashboard Group.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_logistics_dashboard_group_config" model="ir.actions.act_window">
+            <field name="name">Dashboard Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.dashboard.group</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Dashboard Group.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

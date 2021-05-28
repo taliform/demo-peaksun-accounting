@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Fleet Vehicle Log Fuel Form View Inherit -->
+        <record id="peec_maintenance_fleet_vehicle_view_form_inherit" model="ir.ui.view">
+            <field name="name">Peaksun Maintenance Fleet Vehicle Form View Inherit</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]/group[5]" position="after">
+                    <!-- Please double check if this intended, 2 fields are repeated -->
+                    <group string="Maintenance">
+                        <group>
+                            <field name="preventive_maintenance_distance"/>
+                            <field name="est_next_preventive_maintenance_distance"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

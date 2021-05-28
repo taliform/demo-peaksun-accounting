@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Sequences for logistics.delivery.order -->
+        <record id="sequence_delivery_order" model="ir.sequence">
+            <field name="name">Delivery Order</field>
+            <field name="code">logistics.delivery.order</field>
+            <field name="prefix">DO</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.delivery.unit -->
+        <record id="sequence_delivery_unit" model="ir.sequence">
+            <field name="name">Delivery Unit</field>
+            <field name="code">logistics.delivery.unit</field>
+            <field name="prefix">DU</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.atw -->
+        <record id="sequence_atw" model="ir.sequence">
+            <field name="name">Authority To Withdraw</field>
+            <field name="code">logistics.atw</field>
+            <field name="prefix">ATW</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.journey.plan -->
+        <record id="sequence_journey_plan" model="ir.sequence">
+            <field name="name">Journey Plan</field>
+            <field name="code">logistics.journey.plan</field>
+            <field name="prefix">JP</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.log.trip -->
+        <record id="sequence_log_trip" model="ir.sequence">
+            <field name="name">Trip Log</field>
+            <field name="code">logistics.log.trip</field>
+            <field name="prefix">TL</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.log.weight -->
+        <record id="sequence_log_weight" model="ir.sequence">
+            <field name="name">Weight Log</field>
+            <field name="code">logistics.log.weight</field>
+            <field name="prefix">WL</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.log.loading -->
+        <record id="sequence_log_loading" model="ir.sequence">
+            <field name="name">Loading Log</field>
+            <field name="code">logistics.log.loading</field>
+            <field name="prefix">LL</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for logistics.log.unloading -->
+        <record id="sequence_log_unloading" model="ir.sequence">
+            <field name="name">Unloading Log</field>
+            <field name="code">logistics.log.unloading</field>
+            <field name="prefix">UL</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

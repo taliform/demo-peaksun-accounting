@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Default Purchase Order -->
+         <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="domain">[('state','in',('purchase', 'done')), ('purchase_type','=', 'standard')]</field>
+        </record>
+
+        <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+            <field name="domain">[('purchase_type','=', 'standard')]</field>
+        </record>
+
+        <record id="peec_purchase_order_form_inherit" model="ir.ui.view">
+            <field name="name">peec.purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position='attributes'>
+                    <attribute name="domain">[('is_cement_plant','=',False)]</attribute>
+                </field>
+                 <xpath expr="//field[@name='order_line']/form/group/group[1]" position="inside">
+                     <field name="request_line_ids" readonly="True">
+                         <tree>
+                             <field name="request_id"/>
+                             <field name="product_id"/>
+                         </tree>
+                     </field>
+                     <field name="cs_line_id" readonly="True"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="peec_purchase_order_line_form2_inherit" model="ir.ui.view">
+            <field name="name">peec.purchase.order.line.form2.inherit</field>
+            <field name="model">purchase.order.line</field>
+            <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+            <field name="arch" type="xml">
+                <field name="account_analytic_id" position='after'>
+                    <field name="request_line_ids" readonly="True" widget="many2many_tags"/>
+                    <field name="cs_line_id" readonly="True"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="peec_purchase_order_view_tree_readonly" model="ir.ui.view">
+            <field name="name">peec.purchase.order.view.tree.readonly</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Purchase Order Cement -->
+        <record id="peec_purchase_order_cement_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.cement</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_picking']" position="replace">
+                    <!-- remove button -->
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]/button[@name='action_view_picking']" position="replace">
+                    <!-- replace smart button -->
+                    <button type="object" name="action_view_picking" class="oe_stat_button" icon="fa-cube" attrs="{'invisible':[('picking_ids','=',[])]}">
+                        <field name="picking_count" widget="statinfo" string="Receipt" help="Incoming Shipments"/>
+                        <field name="picking_ids" invisible="1"/>
+                    </button>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <!-- replace smart button -->
+                    <button type="object" name="action_view_atws" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('atw_ids','=',[])]}">
+                        <field name="atw_count" widget="statinfo" string="ATWs" help="Authority To Withdraw"/>
+                        <field name="atw_ids" invisible="1"/>
+                    </button>
+                </xpath>
+                <xpath expr="//sheet/div[2]" position="replace">
+                    <div class="oe_title">
+                        <label string="Request for Quotation (Cement)" attrs="{'invisible': [('state','not in',('draft','sent'))]}" for="name"/>
+                        <label string="Purchase Order (Cement)" attrs="{'invisible': [('state','in',('draft','sent'))]}" for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/tree/field[@name='qty_received']" position="attributes">
+                    <attribute name="string">Withdrawn</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='qty_received']" position="after">
+                    <field name="balance_qty"/>
+                </xpath>
+                <field name="partner_id" position='after'>
+                    <field name="cement_plant_id" context="{'default_is_cement_plant': True}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="peec_purchase_order_cement_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree.cement</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="cement_product_id"/>
+                    <field name="balance_qty"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="peec_purchase_cement_action" model="ir.actions.act_window">
+            <field name="name">Purchase Order (Cement)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('peec_purchase_order_cement_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_purchase_order_cement_form')})]"/>
+            <field name="domain">[('state','in',('purchase', 'done')),('purchase_type','=', 'cement')]</field>
+            <field name="target">current</field>
+            <field name="context">{
+                'default_purchase_type': 'cement'
+                }
+            </field>
+        </record>
+
+        <record id="peec_rfq_cement_action" model="ir.actions.act_window">
+            <field name="name">Request for Quotation (Cement)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_purchase_order_cement_form')})]"/>
+            <field name="domain">[('purchase_type','=', 'cement')]</field>
+            <field name="target">current</field>
+            <field name="context">{
+                'quotation_only': True,
+                'default_purchase_type': 'cement'
+                }
+            </field>
+        </record>
+
+        <menuitem id="peec_purchase_order_cement_menu" name="Cement" parent="purchase.menu_procurement_management"
+                  sequence="30"/>
+
+        <menuitem id="peec_purchase_order_cement_rfq_menu" name="Request for Quotation"
+                  parent="peec_purchase_order_cement_menu" action="peec_rfq_cement_action" sequence="20"/>
+
+        <menuitem id="peec_purchase_order_cement_po_menu" name="Purchase Order"
+                  parent="peec_purchase_order_cement_menu" action="peec_purchase_cement_action" sequence="30"/>
+
+        <!-- Purchase Order Tire Service -->
+        <record id="peec_purchase_order_tire_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.tire</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/div[2]" position="replace">
+                    <div class="oe_title">
+                        <label string="Request for Quotation (Product Service)" attrs="{'invisible': [('state','not in',('draft','sent'))]}" for="name"/>
+                        <label string="Purchase Order (Product Service)" attrs="{'invisible': [('state','in',('draft','sent'))]}" for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                    <field name="serial_id"  attrs="{'readonly': [('product_type', '=', 'service')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="peec_purchase_tire_action" model="ir.actions.act_window">
+            <field name="name">Purchase Order (Product Service)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_purchase_order_tire_form')})]"/>
+            <field name="domain">[('state','in',('purchase', 'done')),('purchase_type','=', 'tire')]</field>
+            <field name="target">current</field>
+            <field name="context">{
+                'default_purchase_type': 'tire'
+                }
+            </field>
+        </record>
+
+        <record id="peec_rfq_tire_action" model="ir.actions.act_window">
+            <field name="name">Request for Quotation (Product Service)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_purchase_order_tire_form')})]"/>
+            <field name="domain">[('purchase_type','=', 'tire')]</field>
+            <field name="target">current</field>
+            <field name="context">{
+                'quotation_only': True,
+                'default_purchase_type': 'tire'
+                }
+            </field>
+        </record>
+
+        <menuitem id="peec_purchase_order_tire_menu" name="Product Services" parent="purchase.menu_procurement_management"
+                  sequence="40"/>
+
+        <menuitem id="peec_purchase_order_tire_rfq_menu" name="Request for Quotation"
+                  parent="peec_purchase_order_tire_menu" action="peec_rfq_tire_action" sequence="20"/>
+
+        <menuitem id="peec_purchase_order_tire_po_menu" name="Purchase Order"
+                  parent="peec_purchase_order_tire_menu" action="peec_purchase_tire_action" sequence="30"/>
+
+        <!-- Cement Configuration -->
+        <record id="peec_purchase_cement_plant_action" model="ir.actions.act_window">
+            <field name="name">Cement Plants</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+             <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('base.view_partner_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('base.view_partner_short_form')})]"/>
+            <field name="domain">[('is_cement_plant','=',True)]</field>
+            <field name="target">current</field>
+            <field name="context">{
+                'default_company_type': 'company',
+                'default_is_cement_plant': True,
+                }
+            </field>
+        </record>
+
+        <menuitem id="peec_purchase_config_cement_menu" name="Cement" parent="purchase.menu_purchase_config"
+                  sequence="40" groups="purchase.group_purchase_manager"/>
+
+        <menuitem id="peec_purchase_config_cement_plants_menu" name="Plants" parent="peec_purchase_config_cement_menu"
+                  sequence="10" action="peec_purchase_cement_plant_action"/>
+
+        <!-- Purchase Agreement -->
+<!--        <record model="ir.actions.act_window" id="action_purchase_requisition_to_so">-->
+<!--            <field name="name">Request for Quotation</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">purchase.order</field>-->
+<!--            <field name="view_mode">form,tree</field>-->
+<!--            <field name="domain">[('requisition_id','=',active_id)]</field>-->
+<!--            <field name="context">{-->
+<!--                "default_requisition_id":active_id,-->
+<!--                "default_user_id": False,-->
+<!--                "default_cement_plant_id": cement_plant_id,-->
+<!--                "default_purchase_type": purchase_type-->
+<!--                }-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record model="ir.actions.act_window" id="purchase_requisition.action_purchase_requisition_list">
+            <field name="name">Request for Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requisition_id','=',active_id),('purchase_type', '=', 'standard')]</field>
+            <field name="context">{
+                "default_requisition_id":active_id,
+                "default_user_id": False,
+                "default_purchase_type": purchase_type
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_requisition_list_cement">
+            <field name="name">Request for Quotations (Cement)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('peec_purchase_order_cement_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('peec_purchase_order_cement_form')})]"/>
+            <field name="domain">[('requisition_id','=',active_id),('purchase_type', '=', 'cement')]</field>
+            <field name="target">current</field>
+            <field name="context">{
+                "default_requisition_id":active_id,
+                "default_user_id": False,
+                "default_purchase_type": purchase_type,
+                "form_view_ref": "tf_peec_purchase.peec_purchase_order_cement_form",
+                "tree_view_ref": "tf_peec_purchase.peec_purchase_order_cement_tree"
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_requisition_list_product_service">
+            <field name="name">Request for Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requisition_id','=',active_id),('purchase_type', '=', 'tire')]</field>
+            <field name="context">{
+                "default_requisition_id":active_id,
+                "default_user_id": False,
+                "default_purchase_type": purchase_type,
+                "form_view_ref": "tf_peec_purchase.peec_purchase_order_tire_form"
+                }
+            </field>
+        </record>
+
+        <record id="view_purchase_requisition_form_inherit_tf_peec_purchase" model="ir.ui.view">
+            <field name="name">purchase.requisition.form.inherit.tf.peec.purchase</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header/button[1]" position="replace">
+                    <button name="action_new_quotation" type="object"
+                        string="New Quotation"
+                        attrs="{'invisible': [('state', '!=', 'open')]}"/>
+                </xpath>
+                <xpath expr="//header/button[2]" position="replace">
+                    <button name="action_new_quotation" type="object"
+                        string="New Quotation" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ('in_progress', 'ongoing'))]}"/>
+                </xpath>
+
+                <xpath expr="//sheet/div[2]" position="inside">
+                    <label for="desc" class="oe_edit_only"/>
+                    <div>
+                        <h2>
+                            <field name="desc" placeholder="Description..."/>
+                        </h2>
+                    </div>
+                </xpath>
+                <field name="vendor_id" position="after">
+                    <field name="purchase_type"/>
+                </field>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='qty_ordered']" position="after">
+                    <field name="balance_qty"/>
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']/form/group[1]/field[@name='qty_ordered']" position="after">
+                    <field name="balance_qty"/>
+                </xpath>
+
+                <xpath expr="//div[@name='button_box']/button" position="replace">
+                    <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-list-alt"
+                        attrs="{'invisible': ['|', ('state', '=', 'draft'), ('purchase_type', '!=', 'standard')]}"
+                        context="{'default_purchase_type': purchase_type, 'default_partner_id': vendor_id}">
+                        <field name="order_count" widget="statinfo" string="RFQs/Orders"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//div[@name='button_box']/button" position="after">
+                    <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-list-alt"
+                        attrs="{'invisible': ['|', ('state', '=', 'draft'), ('purchase_type', '!=', 'cement')]}"
+                        context="{'default_purchase_type': purchase_type, 'default_partner_id': vendor_id}">
+                        <field name="cement_count" widget="statinfo" string="RFQs/Orders"/>
+                    </button>
+                    <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-list-alt"
+                        attrs="{'invisible': ['|', ('state', '=', 'draft'), ('purchase_type', '!=', 'tire')]}"
+                        context="{'default_purchase_type': purchase_type, 'default_partner_id': vendor_id}">
+                        <field name="tire_count" widget="statinfo" string="RFQs/Orders"/>
+                    </button>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_purchase_requisition_tree_inherit_tf_peec_purchase" model="ir.ui.view">
+            <field name="name">purchase.requisition.tree.inherit.tf.peec.purchase</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="desc"/>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="vendor_id"/>
+                    <field name="balance_qty"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

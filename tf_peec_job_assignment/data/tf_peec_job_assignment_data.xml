@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="0">
+    	
+		<record id="tf_peec_job_assignment_sequence" model="ir.sequence">
+			<field name="name">Job Assignment</field>
+			<field name="code">tf.hr.job_assignment</field>
+			<field name="prefix">TEMPJA-%(y)s</field>
+			<field name="implementation">standard</field>
+			<field eval="4" name="padding" />
+			<field eval="1" name="number_next_actual" />
+			<field eval="1" name="number_increment" />
+		</record>
+
+	</data>
+</openerp>

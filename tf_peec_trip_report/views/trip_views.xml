@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_trip_report_view_search" model="ir.ui.view">
+            <field name="name">logistics.trip.report.view.search</field>
+            <field name="model">logistics.trip.report</field>
+            <field name="arch" type="xml">
+                <search string="Search Trip Reports">
+                    <group expand="0" string="Group By">
+                        <filter string="Delivery Order" name="delivery_order" domain="[]"
+                                context="{'group_by': 'delivery_order_id'}"/>
+                        <filter string="Delivery Date" name="delivery_date" domain="[]"
+                                context="{'group_by': 'delivery_date'}"/>
+                        <filter string="Employee" name="employee" domain="[]"
+                                context="{'group_by': 'employee_id'}"/>
+                        <filter string="Position" name="position" domain="[]"
+                                context="{'group_by': 'job_id'}"/>
+                        <filter string="Area" name="area" domain="[]"
+                                context="{'group_by': 'area'}"/>
+                        <filter string="Product" name="product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter string="Destination" name="destination" domain="[]"
+                                context="{'group_by': 'destination_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_trip_report_view_tree" model="ir.ui.view">
+            <field name="name">logistics.trip.report.view.tree</field>
+            <field name="model">logistics.trip.report</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="delivery_order_id"/>
+                    <field name="delivery_date"/>
+                    <field name="employee_id"/>
+                    <field name="job_id"/>
+                    <field name="volume"/>
+                    <field name="area"/>
+                    <field name="product_id"/>
+                    <field name="destination_id"/>
+                    <field name="multiplier_rate"/>
+                    <field name="tutok" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_logistics_trip_report" model="ir.actions.act_window">
+            <field name="name">Trip Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.trip.report</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="logistics_trip_report_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <menuitem id="menu_logistics_trip_report" name="Trip Report"
+                  parent="tf_peec_logistics.menu_logistics_root" sequence="60"
+                  action="action_logistics_trip_report"/>
+
+        <menuitem id="menu_ss_hris_schedule_trip_report" name="Trip Report"
+                  parent="ss_hris_schedule.menu_hris_schedule" sequence="20"
+                  action="action_logistics_trip_report"/>
+
+    </data>
+</odoo>

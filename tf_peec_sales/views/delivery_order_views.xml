@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="logistics_delivery_order_view_form_inherit_sales" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.view.form.inherit.sales</field>
+            <field name="model">logistics.delivery.order</field>
+            <field name="inherit_id" ref="tf_peec_logistics.logistics_delivery_order_view_form"/>
+            <field name="arch" type="xml">
+                <field name="sale_id" position="replace">
+                    <label for="sale_id"/>
+                    <div class="o_row">
+                        <field name="sale_id" domain="[('state', '=', 'sale')]"
+                           attrs="{'readonly': [('state', 'not in', ['unassigned', 'assigned', 'in_transit_cp', 'cp', 'loading', 'loaded'])]}"
+                           context="{'form_view_ref': 'tf_peec_sales.peec_sales_order_ch_view_form'}"/>
+                        <span class="oe_read_only">
+                        (<field name="sale_type"/> /
+                        <field name="sale_operation" attrs="{'invisible': [('sale_type', '!=', 'cement')]}"/>
+                        <field name="hauling_type" attrs="{'invisible': [('sale_type', '!=', 'hauling')]}"/>)
+                        </span>
+                    </div>
+                </field>
+                <field name="customer_id" position="before">
+                    <field name="project_id"/>
+                </field>
+                <xpath expr="//field[@name='allocation_ids']/tree/field[@name='sale_id']" position="after">
+                    <field name="project_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="logistics_delivery_order_view_search_inherit_sales" model="ir.ui.view">
+            <field name="name">logistics.delivery.order.view.search.inherit.sales</field>
+            <field name="model">logistics.delivery.order</field>
+            <field name="inherit_id" ref="tf_peec_logistics.logistics_delivery_order_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='sale_order']" position="after">
+                    <filter string="Sales Order" name="project" domain="[]"
+                                context="{'group_by': 'project_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Fleet Vehicle Form View Inherit -->
+        <record id="fleet_vehicle_view_form_inherit_tf_peec_tyrecheck" model="ir.ui.view">
+            <field name="name">fleet.vehicle.view.form.inherit.tf.peec.tyrecheck</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]/group[last()]" position="after">
+                    <group id="tyrecheck_vehicle" string="TyreCheck">
+                        <field name="tyrecheck_id"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

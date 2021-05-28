@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tf_hr_rice_subsidy_config_user,access.tf.hr.rice.subsidy.config.user,model_tf_hr_rice_subsidy_config,base.group_user,1,0,0,0
+access_tf_hr_rice_subsidy_config_officer,access.tf.hr.rice.subsidy.config.officer,model_tf_hr_rice_subsidy_config,group_hr_rice_subsidy_user,1,0,0,0
+access_tf_hr_rice_subsidy_config_manager,access.tf.hr.rice.subsidy.config.manager,model_tf_hr_rice_subsidy_config,group_hr_rice_subsidy_manager,1,1,1,1
+
+access_tf_hr_rice_subsidy_report_user,access.tf.hr.rice.subsidy.report.user,model_tf_hr_rice_subsidy_report,base.group_user,1,0,0,0
+access_tf_hr_rice_subsidy_report_officer,access.tf.hr.rice.subsidy.report.officer,model_tf_hr_rice_subsidy_report,group_hr_rice_subsidy_user,1,1,1,1
+access_tf_hr_rice_subsidy_report_manager,access.tf.hr.rice.subsidy.report.manager,model_tf_hr_rice_subsidy_report,group_hr_rice_subsidy_manager,1,1,1,1
+
+access_tf_hr_rice_subsidy_report_line_user,access.tf.hr.rice.subsidy.report.line.user,model_tf_hr_rice_subsidy_report_line,base.group_user,1,0,0,0
+access_tf_hr_rice_subsidy_report_line_officer,access.tf.hr.rice.subsidy.report.line.officer,model_tf_hr_rice_subsidy_report_line,group_hr_rice_subsidy_user,1,1,1,1
+access_tf_hr_rice_subsidy_report_line_manager,access.tf.hr.rice.subsidy.report.line.manager,model_tf_hr_rice_subsidy_report_line,group_hr_rice_subsidy_manager,1,1,1,1

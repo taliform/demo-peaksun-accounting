@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem name="Rice Subsidy" id="peec_hr_rice_subsidy_main_menu"
+			parent="ss_hris_compben.ss_hris_compben" sequence="41"/>
+
+		<menuitem action="peec_hr_rice_subsidy_report_action" string="Rice Subsidy Report" id="peec_hr_rice_subsidy_report_menu"
+			parent="peec_hr_rice_subsidy_main_menu" sequence="1"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Vehicle Tank Configuration -->
+        <record id="peec_vehicle_tank_tree_view" model="ir.ui.view">
+            <field name="name">Vehicle Tank Tree View</field>
+            <field name="model">fleet.vehicle.tank</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Vehicle Tanks" editable="top">
+                    <field name="name"/>
+                    <field name="shape"/>
+                    <field name="height" attrs="{'readonly':[('shape','=','cylinder')]}"/>
+                    <field name="length" attrs="{'readonly':[('shape','=','cylinder')]}"/>
+                    <field name="width" attrs="{'readonly':[('shape','=','cylinder')]}"/>
+                    <field name="diameter" attrs="{'readonly':[('shape','=','cube')]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_vehicle_tank_action" model="ir.actions.act_window">
+            <field name="name">Vehicle Tanks</field>
+            <field name="res_model">fleet.vehicle.tank</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="peec_vehicle_tank_tree_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="peec_vehicle_tank_menu" name="Vehicle Tanks" parent="fleet.fleet_configuration" sequence="90"
+                  action="peec_vehicle_tank_action" groups="fleet.fleet_group_manager"/>
+
+        <!-- Suspension Type -->
+        <record id="peec_suspension_type_tree_view" model="ir.ui.view">
+            <field name="name">Suspension Types Tree View</field>
+            <field name="model">fleet.vehicle.suspension.type</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Suspension Types" editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_suspension_type_action" model="ir.actions.act_window">
+            <field name="name">Suspension Types</field>
+            <field name="res_model">fleet.vehicle.suspension.type</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="peec_suspension_type_tree_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="peec_suspension_type_menu" name="Suspension Types" parent="fleet.fleet_configuration" sequence="95"
+                  action="peec_suspension_type_action" groups="fleet.fleet_group_manager"/>
+
+        <!-- Drive Configuration -->
+        <record id="peec_drive_config_tree_view" model="ir.ui.view">
+            <field name="name">Drive Configuration Tree View</field>
+            <field name="model">fleet.vehicle.drive.configuration</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Drive Configurations" editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_drive_config_action" model="ir.actions.act_window">
+            <field name="name">Drive Configurations</field>
+            <field name="res_model">fleet.vehicle.drive.configuration</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="peec_drive_config_tree_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="peec_drive_config_menu" name="Drive Configurations" parent="fleet.fleet_configuration" sequence="94"
+                  action="peec_drive_config_action" groups="fleet.fleet_group_manager"/>
+
+        <!-- Fleet Card -->
+        <record id="peec_fleet_card_tree_view" model="ir.ui.view">
+            <field name="name">Fleet Cards Tree View</field>
+            <field name="model">fleet.card</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Fleet Cards" editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_fleet_card_action" model="ir.actions.act_window">
+            <field name="name">Fleet Cards</field>
+            <field name="res_model">fleet.card</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="peec_fleet_card_tree_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="peec_fleet_card_menu" name="Fleet Cards" parent="fleet.fleet_configuration" sequence="96"
+                  action="peec_fleet_card_action" groups="fleet.fleet_group_manager"/>
+
+        <!-- Vehicle Locations -->
+        <record id="peec_fleet_location_tree_view" model="ir.ui.view">
+            <field name="name">Vehicle Locations Tree View</field>
+            <field name="model">fleet.location</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Vehicle Locations" editable="top">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="peec_fleet_location_action" model="ir.actions.act_window">
+            <field name="name">Vehicle Locations</field>
+            <field name="res_model">fleet.location</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="peec_fleet_location_tree_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="peec_fleet_location_menu" name="Vehicle Locations" parent="fleet.fleet_configuration" sequence="91"
+                  action="peec_fleet_location_action" groups="fleet.fleet_group_manager"/>
+
+        <!-- Fleet Settings -->
+        <record id="peek_res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">peek.res.config.settings.view.form.inherit.hr.fleet</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="fleet.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='fleet']" position="inside">
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Fuel Consumption Configuration</span>
+                                <div class="text-muted content-group mt16">
+                                    <span>These configurations are for the internal stock adjustment that will be used for garage fuel logs.</span>
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="picking_type_id" class="col-lg-3 o_light_label"/>
+                                        <field name="picking_type_id"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="location_id" class="col-lg-3 o_light_label"/>
+                                        <field name="location_id"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="location_dest_id" class="col-lg-3 o_light_label"/>
+                                        <field name="location_dest_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Fleet Inventory Location</span>
+                                <div class="text-muted content-group mt16">
+                                    <span>This inventory location will serve as the parent location of automatically created vehicle inventory location.</span>
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="fleet_location_parent_id" class="col-lg-3 o_light_label"/>
+                                        <field name="fleet_location_parent_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

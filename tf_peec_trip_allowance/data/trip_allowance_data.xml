@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Sequences for logistics.delivery.order -->
+        <record id="sequence_trip_allowance" model="ir.sequence">
+            <field name="name">Trip Allowance</field>
+            <field name="code">tf.hr.dh.trip.allowance</field>
+            <field name="prefix">TA</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

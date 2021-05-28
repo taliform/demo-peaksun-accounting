@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!--Tree View-->
+        <record id="peec_sale_location_view_tree" model="ir.ui.view">
+            <field name="name">peec.sale.location.view.tree</field>
+            <field name="model">sale.location</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="distance"/>
+                    <field name="target"/>
+                    <field name="is_loaded"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Action-->
+        <record id="peec_action_sale_location" model="ir.actions.act_window">
+            <field name="name">Sale Locations</field>
+            <field name="res_model">sale.location</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Sale Location.
+                </p>
+            </field>
+        </record>
+
+        <!--Menu Item-->
+        <menuitem id="menu_sale_location_config" name="Sale Locations"
+                  parent="sale.menu_sale_config" sequence="100"
+                  action="peec_action_sale_location"
+                  groups="sales_team.group_sale_manager"/>
+
+    </data>
+</odoo>

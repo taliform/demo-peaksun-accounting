@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="peec_sale_line_offhire_view_form" model="ir.ui.view">
+            <field name="name">peec.sale.line.offhire.view.form</field>
+            <field name="model">sale.line.offhire</field>
+            <field name="arch" type="xml">
+                <form string="Add to Sales Order">
+                    <p>The selected offhire records will be added to the order lines of the corresponding sales order.
+                        Continue?
+                    </p>
+                    <footer>
+                        <button name="add_to_so_line"
+                            string="Add"
+                            type="object"
+                            class="btn-primary"/>
+                        <button string="Discard"
+                            class="btn-secondary"
+                            special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+            name="Add to Sales Order"
+            res_model="sale.line.offhire"
+            binding_model="sale.offhire"
+            binding_views="list"
+            view_mode="form"
+            target="new"
+            view_id="tf_peec_sales.peec_sale_line_offhire_view_form"
+            id="peec_sale_line_offhire_view_action"
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Target SUCF -->
+
+        <record id="logistics_target_sucf_view_search" model="ir.ui.view">
+            <field name="name">logistics.target.sucf.view.search</field>
+            <field name="model">logistics.target.sucf</field>
+            <field name="arch" type="xml">
+                <search string="Search Target SUCF">
+                    <field name="origin_id" string="Origin"
+                           filter_domain="[('origin_id.name', 'ilike', self)]"/>
+                    <field name="destination_id" string="Destination"
+                           filter_domain="[('destination_id.name', 'ilike', self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Origin" name="origin" domain="[]"
+                                context="{'group_by': 'origin_id'}"/>
+                        <filter string="Destination" name="destination" domain="[]"
+                                context="{'group_by': 'destination_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_target_sucf_view_tree" model="ir.ui.view">
+            <field name="name">logistics.target.sucf.view.tree</field>
+            <field name="model">logistics.target.sucf</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="target"/>
+                    <field name="is_loaded"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_logistics_target_sucf" model="ir.actions.act_window">
+            <field name="name">Target SUCF</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.target.sucf</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="logistics_target_sucf_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Target SUCF.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

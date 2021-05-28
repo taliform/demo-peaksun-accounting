@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record model="report.paperformat" id="paperformat_sales_ch_do_report">
+            <field name="name">Peaksun Sale Cement Report</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_right">3</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">3</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+            id="action_report_sale_delivery_order_pdf"
+            model="sale.order"
+            string="Summary of Delivery Orders"
+            report_type="qweb-pdf"
+            name="tf_peec_sales.report_sale_delivery_order_pdf"
+            file="tf_peec_sales.report_sale_delivery_order_pdf"
+            paperformat="paperformat_sales_ch_do_report"
+            menu="False"/>
+
+    </data>
+</odoo>

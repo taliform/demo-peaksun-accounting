@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- ATW -->
+
+        <record id="logistics_atw_view_search" model="ir.ui.view">
+            <field name="name">logistics.atw.view.search</field>
+            <field name="model">logistics.atw</field>
+            <field name="arch" type="xml">
+                <search string="Search Authority To Withdraw">
+                    <field name="name" string="Authority To Withdraw" filter_domain="['|', ('name', 'ilike', self), ('vendor_atw_no', 'ilike', self)]"/>
+                    <field name="delivery_order_id" string="Delivery Order"
+                           filter_domain="[('delivery_order_id.name', 'ilike', self)]"/>
+                    <field name="product_id" string="Cement Product"
+                           filter_domain="[('product_id.name', 'ilike', self)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                            domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                            help="Show all records which has next action date is before today"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                            domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                            domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <filter string="Unmatched" name="unmatched" domain="[('state', '=', 'unmatched')]"/>
+                    <filter string="Matched" name="matched" domain="[('state', '=', 'matched')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Purchase Order" name="purchase" domain="[]"
+                                context="{'group_by': 'purchase_id'}"/>
+                        <filter string="Sales Order" name="sale" domain="[]"
+                                context="{'group_by': 'sale_id'}"/>
+                        <filter string="Cement Product" name="product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter string="Cement Plant" name="cement_plant" domain="[]"
+                                context="{'group_by': 'cement_plant_id'}"/>
+                        <filter string="Packaging" name="packaging" domain="[]"
+                                context="{'group_by': 'packaging'}"/>
+                        <filter string="State" name="state" domain="[]"
+                                context="{'group_by': 'state'}"/>
+                        <filter string="ATW Date" name="return" domain="[]" context="{'group_by': 'atw_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="logistics_atw_view_tree" model="ir.ui.view">
+            <field name="name">logistics.atw.view.tree</field>
+            <field name="model">logistics.atw</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="state == 'unmatched'">
+                    <field name="name"/>
+                    <field name="delivery_order_id"/>
+                    <field name="purchase_id"/>
+                    <field name="partner_ref"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="packaging" optional="hide"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="logistics_atw_view_form" model="ir.ui.view">
+            <field name="name">logistics.atw.view.form</field>
+            <field name="model">logistics.atw</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_withdraw_cement" type="object" string="Withdraw Cement" attrs="{'invisible': ['|', ('delivery_order_id', '!=', False), '|', ('withdrawal_amount', '=', 0), ('picking_id', '!=', False)]}" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="delivery_order_id"/>
+                                <field name="sale_id"/>
+                                <field name="cement_plant_id" domain="[('is_cement_plant', '=', True)]"/>
+                            </group>
+                            <group>
+                                <field name="atw_date"/>
+                                <field name="purchase_id" domain="[('state', '=', 'purchase'), ('order_line.product_id', '=', product_id)]"/>
+                                <field name="partner_ref"/>
+                            </group>
+                        </group>
+                        <group string="Cement Information">
+                            <group>
+                                <field name="product_id"/>
+                                <label for="quantity"/>
+                                <div class="o_row">
+                                    <field name="quantity"/>
+                                    <field name="uom_id"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="packaging"/>
+                                <field name="vendor_atw_no"/>
+                            </group>
+                        </group>
+                        <group string="Actual Withdrawal" readonly="1">
+                            <group>
+                                <label for="withdrawal_amount" attrs="{'invisible': [('delivery_order_id', '!=', False)]}"/>
+                                <div class="o_row" attrs="{'invisible': [('delivery_order_id', '!=', False)]}">
+                                    <field name="withdrawal_amount"/>
+                                    <field name="bag_uom_id" readonly="1"/>
+                                </div>
+                                <field name="picking_id"/>
+                                <field name="weight_log_id"/>
+                            </group>
+                            <group>
+                                <label for="bags_qty"/>
+                                <div class="o_row">
+                                    <field name="bags_qty"/>
+                                    <field name="bag_uom_id"/>
+                                </div>
+                                <field name="vendor_dr_no"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_logistics_atw" model="ir.actions.act_window">
+            <field name="name">ATW</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">logistics.atw</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="logistics_atw_view_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Authority To Withdraw.
+                </p>
+            </field>
+        </record>
+
+        <!-- Add ATW menu to Purchase -->
+        <menuitem id="menu_logistics_atw_purchase" name="ATWs"
+                  parent="purchase.menu_purchase_root" sequence="10"
+                  action="action_logistics_atw"/>
+
+    </data>
+</odoo>

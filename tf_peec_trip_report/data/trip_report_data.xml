@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="daily_trip_report_generation" model="ir.cron" forcecreate="True">
+            <field name="name">Trip Report: Daily Report Generation</field>
+            <field name="model_id" ref="tf_peec_trip_report.model_logistics_trip_report"/>
+            <field name="state">code</field>
+            <field name="code">model.generate_trip_report()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
