@@ -1,7 +1,7 @@
 [submodule "generic"]
 	path = generic
 	url = git@gitlab.taliform.com:internal/generic.git
-	branch = 12.0-development
+	branch = 13.0-development
 [submodule "queue"]
 	path = queue
 	url = https://github.com/OCA/queue.git
