@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+	   <record id="stock_landed_cost_view_inherit" model="ir.ui.view">
+	       <field name="name">stock.landed.cost.view.inherit</field>
+	       <field name="model">stock.landed.cost</field>
+	       <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+	       <field name="arch" type="xml">
+
+	       		<xpath expr="//field[@name='state']" position="attributes">
+	       			<attribute name="statusbar_visible">draft,confirm,done</attribute>
+	       		</xpath>
+	       		
+	       		<xpath expr="//field[@name='account_journal_id']" position="attributes">
+	       			<attribute name="domain">[('type','=','general')]</attribute>
+	       		</xpath>
+	       		
+	       		
+	       		<xpath expr="//button[@name='button_validate']" position="after">
+	       			<button name="button_confirm" string="Confirm" states="draft" type="object" class="oe_highlight"/>
+	       			<button name="button_set_to_draft" string="Set to Draft" states="confirm" type="object" />
+	       		</xpath>
+	       		
+	       		<xpath expr="//button[@name='button_validate']" position="attributes">
+	       			<attribute name="states">confirm</attribute>
+	       			<attribute name="confirm">Are you sure to validate this Landed Cost record?</attribute>
+	       		</xpath>
+	       
+	       		<xpath expr="//field[@name='date']" position="after">
+					<field name="company_id" invisible="1" />
+	       			<field name="partner_id" context="{'res_partner_search_mode': 'supplier'}" domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]"/>
+	       			<field name="description" />
+					<field name="landed_cost_no" />
+					<field name="local_boolean" widget="boolean_button"/>
+	       		</xpath>
+	       		
+	       		<xpath expr="//field[@name='account_move_id']" position="after">
+	       			<field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"  attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}" />
+	       			<field name="boc_exchange_rate" groups="base.group_multi_currency" attrs="{'invisible':[('local_boolean','=',True)]}" required="1"/>
+	       		</xpath>
+
+			   <xpath expr="//field[@name='boc_exchange_rate']" position="after">
+				   <xpath expr="//field[@name='partner_id']" position="move"/>
+				   <field name="incoterm_id"/>
+            	</xpath>
+
+			   <xpath expr="//field[@name='description']" position="before">
+            	    <xpath expr="//field[@name='vendor_bill_id']" position="move"/>
+            	</xpath>
+
+	       		<xpath expr="//div[@name='button_box']" position="inside">
+                            <button name="view_stock_valuation_adjustments_action" string="Detailed Adjustments"
+                            		context="{'default_cost_id': active_id}"
+                            		type="object" class="oe_inline oe_stat_button" icon="fa-list-alt"/>
+	       		</xpath>
+	       		
+	       		<xpath expr="//group/field[@name='price_unit']" position="after">
+	       			<field name="is_taxable"  />
+	       		</xpath>
+	       		
+	       		<xpath expr="//tree/field[@name='price_unit']" position="after">
+	       			<field name="is_taxable" attrs="{'column_invisible': [('parent.local_boolean', '=', True)]}"/>
+	       			<field name="is_dutiable" attrs="{'column_invisible': [('parent.local_boolean', '=', True)]}"/>
+	       		</xpath>
+		        
+	       		<xpath expr="//group[1]" position="after">
+	       			<separator string="Transfers"/>
+					<field name="picking_ids" options="{'no_create_edit': True}" domain="[('state','=','done'),('picking_type_code','=','incoming'),
+		          																		  ('partner_id','=',partner_id),('has_landed_cost','=',False)]">
+		          		<tree>
+		          			<field name="name" />
+		          			<field name="partner_id" />
+		          			<field name="origin" />
+		          			<field name="incoterm_id" />
+		          			<field name="currency_id" groups="base.group_multi_currency" />
+		          			<field name="picking_type_code" invisible="1"/>
+		          			<field name="has_landed_cost" invisible="1" />
+		          			<field name="state" />
+		          		</tree>													  
+		         	</field>
+
+	       		
+	       			<separator string="Importation Details" attrs="{'invisible':[('local_boolean','=',True)]}"/>
+	       			<group attrs="{'invisible':[('local_boolean','=',True)]}">
+	       				<group>
+	       					<field name="country_id" attrs="{'required':[('local_boolean','=',False)]}"/>
+	       					<field name="broker_id" domain="[('supplier_rank', '>', 0)]" />
+	       					<field name="invoice_ref" />
+	       					<field name="import_number" />
+	       					<field name="official_receipt" />
+	       				</group>
+	       				
+						<group>
+							<field name="expected_arrival" />
+	       					<field name="importation_date" attrs="{'required':[('local_boolean','=',False)]}"/>
+	       					<field name="assessment_date" />
+	       					<field name="vat_payment_date" />
+	       				</group>
+	       			</group>
+	       			
+	       			<group string="Amount" attrs="{'invisible':[('local_boolean','=',True)]}">
+	       				<group string="Base" >
+	       					<field name="transaction_value" />
+							<field name="dutiable_amt"/>
+	       				</group>
+	       				
+						<group string="Landed Cost">
+			       			<field name="amount_exempt" string="Exempt" />
+		     				<field name="amount_taxable" string="Taxable"/>
+		     				<field name="vat_paid"/>
+		     				<field name="all_charges"/>
+		     				<field name="total_amount" />
+	       				</group>
+	       			</group>
+	       			
+	       			<group>
+       					<field name="bill_lading" attrs="{'invisible':[('local_boolean','=',True)]}"/>
+						<field name="hs_code" attrs="{'invisible':[('local_boolean','=',True)]}"/>
+						<field name="gross_weight" attrs="{'invisible':[('local_boolean','=',True)]}" />
+						<field name="net_weight" attrs="{'invisible':[('local_boolean','=',True)]}" />
+	       			</group>
+	       		</xpath>
+	       		
+	       		<xpath expr="//field[@name='amount_total']" position="before">
+	       			<field name="line_amount_dutiable" string="Dutiable" />
+	       			<field name="line_amount_exempt" string="Exempt" />
+     				<field name="line_amount_taxable" string="Taxable"/>
+	       		</xpath>
+	       		
+	       		<xpath expr="//field[@name='amount_total']" position="attributes">
+	       			<attribute name="widget"></attribute>
+	       		</xpath>
+	       		
+	       		<xpath expr="//field[@name='picking_ids']" position="replace" />
+	       		<xpath expr="//field[@name='valuation_adjustment_lines']" position="replace">
+	       			<field name="valuation_summary_ids">
+	       				<tree create="false">
+	       					<field name="product_id" />
+	       					<field name="name" />
+	       					<field name="quantity" />
+	       					<field name="purchase_uom_id" />
+	       					<field name="former_cost" sum="Total Former Cost"/>
+	       					<field name="former_cost_per_unit" />
+	       					<field name="allocated_cost"  sum="Total Allocated Cost"/>
+	       					<field name="allocated_cost_per_unit" />
+	       					<field name="landed_cost" sum="Total Landed Cost"/>
+	       					<field name="landed_cost_per_unit" />
+	       				</tree>
+	       			</field>
+	       			<separator string="Description"/>
+	       			<field name="description" />
+	       		</xpath>
+	       			       
+	       </field>
+       </record>
+       
+	</data>
+</odoo> 
+  
+  
+  

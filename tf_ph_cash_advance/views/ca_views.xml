@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	    
+	    <!-- Add CA Accountant -->
+	    <record id="account.menu_finance_entries" model="ir.ui.menu">
+	        <field name="groups_id" eval="[(4,ref('tf_ph_cash_advance.group_cash_advance_accountant'))]"/>
+	    </record>
+    
+    	<!-- Cash Advance Main Menu -->
+    	<menuitem name="Cash Advance" sequence="200"
+        		  id="ph_cash_advance_main_menu"
+        		  parent="account.menu_finance_entries"
+        		  groups="tf_ph_cash_advance.group_cash_advance_accountant"/>
+    	
+		<!-- Cash Advance Search View -->        
+        <record id="cash_advance_search" model="ir.ui.view">
+            <field name="name">cash.advance.search</field>
+            <field name="model">cash.advance</field>
+		    <field name="type">search</field>
+		    <field name="arch" type="xml">
+		        <search string="Cash Advance">
+		           <field name="name" string="Transaction" filter_domain="['|',('name','ilike',self),
+		                                                                  '|',('state','ilike',self),
+                                                                          '|',('create_uid','ilike',self),
+                                                                          '|',('description','ilike',self),
+                                                                          '|',('issued_to','ilike',self),
+                                                                          '|',('voucher_no','ilike',self),
+                                                                          '|',('invoice_id','ilike',self),
+                                                                          ('analytic_account_id','ilike',self),]"/>
+		           <field name="days_old_stored" string="Days Outstanding" filter_domain="[('days_old_stored', 'ilike', self)]"/>
+		           <separator/>
+		           <filter name="for_approval" string="For Approval" domain="[('state', '=', 'confirm')]"/>
+		           <filter name="for_validation" string="For Validation" domain="[('state', '=', 'submit')]"/>
+		           <filter name="not_closed" string="Not Closed" domain="[('state', '!=', 'close')]"/>
+		           <separator/>
+		           <group  expand='0' string='Group by...'>
+		               <filter name="issued_to" string='Issued To' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'issued_to'}"/>
+		               <filter name="status" string='Status' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'state'}"/>
+		           </group>
+		        </search>
+		    </field>
+		</record>
+		
+		 <record model="ir.ui.view" id="cash_advance_graph">
+            <field name="name">cash.advance.graph</field>
+            <field name="model">cash.advance</field>
+            <field name="arch" type="xml">
+                <graph string="Cash Advance">
+                    <field name="issued_to"/>
+                    <field name="amount" type="measure"/>
+                    <field name="total_returned" type="measure"/>
+                    <field name="total_reimbursed" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+		<record id="cash_advance_tree" model="ir.ui.view">
+            <field name="name">cash.advance.tree</field>
+            <field name="model">cash.advance</field>
+            <field name="arch" type="xml">
+                <tree string="Cash Advance" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+                    <field name="name"/>
+                    <field name="create_uid" string="Created By" invisible="1"/>
+                    <field name="issued_to"/>
+                    <field name="date"/>
+                    <field name="voucher_no"/>
+                    <field name="description" invisible="1"/>
+                    <field name="amount"/>
+                    <field name="journal_id" invisible="1"/>
+                    <field name="account_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+					<field name="invoice_id"/>
+					<field name="analytic_account_id"/>
+					<field name="total_transaction" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="for_return" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="for_reimbursement" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="days_old"/>
+                	<field name="state"/>
+                	<field name="company_id" groups="base.group_multi_company"/>
+            	</tree>
+            </field>
+        </record>
+        
+        <record id="cash_advance_form" model="ir.ui.view">
+            <field name="name">cash.advance.form</field>
+            <field name="model">cash.advance</field>
+            <field name="arch" type="xml">
+                <form string="Cash Advance">
+                    <header>
+                    	<button name="button_confirm" string="Send for Approval"
+	                    		type="object" class="oe_highlight"
+	                    		confirm="Send cash advance request for approval?"
+	                    		attrs="{'invisible' : ['|','|',('state', '!=', 'draft'),('ca_type', '!=', 'ca'),('is_issued_to','=',False)]}"/>
+	                    <button name="button_dr_confirm" string="Confirm"
+	                    		type="object" class="oe_highlight"
+	                    		attrs="{'invisible' : ['|',('ca_type', '!=', 'dr'),('state', '!=', 'draft')]}"/>
+	                    <button name="approve_button" string="Approve"
+	                    		type="object" class="oe_highlight"
+	                    		confirm="Are you sure you want to approve this request?"
+	                    		attrs="{'invisible' : ['|',('is_approver','=',False),('state', 'not in', ['for_approval','liq_for_approval'])]}"
+	                    		groups="tf_ph_cash_advance.group_cash_advance_manager"/>
+	                    <button name="decline_button" string="Reject"
+	                    		type="object"
+	                    		confirm="Are you sure you want to reject this request?"
+	                    		attrs="{'invisible' : ['|',('is_approver','=',False),('state', 'not in', ['for_approval','liq_for_approval'])]}"
+	                    		groups="tf_ph_cash_advance.group_cash_advance_manager"/>
+	                    <button name="button_revise" string="Receive Revised Amount"
+	                    		type="object" class="oe_highlight"
+	                    		attrs="{'invisible': ['|','|',('amount_changed','=',False),('state','!=','confirm'),('invoice_payment_state', '!=', 'paid')]}"
+	                    		help="Revise CA amount if the related bill's amount has changed."
+	                    		groups="tf_ph_cash_advance.group_cash_advance_user,account.group_account_invoice"/>
+	                    <button name="button_liq_approval" string="Send Liquidation for Approval"
+	                    		type="object" class="oe_highlight"
+                    			confirm="Send the liquidations for approval?"
+	                    		context="{'active_ids':active_ids}"
+	                    		attrs="{'invisible' : ['|',('state','!=','open'),('is_liq_approved', '=', True)]}"/>
+						<button name="button_receive" string="Received"
+                    			type="object" class="oe_highlight"
+                    			confirm="This confirms that the payment for the related Vendor Bill has been released."
+                    			attrs="{'invisible' : ['|','|',('state', '!=', 'confirm'),('invoice_payment_state', '!=', 'paid'),('amount_changed','=',True)]}"
+                    			groups="tf_ph_cash_advance.group_cash_advance_manager"/>
+                    	<button name="button_validate" string="Validate" 
+                    			type="object" class="oe_highlight"
+                    			attrs="{'invisible' : [('state', '!=', 'submit')]}" 
+                    			groups="tf_ph_cash_advance.group_cash_advance_accountant"/>
+                    	<button name="button_close" string="Close" 
+                    			type="object" class="oe_highlight"
+                    			confirm="Are you sure you want to close this record?"
+                    			context="{'active_ids':active_ids}"
+                    			attrs="{'invisible' : [('is_for_closing', '!=', True)]}" 
+                    			groups="account.group_account_invoice,tf_ph_cash_advance.group_cash_advance_manager"/>
+                    	<button name="button_reopen" string="Re-Open"
+                    			type="object" confirm="Re-open this cash advance record?"
+                    			context="{'active_ids':active_ids}"
+                    			attrs="{'invisible' : [('state','!=','submit')]}"
+                    			groups="account.group_account_invoice"/>
+	                    <button name="button_cancel" string="Cancel"
+	                    		type="object" confirm="Are you sure you want to cancel this record?"
+	                    		context="{'active_ids':active_ids}"
+	                    		attrs="{'invisible' : [('hide_cancel','=',True)]}"/>
+	                    <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,open,submit,validated,close"/>
+                    </header>
+                    <sheet string="Cash Advance">
+                    	<div class="oe_button_box" name="button_box">
+                            <button name="view_cash_advance_transaction_action" string="CA Liquidations"
+                            		attrs="{'invisible': ['|','|',('state','in',['draft','for_approval','confirm']),('hide_liq_btn','=',True),('ca_type','=','dr')]}" context="{'default_cash_advance_id':active_id}"
+                            		type="object" class="oe_inline oe_stat_button" icon="fa-list-alt"/>
+                            <button name="view_cash_advance_transaction_action" string="DR Liquidations"
+                            		attrs="{'invisible': ['|','|',('state','in',['draft','for_approval','confirm']),('hide_liq_btn','=',True),('ca_type','=','ca')]}" context="{'default_cash_advance_id':active_id}"
+                            		type="object" class="oe_inline oe_stat_button" icon="fa-list-alt"/>
+                            <button name="view_ca_transaction_invoice_action" string="Liquidation Invoices"
+                            		attrs="{'invisible':[('state', 'not in', ('validated','for_payment','close'))]}" context="{'default_cash_advance_id':active_id}"
+                            		type="object" class="oe_inline oe_stat_button" icon="fa-list-alt"/>
+                        </div>
+                    	<div>
+	                        <h1 class="mt0">
+	                            <label for="name" string="Draft Cash Advance" attrs="{'invisible': ['|',('state','not in',('draft',)), ('ca_type','!=','ca')]}"/>
+	                            <label for="name" string="Draft Direct Reimbursement" attrs="{'invisible': ['|',('state','not in',('draft',)), ('ca_type','!=','dr')]}"/>
+                            	<field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state','in',('draft',))]}"/>
+	                        </h1>
+	                    </div>
+						<div name="amt_change_warning" class="alert alert-danger" role="alert" style="margin-top: 10px;"
+							 attrs="{'invisible': ['|','|',('amount_changed','=',False),('ca_type','=','dr'),('state','!=','confirm')]}">
+                            <p><label for="changed_amt_reason"/><field name="changed_amt_reason" class="oe_inline"/></p>
+                        </div>
+                        <group name="info">
+                            <group name="section1">                                
+                            	<field name="issued_to" required="1" options="{'no_create': True}" domain="[('id','=', uid)]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="amount" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible': [('ca_type','=','dr')]}"/>
+								<field name="new_amount" attrs="{'invisible': ['|','|',('amount_changed','=',False),('ca_type','=','dr'),('state','!=','confirm')]}"/>
+                                <field name="journal_id" readonly="1" domain="[('type','=','purchase')]" invisible="1"/>
+                                <field name="invoice_id" readonly="1" attrs="{'invisible':[('invoice_id', '=', False)]}"/>
+                            	<field name="voucher_no" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="description" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="days_old" readonly="1"/>
+                                <field name="ca_type" invisible="1"/>
+                                <field name="is_liq_approved" invisible="1"/>
+                                <field name="is_liq_invoiced" invisible="1"/>
+                                <field name="is_for_closing" invisible="1"/>
+                                <field name="is_issued_to" invisible="1"/>
+                                <field name="hide_cancel" invisible="1"/>
+                                <field name="hide_liq_btn" invisible="1"/>
+								<field name="invoice_payment_state" invisible="1"/>
+                                <field name="liq_reject_reason" invisible="1"/>
+                                <field name="amount_changed" readonly="1" invisible="1"/>
+                                <field name="manager_ids" widget="many2many_tags" string="CA Managers" invisible="1"/>
+                                <field name="is_approver" invisible="1"/>
+                                <field name="approver_ids" widget="many2many_tags" invisible="1"/>
+                            </group>
+                            <group name="section2"> 
+                                <field name="account_id" required="1" readonly="1" domain="[('user_type_id.name','=','Current Assets')]"/>
+                                <field name="date" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="purchase_tax_id" widget="selection" domain="[('price_include','=',True),('type_tax_use','=','purchase')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+								<field name="wht_tax_id" widget="selection" attrs="{'readonly':[('state', '!=', 'draft')]}"
+									   domain="[('type_tax_use','=','purchase'),('for_withholding','=',True),('amount','&lt;',0)]"/>
+                                <field name="analytic_account_id" groups="analytic.group_analytic_accounting" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            	<field name="currency_id" invisible="1"/>
+                            	<field name="wo_return_invoice_id" readonly="1" attrs="{'invisible':[('wo_return_invoice_id', '=', False)]}"/>
+                            	<field name="wo_reimburse_invoice_id" readonly="1" attrs="{'invisible':[('wo_reimburse_invoice_id', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Liquidations" attrs="{'invisible': ['|',('state','in',('draft','for_approval','confirm')),('state','=','cancel'),('cash_transaction_ids','=',[])]}">
+                        		<field name="cash_transaction_ids">
+                                    <tree string="Cash Transaction" create="false" editable="top" decoration-info="state == 'draft'" decoration-muted="state == 'close'">
+                                        <field name="or_no" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="expense_category_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="description" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="amount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tax_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="partner_id" required="1" context="{'default_supplier':True,'default_customer':False,'default_is_company': True}" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="analytic_account_id" groups="analytic.group_analytic_accounting" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_accounting" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="transaction_type" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="state" readonly="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group class="oe_subtotal_footer oe_right" name="liq_total" attrs="{'invisible': [('state','in',('draft','for_approval','confirm'))]}">
+                            <field name="total_transaction" class="oe_subtotal_footer_separator"/>
+                            <field name="orig_amount_return" attrs="{'invisible':[('orig_amount_return','=',0)]}"/>
+                            <field name="orig_amount_reimburse" attrs="{'invisible':[('orig_amount_reimburse','=',0)]}"/>
+                            <field name="for_return" attrs="{'invisible':[('orig_amount_return','=',0)]}"/>
+                        	<field name="for_reimbursement" attrs="{'invisible':[('orig_amount_reimburse','=',0)]}"/>
+                        	<field name="total_returned" class="oe_subtotal_footer_separator" attrs="{'invisible':[('orig_amount_return','=',0)]}"/>
+                        	<field name="total_reimbursed" class="oe_subtotal_footer_separator" attrs="{'invisible':[('orig_amount_reimburse','=',0)]}"/>
+                        	
+                         </group> 
+                         <field name="note" class="oe_inline" placeholder="Remarks..." attrs="{'readonly': [('state','not in',('draft',))]}"/>
+                         <div class="oe_clear"/>
+	                </sheet> 
+                    <div class="oe_chatter">
+		                <field name="message_follower_ids" widget="mail_followers"/>
+		                <field name="activity_ids" widget="mail_activity"/>
+		                <field name="message_ids" widget="mail_thread"/>
+		            </div> 
+                </form>
+            </field>
+        </record>
+        
+        <record id="cash_advance_action" model="ir.actions.act_window">
+            <field name="name">Cash Advance</field>
+            <field name="res_model">cash.advance</field>
+			<field name="context">{'search_default_not_closed':1,'default_ca_type':'ca','ca_type':'ca'}</field>
+            <field name="domain">[('ca_type','=','ca')]</field>
+            <field name="view_mode">tree,form,graph</field>
+	    	<field name="search_view_id" ref="cash_advance_search"/>
+	    	<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Cash Advance.
+              </p>
+            </field>
+        </record>
+
+        <record id="cash_advance_action_view1" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="cash_advance_tree"/>
+            <field name="act_window_id" ref="cash_advance_action"/>
+        </record>
+        
+        <menuitem name="Cash Advance" sequence="10"
+		          id="menu_cash_advance_request" 
+		          action="cash_advance_action" 
+		          parent="ph_cash_advance_main_menu" 
+        		  groups="tf_ph_cash_advance.group_cash_advance_accountant"/>
+
+		
+        <!-- CA Liquidation -->
+        <record id="cash_advance_transaction_tree" model="ir.ui.view">
+            <field name="name">cash.advance.transaction.tree</field>
+            <field name="model">cash.advance.transaction</field>
+            <field name="arch" type="xml">
+                <tree string="CA Liquidations" decoration-info="state == 'draft'" decoration-muted="state == 'close'">
+                    <field name="or_no"/>
+                    <field name="cash_advance_id" required="1" options="{'no_create': True, 'no_open': True}" domain="[('state','=','draft')]" invisible="context.get('default_cash_advance_id')"/>
+                    <field name="expense_category_id" required="1"/>
+                    <field name="description" required="1"/> 
+                    <field name="date"/> 
+                    <field name="amount" string="Amount (VAT Inc)" sum="Total" />
+                    <field name="tax_id" domain="[('type_tax_use','=','purchase'),('amount','>',0),('price_include','=',True)]" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="partner_id" required="1" domain="[('supplier','=',True)]" context="{'default_customer': False, 'default_supplier': True, 'default_is_company': True}" options="{'no_create': True, 'no_open': True}"/>                    
+                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="account_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="transaction_type"/>
+                    <field name="ct_cash_advance_state" invisible="1"/>
+                    <field name="state" readonly="1"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="cash_advance_transaction_form" model="ir.ui.view">
+            <field name="name">cash.advance.transaction.form</field>
+            <field name="model">cash.advance.transaction</field>
+            <field name="arch" type="xml">
+            	<form string="CA Liquidations">
+				  	<header>
+				  		<field name="state" widget="statusbar" statusbar_visible="draft,for_approval,submit,validated,close"/>
+				  	</header>
+				    <sheet>
+				    	<div class="oe_title oe_left">
+					    	<label for="cash_advance_id"/>
+					    	<h1>
+					    		<field name="cash_advance_id"  
+					    			   options="{'no_create': True, 'no_open': True}"
+			                    	   domain="[('state','=','open')]"
+			                    	   on_change="onchange_purchase_tax(cash_advance_id)"
+			                    	   attrs="{'readonly':[('state','!=','draft')]}"/>
+					    	</h1>
+					    </div>
+				      <group>
+						<group>
+							<field name="expense_category_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+							<field name="or_no" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="description" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="partner_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>  
+						</group>
+						<group>
+							<field name="amount" string="Amount (VAT Inc)" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_accounting" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="tax_id" widget="selection" attrs="{'readonly':[('state', '!=', 'draft')]}" domain="[('type_tax_use','=','purchase'),'|',('price_include','=',True),('amount','=',0)]"/>
+		                    <field name="transaction_type" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+		                    <field name="ct_cash_advance_state" invisible="1"/>
+						</group>
+					  </group>
+					</sheet>
+					<div class="oe_chatter">
+		                <field name="message_follower_ids" widget="mail_followers"/>
+		                <field name="message_ids" widget="mail_thread"/>
+		            </div>
+			  </form>
+            </field>
+        </record>
+        
+		<record id="cash_advance_transaction_search" model="ir.ui.view">
+            <field name="name">cash.advance.transaction.search</field>
+            <field name="model">cash.advance.transaction</field>
+		    <field name="type">search</field>
+		    <field name="arch" type="xml">
+		        <search string="CA Liquidations">
+		           <field name="or_no" string="OR #" filter_domain="[('or_no','ilike',self)]"/>
+		           <field name="cash_advance_id" string="Cash Advance" filter_domain="[('cash_advance_id','ilike',self)]"/>
+		           <field name="expense_category_id" string="Expense Category" filter_domain="[('expense_category_id','ilike',self)]"/>
+		           <field name="description" string="Description" filter_domain="[('description','ilike',self)]"/>
+		           <separator/>
+		           <group  expand='0' string='Group by...'>
+		               <filter name="cash_advance" string="Cash Advance" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'cash_advance_id'}"/>
+		               <filter name="expense" string="Expense Category" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'expense_category_id'}"/>
+		           </group>
+		        </search>
+		    </field>
+		</record>
+
+        <record id="cash_advance_transaction_action" model="ir.actions.act_window">
+            <field name="name">Liquidations</field>
+            <field name="res_model">cash.advance.transaction</field>
+	    	<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="search_view_id" ref="cash_advance_transaction_search"/>
+			<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Cash Advance Liquidation.
+              </p>
+            </field>
+        </record>
+        
+		<record id="cash_advance_transaction_action_view" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="cash_advance_transaction_tree"/>
+            <field name="act_window_id" ref="cash_advance_transaction_action"/>
+        </record>
+        
+		<menuitem name="Liquidations" sequence="30"
+				  id="menu_cash_advance_transaction" 
+				  action="cash_advance_transaction_action" 
+				  parent="ph_cash_advance_main_menu"
+				  groups="tf_ph_cash_advance.group_cash_advance_accountant"/>
+        
+        <!-- Custom CSS -->
+        <template id="assets_backend" name="tf_ph_cash_advance_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/tf_ph_cash_advance/static/src/css/tf_ph_cash_advance_style.css"/>
+            </xpath>
+        </template>
+        
+	</data>
+</odoo>
+        

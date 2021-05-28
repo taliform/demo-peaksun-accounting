@@ -1,0 +1,1532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Cash Management Configuration Menu -->
+		<menuitem name="Cash Management" sequence="100"
+			id="cash_management_config"
+			parent="account.menu_finance_configuration"
+			groups="account.group_account_invoice" />
+
+		<!-- Cash Management Main Menu -->
+		<menuitem name="Cash Management" sequence="100"
+			id="ph_cash_management_main_menu"
+			parent="account.menu_finance_entries"
+			groups="account.group_account_invoice,group_cash_management_manager" />
+
+		<!-- CM Accountant Menu -->
+		<menuitem id="account.menu_finance_entries" name="Accounting"
+			parent="account_accountant.menu_accounting" sequence="4"
+			groups="account.group_account_manager,tf_ph_cash_management.group_cash_management_accountant,tf_ph_cash_management.group_cash_management_manager" />
+
+		<!-- Billing -->
+		<menuitem id="account.menu_action_manual_reconciliation"
+			parent="account.menu_finance_entries_actions"
+			action="account.action_manual_reconciliation" sequence="25"
+			groups="account.group_account_manager" />
+
+		<!-- Accountant -->
+		<menuitem
+			id="account.menu_finance_entries_accounting_entries"
+			name="Accounting Entries" parent="account.menu_finance_entries"
+			groups="account.group_account_manager" />
+
+		<!-- Request Fund -->
+		<record id="request_fund_form" model="ir.ui.view">
+			<field name="name">request.fund.form</field>
+			<field name="model">request.fund</field>
+			<field name="arch" type="xml">
+				<form string="Request Fund">
+					<group>
+						<field name="cash_management_id" invisible="1" />
+						<field name="amount" required="1" />
+						<field name="description" required="1" />
+					</group>
+					<footer>
+						<button string="Request" type="object"
+							name="send_fund_request" class="btn-primary" />
+						<button class="btn-secondary" string="Cancel"
+							special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_request_fund" model="ir.actions.act_window">
+			<field name="name">Request Funds</field>
+			<field name="res_model">request.fund</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<!-- Close Cash Management Wizard -->
+		<record id="close_cash_management_form" model="ir.ui.view">
+			<field name="name">close.cash.management.form</field>
+			<field name="model">cash.management.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Close Cash Management">
+					<group>
+						<group>
+							<field name="cash_management_id" invisible="1" />
+							<field name="journal_id" domain="[('type','=','sale')]" />
+						</group>
+					</group>
+					<p>
+						<h3>The Cash Management record cannot be close if the following
+							condition exists:
+						</h3>
+					</p>
+					<p>
+						<h4>A. Unreplenished transactions exists</h4>
+						<ol>
+							<li>Select the Transaction button on the Cash Management form
+								view.
+							</li>
+							<li>Select all transaction records then click the Action button
+								and
+								select Replenish Fund.
+							</li>
+							<li>Process the Replenishment document that will be generated.
+							</li>
+						</ol>
+					</p>
+					<p>
+						<h4>B. Unreimbursed transactions exists</h4>
+						<ol>
+							<li>Select the Requisition button on the Cash Management form
+								view.
+							</li>
+							<li>Check for the Cash Request that has For Reimbursement amount.
+							</li>
+							<li>Process the Reimbursement by clicking the icon and enter the
+								amount to return.
+							</li>
+						</ol>
+					</p>
+					<p>
+						<h4>
+							Note: If the remaining Cash Balance amount is less than the
+							amount to
+							reimburse, request additional
+							fund first by selecting the
+							Request Fund button.
+						</h4>
+					</p>
+					<footer>
+						<button name="close_cash_management" string="Close"
+							type="object" class="btn-primary"
+							context="{'default_cash_management_id':cash_management_id}" />
+						<button string="Cancel" class="btn-secondary"
+							special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_cash_management_wizard"
+			model="ir.actions.act_window">
+			<field name="name">Cash Management Wizard</field>
+			<field name="res_model">cash.management.wizard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<!-- Return Reimburse -->
+		<record id="return_reimburse_form" model="ir.ui.view">
+			<field name="name">return.reimburse.form</field>
+			<field name="model">return.reimburse</field>
+			<field name="arch" type="xml">
+				<form string="Return Reimburse">
+					<group>
+						<field name="date" />
+						<field name="amount" string="Amount" />
+						<field name="reference" string="Acknowledgement Receipts"
+							placeholder="Probationary/Acknowledgment Receipt no." />
+						<field name="type" invisible="1" />
+					</group>
+					<footer>
+						<button string="Apply" type="object"
+							name="return_reimburse" class="btn-primary" />
+						<button string="Cancel" class="btn-secondary"
+							special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="return_action" model="ir.actions.act_window">
+			<field name="name">Return Amount</field>
+			<field name="res_model">return.reimburse</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<record id="reimburse_action" model="ir.actions.act_window">
+			<field name="name">Reimburse Amount</field>
+			<field name="res_model">return.reimburse</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<!-- CR Liquidation Main -->
+		<record id="cash_transaction_tree" model="ir.ui.view">
+			<field name="name">cash.transaction.tree</field>
+			<field name="model">cash.transaction</field>
+			<field name="arch" type="xml">
+				<tree string="Liquidations" decoration-info="state == 'open'"
+					decoration-muted="state == 'close'">
+					<field name="or_no" />
+					<field name="cash_request_id"
+						domain="[('state','=','open'),('cash_management_state','=','open')]"
+						required="1" options="{'no_open': True}" />
+					<field name="expense_category_id" required="1"
+						options="{'no_create': True, 'no_open': True}" />
+					<field name="description" required="1" />
+					<field name="date" />
+					<field name="amount" string="Amount (VAT Inc)" sum="Total" />
+					<field name="tax_id"
+						domain="[('type_tax_use','=','purchase'),('amount','>',0),('price_include','=',True)]"
+						options="{'no_open': True}" />
+					<field name="partner_id" required="1"
+						domain="[('supplier_rank', '>', 0)]"
+						context="{'default_customer':0, 'default_supplier':1}"
+						string="Partner" options="{'no_open': True}" />
+					<field name="analytic_account_id" options="{'no_open': True}"
+						groups="analytic.group_analytic_accounting" />
+					<field name="account_id" required="1"
+						domain="[('type','=','other')]" options="{'no_open': True}" />
+					<field name="transaction_type" />
+					<field name="cash_replenishment_id" readonly="1"
+						options="{'no_open': True}" />
+					<field name="state" readonly="1" />
+					<field name="ct_cash_management_state" invisible="1" />
+					<field name="cash_management_id" invisible="1" />
+					<field name="create_uid" string="Created By" readonly="1"
+						invisible="1" />
+					<field name="create_date" string="Record Date" readonly="1"
+						invisible="1" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- CR Liquidation Form -->
+		<record id="cash_transaction_form" model="ir.ui.view">
+			<field name="name">cash.transaction.form</field>
+			<field name="model">cash.transaction</field>
+			<field name="arch" type="xml">
+				<form string="Liquidation">
+					<header>
+						<field name="state" widget="statusbar"
+							statusbar_visible="open,replenish,validated,close" />
+					</header>
+					<sheet>
+						<div class="oe_title oe_left">
+							<label for="cash_request_id" />
+							<h1>
+								<field name="cash_request_id" required="1"
+									options="{'no_create': True, 'no_open': True}"
+									domain="[('state','=','open')]"
+									attrs="{'readonly':[('state','!=','open')]}" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="expense_category_id" required="1"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="or_no"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="description"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="date"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="partner_id" required="1"
+									domain="[('is_company', '=', True), ('supplier_rank', '>', 0)]"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+							</group>
+							<group>
+								<field name="amount" string="Amount"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="analytic_account_id"
+									groups="analytic.group_analytic_accounting"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="analytic_tag_ids" widget="many2many_tags"
+									groups="analytic.group_analytic_accounting"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+								<field name="tax_id" attrs="{'readonly':[('state', '!=', 'open')]}"
+									domain="[('type_tax_use','=','purchase'),('for_withholding','=',False),('amount','>=',0),('price_include','=',True)]" />
+								<field name="wht_tax_id" attrs="{'readonly':[('state', '!=', 'open')]}"
+									domain="[('type_tax_use','=','purchase'),('for_withholding','=',True),('amount','&lt;',0)]" />
+								<field name="transaction_type"
+									attrs="{'readonly':[('state', '!=', 'open')]}" />
+							</group>
+						</group>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<!-- CR Liquidation Tree View from Cash Management -->
+		<record id="cash_transaction_tree2" model="ir.ui.view">
+			<field name="name">cash.transaction.tree2</field>
+			<field name="model">cash.transaction</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Liquidations" decoration-info="state == 'open'"
+					decoration-muted="state == 'close'">
+					<field name="or_no"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}" />
+					<field name="cash_request_id" required="1"
+						domain="[('state','=','open'),('cash_management_id','=',cash_management_id)]"
+						options="{'no_open': True}"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}" />
+					<field name="expense_category_id" required="1"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}"
+						options="{'no_create': True, 'no_open': True}" />
+					<field name="description" required="1"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}" />
+					<field name="date"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}" />
+					<field name="amount" string="Amount (VAT Inc)"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}"
+						sum="Total" />
+					<field name="tax_id"
+						domain="[('type_tax_use','=','purchase'),('amount','>',0),('price_include','=',True)]"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}"
+						options="{'no_open': True}" />
+					<field name="partner_id" required="1"
+						domain="[('supplier','=',True)]"
+						context="{'default_customer':0, 'default_supplier':1}"
+						string="Partner"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}"
+						options="{'no_open': True}" />
+					<field name="analytic_account_id"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}"
+						options="{'no_open': True}"
+						groups="analytic.group_analytic_accounting" />
+					<field name="analytic_tag_ids"
+						groups="analytic.group_analytic_tags" widget="many2many_tags"
+						options="{'color_field': 'color'}"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}" />
+					<field name="account_id" required="1"
+						domain="[('type','=','other')]" invisible="1"
+						attrs="{'readonly':['|',('state','=','replenish'),('ct_cash_management_state', 'in', ('for_closing','close'))]}"
+						options="{'no_open': True}" />
+					<field name="transaction_type" />
+					<field name="cash_replenishment_id" readonly="1"
+						options="{'no_open': True}" />
+					<field name="state" readonly="1" />
+					<field name="ct_cash_management_state" invisible="1" />
+					<field name="cash_management_id" invisible="1" />
+					<field name="create_uid" string="Created By" readonly="1"
+						invisible="1" />
+					<field name="create_date" string="Record Date" readonly="1"
+						invisible="1" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- CR Liquidation Tree View from Cash Request -->
+		<record id="cash_transaction_tree3" model="ir.ui.view">
+			<field name="name">cash.transaction.tree3</field>
+			<field name="model">cash.transaction</field>
+			<field name="arch" type="xml">
+				<tree string="CR Liquidations"
+					decoration-info="state == 'open'"
+					decoration-muted="state == 'close'">
+					<field name="or_no" />
+					<field name="cash_request_id" required="1"
+						options="{'no_open': True}" />
+					<field name="expense_category_id" required="1" />
+					<field name="description" required="1" />
+					<field name="date" />
+					<field name="amount" string="Amount (VAT Inc)" />
+					<field name="tax_id"
+						domain="[('type_tax_use','=','purchase'),('amount','>',0),('price_include','=',True)]"
+						options="{'no_create': True, 'no_open': True}" />
+					<field name="partner_id" required="1"
+						domain="[('supplier','=',True)]"
+						context="{'default_customer': False, 'default_supplier': True, 'default_is_company': True}"
+						options="{'no_create': True, 'no_open': True}" />
+					<field name="analytic_account_id"
+						groups="analytic.group_analytic_accounting"
+						options="{'no_create': True, 'no_open': True}" />
+					<field name="account_id"
+						options="{'no_create': True, 'no_open': True}" />
+					<field name="transaction_type" />
+					<field name="cash_replenishment_id" readonly="1"
+						options="{'no_open': True}" />
+					<field name="state" readonly="1" />
+					<field name="ct_cash_management_state" invisible="1" />
+					<field name="cash_management_id" invisible="1" />
+					<field name="create_uid" string="Created By" readonly="1"
+						invisible="1" />
+					<field name="create_date" string="Record Date" readonly="1"
+						invisible="1" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="cash_transaction_search" model="ir.ui.view">
+			<field name="name">cash.transaction.search</field>
+			<field name="model">cash.transaction</field>
+			<field name="arch" type="xml">
+				<search string="Liquidation">
+					<field name="name" string="Transaction"
+						filter_domain="[('name','ilike',self)]" />
+					<separator />
+					<filter string="Open" name="open"
+						domain="[('state','=','open')]" help="Unreplenished Transaction" />
+					<filter string="Replenished" name="replenish"
+						domain="[('state','=','replenish')]" />
+					<separator />
+					<field name="cash_request_id" string="Cash Request" />
+					<field name="cash_management_id" string="Cash Management" />
+					<field name="expense_category_id" string="Expense Category" />
+					<field name="description" string="Description" />
+					<group expand="0" string="Group By...">
+						<filter name="group_cr" string='Cash Request' domain="[]"
+							context="{'group_by' : 'cash_request_id'}" />
+						<filter name="group_cm" string='Cash Management'
+							domain="[]" context="{'group_by' : 'cash_management_id'}" />
+						<filter name="group_ec" string='Expense Category'
+							domain="[]" context="{'group_by' : 'expense_category_id'}" />
+						<filter name="group_rep" string='Cash Replenishment'
+							domain="[]" context="{'group_by' : 'cash_replenishment_id'}" />
+						<filter name="group_supplier" string='Supplier' domain="[]"
+							context="{'group_by' : 'partner_id'}" />
+						<filter name="group_created" string='Created By'
+							domain="[]" context="{'group_by' : 'create_uid'}" />
+						<filter name="group_record_date" string='Record Date'
+							domain="[]" context="{'group_by' : 'create_date'}" />
+						<filter string="Status" name="status" domain="[]"
+							context="{'group_by': 'state'}" />
+					</group>
+
+				</search>
+			</field>
+		</record>
+
+		<record id="cash_transaction_graph" model="ir.ui.view">
+			<field name="name">cash.transaction.graph</field>
+			<field name="model">cash.transaction</field>
+			<field name="arch" type="xml">
+				<graph string="Liquidation" type="line">
+					<field name="cash_request_id" type="row" />
+					<field name="issued_to" type="row" />
+					<field name="partner_id" type="row" />
+					<field name="amount" type="measure" />
+				</graph>
+			</field>
+		</record>
+
+		<record id="cash_transaction_pivot" model="ir.ui.view">
+			<field name="name">cash.transaction.pivot</field>
+			<field name="model">cash.transaction</field>
+			<field name="arch" type="xml">
+				<pivot string="Liquidation" disable_linking="True">
+					<field name="cash_request_id" type="row" />
+					<field name="issued_to" type="row" />
+					<field name="partner_id" type="row" />
+					<field name="amount" type="measure" />
+				</pivot>
+			</field>
+		</record>
+
+
+		<record id="cash_transaction_action"
+			model="ir.actions.act_window">
+			<field name="name">Liquidations</field>
+			<field name="res_model">cash.transaction</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="context">{'cr_liquidation_main_menu':True}</field>
+			<field name="search_view_id" ref="cash_transaction_search" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create a CR Liquidation.
+				</p>
+			</field>
+		</record>
+
+		<record id="cash_transaction_action2"
+			model="ir.actions.act_window">
+			<field name="name">Liquidations</field>
+			<field name="res_model">cash.transaction</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="domain">[('cash_management_id','=',active_id)]</field>
+			<field name="context">{'default_cash_management_id':active_id}
+			</field>
+			<field name="search_view_id" ref="cash_transaction_search" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create a CR Liquidation.
+				</p>
+			</field>
+		</record>
+
+		<record id="cash_transaction_action3"
+			model="ir.actions.act_window">
+			<field name="name">Liquidations</field>
+			<field name="res_model">cash.transaction</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="domain">[('cash_request_id','=',active_id)]</field>
+			<field name="context">{'default_cash_request_id':active_id}</field>
+			<field name="search_view_id" ref="cash_transaction_search" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create a CR Liquidation.
+				</p>
+			</field>
+		</record>
+
+		<record id="cash_transaction_action3_view1"
+			model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="cash_transaction_tree3" />
+			<field name="act_window_id" ref="cash_transaction_action3" />
+		</record>
+
+		<!-- Cash Management -->
+		<record id="cash_management_tree" model="ir.ui.view">
+			<field name="name">cash.management.tree</field>
+			<field name="model">cash.management</field>
+			<field name="arch" type="xml">
+				<tree string="Cash Management"
+					decoration-info="state == 'draft'"
+					decoration-muted="state == 'cancel'">
+					<field name="name" />
+					<field name="date" />
+					<field name="journal_id" />
+					<field name="analytic_account_id"
+						groups="analytic.group_analytic_accounting" />
+					<field name="analytic_tag_ids"
+						groups="analytic.group_analytic_tags" widget="many2many_tags" />
+					<field name="state" />
+					<field name="company_id" groups="base.group_multi_company"
+						options="{'no_create': True}" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="cash_management_form" model="ir.ui.view">
+			<field name="name">cash.management.form</field>
+			<field name="model">cash.management</field>
+			<field name="arch" type="xml">
+				<form string="Cash Management">
+					<header>
+						<button name="button_open" string="Open CashBox"
+							type="object" class="oe_highlight"
+							attrs="{'invisible' : [('state', '!=', 'draft')]}"
+							confirm="Are you sure you want to open the Cash Box?" />
+						<button name="button_for_closing" string="For Closing"
+							type="object" attrs="{'invisible' : [('state', '!=', 'open')]}"
+							confirm="Confirm closing of Cash Management?"
+							groups="tf_ph_cash_management.group_cash_management_manager"
+							class="oe_highlight" />
+						<button name="%(action_cash_management_wizard)d"
+							string="Close Cash Balance" type="action" class="oe_highlight"
+							attrs="{'invisible' : ['|',('state', '!=', 'for_closing'),('closing_invoice_id','!=',False)]}"
+							context="{'default_cash_management_id':active_id}" />
+						<button name="button_reopen" string="Re-Open"
+							type="object" states="for_closing"
+							confirm="Confirm re-opening of the Cash Management?"
+							groups="tf_ph_cash_management.group_cash_management_manager,tf_ph_cash_management.group_cash_management_accountant" />
+						<button name="%(action_request_fund)d"
+							string="Request Fund" type="action"
+							context="{'default_cash_management_id':active_id}"
+							attrs="{'invisible':[('state','not in', ['draft','open'])]}"
+							class="oe_highlight" />
+						<field name="state" widget="statusbar"
+							statusbar_visible="draft,open,for_closing,close" />
+					</header>
+					<sheet string="Cash Management">
+						<div class="oe_button_box" name="button_box">
+							<button name="view_cash_request_action"
+								string="Requisitions" type="object"
+								attrs="{'invisible':[('state', 'not in', ('open','for_closing'))]}"
+								class="oe_stat_button" icon="fa-money" />
+							<button name="%(cash_transaction_action2)d"
+								string="CR Liquidations" type="action"
+								attrs="{'invisible':[('state', '=', 'draft' )]}"
+								class="oe_stat_button" icon="fa-list-alt" />
+						</div>
+						<div name="closing_cm_note" role="alert"
+							class="alert alert-info" style="margin-top: 10px;"
+							groups="account.group_account_invoice,tf_ph_cash_management.group_cash_management_manager"
+							attrs="{'invisible':['|',('closing_invoice_id','=',False),('state', '=', 'close')]}">
+							<p>
+								<b>Note:</b>
+								This cash management record will be automatically closed once
+								the payment for the Closing Invoice has been made.
+							</p>
+						</div>
+						<div>
+							<h1 class="mt0">
+								<label for="name" string="Draft Cash Management"
+									attrs="{'invisible': [('state','not in',('draft'))]}" />
+								<field name="name" readonly="1" class="oe_inline"
+									attrs="{'invisible': [('state','in',('draft'))]}" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="journal_id" required="1" domain="[('type','=','purchase')]"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="cash_management_amount_type" required="1"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="currency_id"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="previous_cash_amount"
+									attrs="{'invisible':[('cash_management_amount_type','!=', 'enter_previous')], 'readonly' : [('state', '!=', 'draft')]}" />
+
+								<label for="create_uid" string="Custodian" class="o_light_label"/>
+								<div>
+									<field name="create_uid" string="Custodian" readonly="1"
+										   attrs="{'invisible':[('create_uid','=', False)]}"/>
+									<button name="action_update_custodian" type="object" string="(update)"
+											class="oe_edit_only oe_link oe_inline"
+											attrs="{'invisible': [('state', 'in', ['draft','close'])]}"
+											groups="tf_ph_cash_management.group_cash_management_manager"/>
+								</div>
+								<field name="current_fund" readonly="1" widget="monetary" />
+								<field name="closing_invoice_id" readonly="1"
+									attrs="{'invisible': [('closing_invoice_id','=',False)]}" />
+								<field name="is_locked" invisible="1" />
+							</group>
+							<group>
+								<!-- Account - Bank and Cash (liquidity) -->
+								<field name="account_id" required="1"
+									   domain="['|',('internal_type','=','liquidity'),('user_type_id','=',%(account.data_account_type_current_assets)d)]"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="date" required="1"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="purchase_tax_id"
+									options="{'no_create_edit':True}"
+									domain="[('type_tax_use','=','purchase'),('amount','>',0),('price_include','=',True)]"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="analytic_account_id"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}"
+									groups="analytic.group_analytic_accounting" />
+								<field name="analytic_tag_ids"
+									groups="analytic.group_analytic_tags" widget="many2many_tags"
+									options="{'color_field': 'color'}"
+									attrs="{'readonly' : [('state', '!=', 'draft')]}" />
+								<field name="cr_user_ids" string="CM Users"
+									widget="many2many_tags" options="{'no_create_edit':True}"
+									attrs="{'readonly': ['|',('closing_invoice_id','!=',False),('state','=','close')]}" />
+								<field name="company_id" invisible="1" />
+								<field name="manager_ids" widget="many2many_tags"
+									invisible="1" />
+								<field name="user_ids" widget="many2many_tags"
+									invisible="1" />
+								<field name="cm_multiple_approval"
+									domain="[('company_id', '=', company_id)]"
+									attrs="{'readonly' : [ ('state', '!=', 'draft')] }" />
+								<field name="basic_cm_approver_id"
+									options="{'no_create_edit':True}"
+									domain="[('id', 'in', user_ids)]"
+									attrs="{'required': [('user_ids','!=',[]),('cm_multiple_approval','=','basic')], 'invisible': [ ('cm_multiple_approval','!=','basic') ], 'readonly': [('state','!=','draft')]}" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Running Amounts">
+								<table class="table table-condensed table-bordered">
+									<tbody>
+										<tr>
+											<td>Cash Balance</td>
+											<td>
+												<field name="remaining_fund" readonly="1"
+													widget="monetary" />
+											</td>
+										</tr>
+										<tr attrs="{'invisible':[('state','=','close')]}">
+											<td style="font-weight: bold;">Ongoing Replenishment</td>
+											<td>
+												<field name="ongoing_replenishment" readonly="1"
+													widget="monetary" />
+											</td>
+										</tr>
+										<tr attrs="{'invisible':[('state','!=','close')]}">
+											<td style="font-weight: bold;">Closed Replenishment</td>
+											<td>
+												<field name="total_validated_replenishment"
+													readonly="1" widget="monetary" />
+											</td>
+										</tr>
+										<tr>
+											<td style="font-weight: bold;">Unreplenished Transactions</td>
+											<td>
+												<field name='unreplenished_cash_transaction_amount'
+													readonly="1" widget="monetary" />
+											</td>
+										</tr>
+										<tr>
+											<td style="font-weight: bold;">Unliquidated Amount</td>
+											<td>
+												<field name="unliquidated_amount" readonly="1"
+													widget="monetary" />
+											</td>
+										</tr>
+										<tr>
+											<td style="font-weight: bold;">Reimbursement Amount</td>
+											<td>
+												<field name="total_for_reimbursement" readonly="1"
+													widget="monetary" />
+											</td>
+										</tr>
+										<tr>
+											<td style="font-weight: bold;">TOTAL</td>
+											<td style="font-weight: bold;">
+												<field name="total_amount" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<p>The Total amount should be equal to Cash Fund amount.</p>
+							</page>
+							<page string="Funds">
+								<field name="cash_management_fund_ids" nolabel="1"
+									colspan="4"
+									context="{'default_custodian_id':create_uid, 'default_cash_management_id':active_id}"
+									attrs="{'readonly' : [('state', 'in', ('for_closing','close'))]}">
+									<tree string="Opening Cashbox Lines" editable="bottom">
+										<field name="invoice_id"
+											attrs="{'readonly' : [('state', '=', 'confirm')]}"
+											domain="[('received','=',False),
+                                           				('cash_management_id','=',cash_management_id),
+                                                           ('type','in',['in_invoice','in_refund']),
+                                           	            ('invoice_payment_state','=','paid'),
+                                                           ('is_fund','=',True)]"
+											options="{'no_create_edit': True, 'no_open': True}"
+											string="Vendor Bill" />
+										<field name="cash_management_id" invisible="1" />
+										<field name="custodian_id" invisible="1" />
+										<field name="amount" sum="Total Fund" readonly="1" />
+										<field name="state" invisible="1" />
+										<button string="Confirm" type="object"
+											name="confirm_fund"
+											attrs="{'invisible' : [('state', '!=', 'draft')]}"
+											confirm="Are you sure you want to confirm requested fund?" />
+									</tree>
+								</field>
+							</page>
+							<page string="Replenishment">
+								<field name="replenishment_ids" nolabel="1">
+									<tree string="Replenishment" create="false" edit="false"
+										delete="false">
+										<field name="name" />
+										<field name="amount" sum="Amount" />
+										<field name="state" />
+									</tree>
+								</field>
+							</page>
+							<page string="Journal Entries">
+								<field name="journal_entry_ids" readonly="1" domain="[('type', '=', 'entry')]">
+									<tree string="Journal Entries"
+										decoration-info="state == 'draft'">
+										<field name="name" />
+										<field name="ref" />
+										<field name="date" />
+										<field name="journal_id" />
+										<field name="partner_id" />
+										<field name="amount_total" sum="Total Amount" />
+										<field name="state" />
+										<field name="narration" string="Remarks" />
+									</tree>
+								</field>
+							</page>
+							<page string="Requested Funds">
+								<field name="requested_fund_ids" readonly="1">
+									<tree string="Requested Funds"
+										decoration-info="state == 'draft'"
+										decoration-muted="state == 'cancel'">
+										<field name="partner_id" groups="base.group_user" />
+										<field name="invoice_date" />
+										<field name="name" />
+										<field name="invoice_user_id" string="Responsible" />
+										<field name="invoice_date_due" />
+										<field name="amount_residual" sum="Residual Amount" />
+										<field name="amount_untaxed" sum="Untaxed Amount" />
+										<field name="amount_total" sum="Total Amount" />
+										<field name="state" />
+										<field name="invoice_payment_state"/>
+									</tree>
+								</field>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="cash_management_search" model="ir.ui.view">
+			<field name="name">cash.management.search</field>
+			<field name="model">cash.management</field>
+			<field name="arch" type="xml">
+				<search string="Cash Management">
+					<field name="name" string="Cash Management"
+						filter_domain="[('name','ilike',self)]" />
+					<separator />
+					<filter string="Draft" name="draft"
+						domain="[('state','=','draft')]" help="Draft CM" />
+					<filter string="Open" name="open"
+						domain="[('state','=','open')]" />
+					<filter string="For Closing" name="for_closing"
+						domain="[('state','=','for_closing')]" />
+					<filter string="Closed" name="closed"
+						domain="[('state','=','close')]" />
+					<separator />
+					<field name="journal_id" string="Journal" />
+					<field name="account_id" string="Account" />
+					<group expand="0" string="Group By...">
+						<filter name="group_journal" string='Journal' domain="[]"
+							context="{'group_by' : 'journal_id'}" />
+						<filter name="group_currency" string='Currency' domain="[]"
+							context="{'group_by' : 'currency_id'}" />
+						<filter name="group_created" string='Custodian' domain="[]"
+							context="{'group_by' : 'create_uid'}" />
+						<filter name="group_record_date" string='Record Date'
+							domain="[]" context="{'group_by' : 'create_date'}" />
+						<filter string="Status" name="status" domain="[]"
+							context="{'group_by': 'state'}" />
+					</group>
+
+				</search>
+			</field>
+		</record>
+
+		<record id="cash_management_graph" model="ir.ui.view">
+			<field name="name">cash.management.graph</field>
+			<field name="model">cash.management</field>
+			<field name="arch" type="xml">
+				<graph string="Cash Management" type="line">
+					<field name="name" type="row" />
+					<field name="journal_id" type="row" />
+					<field name="remaining_fund_stored" type="measure" />
+					<field name="ongoing_replenishment_stored" type="measure" />
+					<field name="unreplenished_cash_transaction_amount_stored"
+						type="measure" />
+					<field name="unliquidated_amount_stored" type="measure" />
+					<field name="total_for_reimbursement_stored" type="measure" />
+					<field name="total_amount_stored" type="measure" />
+				</graph>
+			</field>
+		</record>
+
+		<record id="cash_management_pivot" model="ir.ui.view">
+			<field name="name">cash.management.pivot</field>
+			<field name="model">cash.management</field>
+			<field name="arch" type="xml">
+				<pivot string="Cash Management" disable_linking="True">
+					<field name="name" type="row" />
+					<field name="journal_id" type="row" />
+					<field name="remaining_fund_stored" type="measure" />
+					<field name="ongoing_replenishment_stored" type="measure" />
+					<field name="unreplenished_cash_transaction_amount_stored"
+						type="measure" />
+					<field name="unliquidated_amount_stored" type="measure" />
+					<field name="total_for_reimbursement_stored" type="measure" />
+					<field name="total_amount_stored" type="measure" />
+				</pivot>
+			</field>
+		</record>
+
+		<record id="cash_management_action"
+			model="ir.actions.act_window">
+			<field name="name">Cash Management</field>
+			<field name="res_model">cash.management</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="search_view_id" ref="cash_management_search" />
+			<field name="context">{}</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create a Cash Management.
+				</p>
+			</field>
+		</record>
+
+		<record id="cash_management_action_view1"
+			model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="cash_management_tree" />
+			<field name="act_window_id" ref="cash_management_action" />
+		</record>
+
+		<record id="cash_management_action_view2"
+			model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="cash_management_form" />
+			<field name="act_window_id" ref="cash_management_action" />
+		</record>
+
+		<menuitem name="Cash Management" sequence="1"
+			id="menu_cash_management" action="cash_management_action"
+			parent="ph_cash_management_main_menu"
+			groups="account.group_account_user,tf_ph_cash_management.group_cash_management_manager" />
+
+		<!-- Cash Request -->
+		<record id="cash_request_tree" model="ir.ui.view">
+			<field name="name">cash.request.tree</field>
+			<field name="model">cash.request</field>
+			<field name="arch" type="xml">
+				<tree string="Cash Requests" decoration-info="state == 'draft'"
+					decoration-muted="state in ('close','cancel')">
+					<field name="name" />
+					<field name="cash_management_id" />
+					<field name="issued_to" />
+					<field name="date" />
+					<field name="voucher_no" />
+					<field name="description" />
+					<field name="amount" />
+					<field name="total_transaction" />
+					<field name="total_returned" />
+					<field name="for_return" />
+					<button name="%(return_action)d" string="Return Amount"
+						icon="fa-pencil-square-o" type="action"
+						context="{'default_cash_request_id':id, 'default_amount':for_return, 'default_type':'return'}"
+						attrs="{'invisible' : ['|',('for_return','=',0),('is_locked','=',True)]}"
+						groups="tf_ph_cash_management.group_cash_management_manager" />
+					<field name="total_reimbursed" />
+					<field name="for_reimbursement" />
+					<button name="%(reimburse_action)d"
+						string="Reimburse Amount" icon="fa-pencil-square-o" type="action"
+						context="{'default_cash_request_id':id, 'default_amount':for_reimbursement, 'default_type':'reimburse'}"
+						attrs="{'invisible' : ['|',('for_reimbursement','=',0),('is_locked','=',True)]}"
+						groups="tf_ph_cash_management.group_cash_management_manager" />
+					<field name="reference" string="Return/Reimburse Receipt no." />
+					<field name="days_old" readonly="1" />
+					<field name="state" readonly="1" />
+					<field name="is_locked" invisible="1" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="cash_request_form" model="ir.ui.view">
+			<field name="name">cash.request.form</field>
+			<field name="model">cash.request</field>
+			<field name="arch" type="xml">
+				<form string="Cash Request">
+					<header>
+						<button name="confirm_button" string="Send for Approval"
+							type="object" class="oe_highlight"
+							confirm="Send cash request for approval?"
+							attrs="{'invisible':[('state','!=', 'draft')]}" />
+						<button name="approve_button" string="Approve"
+							type="object" class="oe_highlight"
+							confirm="Are you sure you want to approve this request?"
+							attrs="{'invisible' : ['|',('is_approver','=',False),('state', '!=', 'for_approval')]}"
+							groups="tf_ph_cash_management.group_cash_management_user" />
+						<!-- attrs="{'invisible' : ['|',('is_approver','=',False),('state', 
+							'not in', ['for_approval','liq_for_approval'])]}" -->
+						<button name="decline_button" string="Reject" type="object"
+							confirm="Are you sure you want to reject this request?"
+							attrs="{'invisible' : ['|',('is_approver','=',False),('state', '!=', 'for_approval')]}"
+							groups="tf_ph_cash_management.group_cash_management_user" />
+						<!-- attrs="{'invisible' : ['|',('is_approver','=',False),('state', 
+							'not in', ['for_approval','liq_for_approval'])]}" -->
+						<button name="button_release" string="Release Fund"
+							type="object" class="oe_highlight"
+							confirm="Do you want to confirm this cash requisition?"
+							attrs="{'invisible' : ['|','|',('is_custodian','=',False),('state','!=','release'),('is_locked','=',True)]}"
+							groups="tf_ph_cash_management.group_cash_management_user" />
+						<!-- <button name="button_liq_approval" string="Send Liquidation for 
+							Approval" type="object" class="oe_highlight" confirm="Send the liquidations 
+							for approval?" context="{'active_ids':active_ids}" attrs="{'invisible' : 
+							['|',('state','!=','open'),('is_liq_approved', '=', True)]}"/> -->
+						<button name="button_close" string="Close" type="object"
+							class="oe_highlight"
+							confirm="Are you sure you want to close this entry for cash requisition?"
+							attrs="{'invisible' : [('state','!=','open')]}"
+							groups="tf_ph_cash_management.group_cash_management_manager,account.group_account_invoice" />
+						<!-- attrs="{'invisible' : ['|',('state','!=','open'),('is_liq_approved', 
+							'=', False)]}" -->
+						<button name="action_on_hold" string="On Hold" type="object"
+							confirm="Additional liquidations may not be created when on hold. Are you sure you want to put the cash request on hold?"
+							states="open"
+							groups="tf_ph_cash_management.group_cash_management_manager" />
+						<button name="action_reopen" string="Re-Open" type="object"
+							class="oe_highlight"
+							confirm="Are you sure you want to re-open the cash request?"
+							states="on_hold"
+							groups="tf_ph_cash_management.group_cash_management_manager" />
+						<button name="%(return_action)d" string="For Return"
+							type="action"
+							confirm="Are you sure you want to return the amount of this cash requisition?"
+							context="{'default_cash_request_id':id, 'default_amount':for_return, 'return_form': True, 'default_type':'return'}"
+							attrs="{'invisible' : ['|','|',('state','!=','open'),('is_returned','=',True),('cash_transaction_ids','!=',[])]}"
+							groups="tf_ph_cash_management.group_cash_management_manager" />
+						<button name="button_cancel" string="Cancel" type="object"
+							context="{'active_ids':active_ids}"
+							attrs="{'invisible':['|',('state','not in', ['for_approval','release']), ('hide_cancel','=',True)]}"
+							groups="tf_ph_cash_management.group_cash_management_user" />
+						<field name="state" widget="statusbar" nolabel="1"
+							statusbar_visible="draft,release,open,close" />
+					</header>
+					<sheet string="Cash Request">
+						<div class="oe_button_box" name="button_box">
+							<button name="%(cash_transaction_action3)d"
+								string="CR Liquidations" type="action"
+								attrs="{'invisible':[('state','not in',['open','close'])]}"
+								class="oe_inline oe_stat_button" icon="fa-list-alt"
+								context="{'default_cash_request_id':active_id}" />
+							<!-- attrs="{'invisible':[('state','not in',['open','liq_for_approval','close'])]}" -->
+						</div>
+						<div>
+							<h1 class="mt0">
+								<label for="name" string="Draft Cash Request"
+									attrs="{'invisible': [('state','not in',('draft','release'))]}" />
+								<field name="name" readonly="1" class="oe_inline"
+									attrs="{'invisible': [('state','in',('draft','release'))]}" />
+							</h1>
+							<label for="cash_management_id" class="oe_edit_only" />
+							<h2>
+								<field name="cash_management_id" required="1"
+									options="{'no_create': True, 'no_open': True}"
+									domain="[('id','in',cash_management_ids)]"
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+							</h2>
+						</div>
+						<group>
+							<group>
+								<field name="issued_to" required="1"
+									options="{'no_create': True}"
+									attrs="{'readonly':[('state', '!=', 'draft')]}"
+									domain="[('id','=', uid)]" />
+								<field name="amount"
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+								<field name="voucher_no" string="Voucher No."
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+								<field name="description"
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+								<field name="days_old" readonly="1" />
+								<field name="cash_management_ids" widget="many2many_tags"
+									invisible="1" />
+								<field name="hide_cancel" invisible="1" />
+								<field name="is_approver" invisible="1" />
+								<field name="is_custodian" invisible="1" />
+								<field name="is_returned" invisible="1" />
+							</group>
+							<group>
+								<field name="date"
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+								<field name="purchase_tax_id" domain="[('price_include','=',True),('type_tax_use','=','purchase')]"
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+								<field name="analytic_account_id"
+									groups="analytic.group_analytic_accounting"
+									attrs="{'readonly':[('state', '!=', 'draft')]}" />
+								<field name="cash_management_state" invisible="1" />
+								<field name="is_locked" invisible="1" />
+								<field name="currency_id" invisible="1" />
+								<!-- <field name="is_liq_approved" invisible="1" /> -->
+								<field name="approver_ids" widget="many2many_tags"
+									invisible="1" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Liquidations"
+								attrs="{'invisible': ['|',('state','in',('draft','for_approval','release','confirm')),('state','=','cancel'),('cash_transaction_ids','=',[])]}">
+								<field name="cash_transaction_ids"
+									attrs="{'readonly':['|',('cash_management_state', 'in', ('for_closing','close')),('state','=','close')]}">
+									<tree string="Liquidation" create="false" editable="top"
+										decoration-info="state == 'open'"
+										decoration-muted="state == 'close'">
+										<field name="or_no"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="expense_category_id" required="1"
+											options="{'no_open': True}"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="description" required="1"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="date"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="amount"
+											attrs="{'readonly': ['|',('is_amount_readonly','=',True),('state','!=','open')]}" />
+										<field name="tax_id" options="{'no_open': True}"
+											domain="[('price_include','=',True),('type_tax_use','=','purchase')]"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="partner_id" required="1"
+											context="{'default_supplier':True,'default_customer':False}"
+											domain="[('is_company', '=', True), ('supplier_rank', '>', 0)]"
+											options="{'no_open': True}"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="analytic_account_id"
+											options="{'no_open': True}"
+											attrs="{'readonly':[('state', '!=', 'open')]}"
+											groups="analytic.group_analytic_accounting" />
+										<field name="analytic_tag_ids" widget="many2many_tags"
+											groups="analytic.group_analytic_accounting"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="transaction_type"
+											options="{'no_open': True}"
+											attrs="{'readonly':[('state', '!=', 'open')]}" />
+										<field name="state" readonly="1" />
+										<field name="is_amount_readonly" invisible="1" />
+									</tree>
+								</field>
+							</page>
+							<page string="Returned"
+								attrs="{'invisible': [('return_ids','=',[])]}">
+								<!-- attrs="{'invisible': ['|',('state','in',('draft','for_approval','release','confirm')),('state','=','cancel'),('return_ids','=',[])]}"> -->
+								<field name="return_ids" create="false" edit="false"
+									domain="[('type','=','return')]"
+									attrs="{'readonly':['|','|',('cash_management_state', 'in', ('for_closing','close')),('state', '=', 'close'),('state', '!=', 'open')]}">
+									<tree string="Returned">
+										<field name="reference" />
+										<field name="amount" />
+										<field name="date" />
+									</tree>
+								</field>
+							</page>
+							<page string="Reimbursed"
+								attrs="{'invisible': [('reimburse_ids','=',[])]}">
+								<!-- attrs="{'invisible': ['|',('state','in',('draft','for_approval','release','confirm')),('state','=','cancel'),('reimburse_ids','=',[])]}"> -->
+								<field name="reimburse_ids" create="false" edit="false"
+									domain="[('type','=','reimburse')]"
+									attrs="{'readonly':['|','|',('cash_management_state', 'in', ('for_closing','close')),('state', '=', 'close'),('state', '!=', 'open')]}">
+									<tree string="Reimbursed">
+										<field name="reference" />
+										<field name="amount" />
+										<field name="date" />
+									</tree>
+									<form string="Reimbursed">
+										<field name="date" />
+										<field name="amount" />
+										<field name="reference" />
+									</form>
+								</field>
+							</page>
+						</notebook>
+						<group class="oe_subtotal_footer oe_right" name="liq_total"
+							attrs="{'invisible': [('state','in',('draft','for_approval','release','confirm'))]}">
+							<field name="total_transaction"
+								class="oe_subtotal_footer_separator" />
+							<field name="orig_amount_return"
+								attrs="{'invisible':['|',('total_returned','=',0),('orig_amount_return','=',0)]}" />
+							<field name="orig_amount_reimburse"
+								attrs="{'invisible':[('orig_amount_reimburse','=',0)]}" />
+							<field name="for_return"
+								attrs="{'invisible':[('orig_amount_return','=',0)]}" />
+							<field name="for_reimbursement"
+								attrs="{'invisible':[('orig_amount_reimburse','=',0)]}" />
+							<field name="total_returned"
+								class="oe_subtotal_footer_separator"
+								attrs="{'invisible':[('orig_amount_return','=',0)]}" />
+							<field name="total_reimbursed"
+								class="oe_subtotal_footer_separator"
+								attrs="{'invisible':[('orig_amount_reimburse','=',0)]}" />
+						</group>
+						<field name="note" class="oe_inline"
+							placeholder="Remarks..."
+							attrs="{'readonly': [('state','not in',('draft',))]}" />
+						<div class="oe_clear" />
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" />
+						<field name="activity_ids" widget="mail_activity" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="cash_request_search" model="ir.ui.view">
+			<field name="name">cash.request.search</field>
+			<field name="model">cash.request</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Cash Request">
+					<field name="name" string="Name"
+						filter_domain="[('name','ilike',self)]" />
+					<separator />
+					<filter string="Draft" name="draft"
+						domain="[('state','=','draft')]" />
+					<filter string="Open" name="open"
+						domain="[('state','=','open')]" />
+					<filter string="Closed" name="closed"
+						domain="[('state','=','close')]" />
+					<separator />
+					<filter name="not_closed" string="Not Closed"
+						domain="[('state', 'not in', ['close','cancel'])]" />
+					<field name="days_old_stored" string="Days Outstanding"
+						filter_domain="[('days_old_stored', 'ilike', self)]" />
+					<separator />
+					<field name="issued_to" string="Issue To"
+						filter_domain="[('issued_to','ilike',self)]" />
+					<field name="cash_management_id" string="Cash Management"
+						filter_domain="[('cash_management_id','ilike',self)]" />
+					<field name="voucher_no" string="Voucher"
+						filter_domain="[('voucher_no','ilike',self)]" />
+					<group expand='0' string='Group by...'>
+						<filter name="group_cm" string='Cash Management'
+							domain="[]" context="{'group_by' : 'cash_management_id'}" />
+						<filter name="group_issued" string='Issued To' domain="[]"
+							context="{'group_by' : 'issued_to'}" />
+						<filter name="group_status" string='Status' domain="[]"
+							context="{'group_by' : 'state'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id="cash_request_graph" model="ir.ui.view">
+			<field name="name">cash.request.graph</field>
+			<field name="model">cash.request</field>
+			<field name="arch" type="xml">
+				<graph string="Cash Management" type="line">
+					<field name="cash_management_id" type="row" />
+					<field name="state" type="row" />
+					<field name="name" type="row" />
+					<field name="amount" type="measure" />
+					<field name="total_transaction_stored" type="measure" />
+					<field name="total_returned_stored" type="measure" />
+					<field name="total_reimbursed_stored" type="measure" />
+					<field name="for_return_stored" type="measure" />
+					<field name="for_reimbursement_stored" type="measure" />
+				</graph>
+			</field>
+		</record>
+
+		<record id="cash_request_pivot" model="ir.ui.view">
+			<field name="name">cash.request.pivot</field>
+			<field name="model">cash.request</field>
+			<field name="arch" type="xml">
+				<pivot string="Cash Request" disable_linking="True">
+					<field name="cash_management_id" type="row" />
+					<field name="state" type="row" />
+					<field name="name" type="row" />
+					<field name="amount" type="measure" />
+					<field name="total_transaction_stored" type="measure" />
+					<field name="total_returned_stored" type="measure" />
+					<field name="total_reimbursed_stored" type="measure" />
+					<field name="for_return_stored" type="measure" />
+					<field name="for_reimbursement_stored" type="measure" />
+				</pivot>
+			</field>
+		</record>
+
+		<record id="cash_request_action" model="ir.actions.act_window">
+			<field name="name">Cash Requests</field>
+			<field name="res_model">cash.request</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="context">{'search_default_not_closed':1}</field>
+			<field name="search_view_id" ref="cash_request_search" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create a Cash Request.
+				</p>
+			</field>
+		</record>
+
+		<!--Cash Replenishment -->
+		<record id="cash_replenishment_tree" model="ir.ui.view">
+			<field name="name">cash.replenishment.tree</field>
+			<field name="model">cash.replenishment</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Cash Replenishment" create="false"
+					decoration-info="state == 'draft'">
+					<field name="name" />
+					<field name="cash_management_id" />
+					<field name="custodian_id" />
+					<field name="create_date" readonly="1" />
+					<field name="journal_id" />
+					<field name="amount" sum="Amount" />
+					<field name="invoice_id" />
+					<field name="state" />
+					<field name="company_id" groups="base.group_multi_company"
+						options="{'no_create': True}" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="cash_replenishment_form" model="ir.ui.view">
+			<field name="name">cash.replenishment.form</field>
+			<field name="model">cash.replenishment</field>
+			<field name="arch" type="xml">
+				<form string="Cash Replenishment" create="false">
+					<header>
+						<button name="button_locked"
+							attrs="{'invisible':[('is_locked','=',True)]}"
+							string="Perform Cash Count" class="oe_highlight"
+							groups="tf_ph_cash_management.group_cash_management_manager"
+							type="object" />
+						<button name="confirm_replenishment"
+							attrs="{'invisible':[('state','!=','locked')]}" string="Confirm"
+							class="oe_highlight"
+							groups="tf_ph_cash_management.group_cash_management_manager"
+							type="object" />
+						<button name="replenishment_validate"
+							attrs="{'invisible':['|',('is_locked','=',False),('state','!=','draft')]}"
+							string="Validate" class="oe_highlight"
+							confirm="This will generate CR Liquidation Invoices and make sure that the Replenishment Transactions are already correct."
+							groups="tf_ph_cash_management.group_cash_management_accountant" type="object" />
+						<button name="action_unlock"
+							attrs="{'invisible':['|',('is_locked','=',False),('state','!=','draft')]}"
+							string="Re-Count Cash"
+							groups="tf_ph_cash_management.group_cash_management_accountant" type="object" />
+						<button name="replenishment_release"
+							attrs="{'invisible':['|',('state','!=','validate'),('cash_management_state','=','for_closing')]}"
+							string="Process" groups="account.group_account_invoice"
+							class="oe_highlight"
+							confirm="Are you sure you want to process replenishment for this entry?"
+							type="object" />
+						<button name="replenishment_receive"
+							attrs="{'invisible':['|','|',('custodian_id','=','create_uid'),('state','!=','release'),('invoice_state','!=','paid')]}"
+							string="Received"
+							confirm="Are you sure you want to receive replenishment for this entry?"
+							type="object" class="oe_highlight"
+							groups="account.group_account_invoice,tf_ph_cash_management.group_cash_management_manager" />
+						<field name="state" widget="statusbar" nolabel="1"
+							statusbar_visible="draft,locked,validate,release,receive" />
+					</header>
+					<sheet string="Cash Replenishment">
+						<div class="oe_button_box" name="button_box"
+							attrs="{'invisible':[('state','in',['draft','locked'])]}">
+							<button type="object" name="action_view_cm_report"
+								class="oe_stat_button" icon="fa-book"
+								string="Replenishment Report" />
+							<button class="oe_stat_button" name="action_view_cr_liq_ids" icon="fa-list"
+								type="object" attrs="{'invisible': [('cr_liq_inv_count', '=', 0)]}"
+									groups="tf_ph_cash_management.group_cash_management_accountant">
+								<field name="cr_liq_inv_count" string="CR Liquidation Invoices" widget="statinfo" />
+							</button>
+						</div>
+						<div>
+							<h1 class="mt0">
+								<label for="name" string="Draft Cash Replenishment"
+									attrs="{'invisible': [('state','not in',('draft'))]}" />
+								<field name="name" readonly="1" class="oe_inline"
+									attrs="{'invisible': [('state','in',('draft'))]}" />
+							</h1>
+							<label for="cash_management_id" />
+							<h2>
+								<field name="cash_management_id" readonly="1" />
+							</h2>
+						</div>
+						<group>
+							<group>
+								<field name="is_locked" invisible="1" />
+								<field name="custodian_id" readonly="1" />
+								<field name="journal_id" required="1" readonly="1" />
+								<field name="cash_management_state" invisible="1" />
+								<field name="currency_id" invisible="1" />
+							</group>
+							<group>
+								<field name="amount" />
+								<field name="invoice_id" readonly="1" />
+								<field name="invoice_state" invisible="1" />
+								<field name="total_expense_category" invisible="1" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Cash Count">
+								<field name="cash_count_ids" nolabel="1"
+									attrs="{'readonly':[('state','!=','locked')]}">
+									<tree string="Cash Count" editable="bottom">
+										<field name="denomination" />
+										<field name="qty" />
+										<field name="total" readonly="1" sum="Total" />
+									</tree>
+								</field>
+							</page>
+							<page string="Replenishment Lines">
+								<field name="replenishment_line_ids" nolabel="1"
+									readonly="1">
+									<tree string="Supplier Invoice" editable="bottom">
+										<field name="partner_id" groups="base.group_user"
+											readonly="1" />
+										<field name="invoice_date" readonly="1" />
+										<field name="name" readonly="1" />
+										<field name="invoice_user_id" string="Responsible" readonly="1" />
+										<field name="invoice_origin" />
+										<field name="amount_untaxed" sum="Total Amount"
+											readonly="1" />
+										<field name="state" readonly="1" />
+									</tree>
+								</field>
+							</page>
+							<page string="Expense Category" invisible="1">
+								<field name="expense_category_line_ids" nolabel="1"
+									attrs="{'readonly':[('state','!=','draft')]}">
+									<tree string="Expense Category" create="false"
+										delete="false">
+										<field name="expense_category_id" />
+										<field name="amount" />
+									</tree>
+								</field>
+							</page>
+							<page string="Replenished Transactions">
+								<field name="cash_transaction_ids" nolabel="1">
+									<tree string="Replenished CR Liquidation" create="false"
+										delete="false" editable="top">
+										<field name="transac_readonly" invisible="1" />
+										<field name="or_no" readonly="1" />
+										<field name="cash_request_id" readonly="1" />
+										<field name="expense_category_id" required="1"
+											options="{'no_open': True}"
+											attrs="{'readonly': [('transac_readonly','=',True)]}" />
+										<field name="description" readonly="1" />
+										<field name="date" readonly="1" />
+										<field name="amount" sum="Total Amount" readonly="1" />
+										<field name="tax_id"
+											domain="[('price_include','=',True),('type_tax_use','=','purchase')]"
+											attrs="{'readonly': [('transac_readonly','=',True)]}" />
+										<field name="partner_id"
+											context="{'default_supplier':True,'default_customer':False}"
+											options="{'no_open': True}"
+											domain="[('is_company', '=', True), ('supplier_rank', '>', 0)]"
+											attrs="{'readonly': [('transac_readonly','=',True)]}" />
+										<field name="analytic_account_id"
+											attrs="{'readonly': [('transac_readonly','=',True)]}"
+											groups="analytic.group_analytic_accounting" />
+										<field name="analytic_tag_ids"
+											groups="analytic.group_analytic_tags"
+											attrs="{'readonly': [('transac_readonly','=',True)]}"
+											widget="many2many_tags" />
+										<field name="cash_replenishment_id" readonly="1" />
+										<field name="state" readonly="1" />
+									</tree>
+								</field>
+							</page>
+							<page string="Unreplenished Transactions">
+								<field name="unreplenished_cash_transaction_ids"
+									nolabel="1" readonly="1">
+									<tree string="Unreplenished CR Liquidation" create="false"
+										edit="false" delete="false">
+										<field name="or_no" />
+										<field name="cash_request_id" />
+										<field name="expense_category_id" />
+										<field name="description" />
+										<field name="date" />
+										<field name="amount" sum="Total Amount" />
+										<field name="tax_id" />
+										<field name="partner_id" />
+										<field name="analytic_account_id"
+											groups="analytic.group_analytic_accounting" />
+										<field name="analytic_tag_ids"
+											groups="analytic.group_analytic_tags" widget="many2many_tags" />
+										<field name="cash_replenishment_id" />
+										<field name="state" />
+									</tree>
+								</field>
+							</page>
+							<page string="Unliquidated Cash Requisitions">
+								<field name="unliquidated_cash_request_ids" nolabel="1"
+									readonly="1">
+									<tree string="CR Liquidation" create="false" edit="false"
+										delete="false">
+										<field name="name" />
+										<field name="issued_to" />
+										<field name="cash_management_id" />
+										<field name="date" />
+										<field name="voucher_no" />
+										<field name="description" />
+										<field name="for_return" sum="Total" />
+									</tree>
+								</field>
+							</page>
+							<page string="For Reimbursement">
+								<field name="reimbursement_cash_request_ids" nolabel="1"
+									readonly="1">
+									<tree string="For Reimbursement" create="false"
+										edit="false" delete="false">
+										<field name="name" />
+										<field name="issued_to" />
+										<field name="cash_management_id" />
+										<field name="date" />
+										<field name="voucher_no" />
+										<field name="description" />
+										<field name="for_reimbursement"
+											string="For Reimbursement" sum="Total" />
+									</tree>
+								</field>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="cash_replenishment_action"
+			model="ir.actions.act_window">
+			<field name="name">Replenishments</field>
+			<field name="res_model">cash.replenishment</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create new replenishment.
+				</p>
+			</field>
+		</record>
+
+		<record id="cash_replenishment_action_view1"
+			model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="cash_replenishment_tree" />
+			<field name="act_window_id" ref="cash_replenishment_action" />
+		</record>
+
+		<record id="cash_replenishment_action_view2"
+			model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="cash_replenishment_form" />
+			<field name="act_window_id" ref="cash_replenishment_action" />
+		</record>
+
+		<menuitem name="Replenishments" sequence="4"
+			id="menu_cash_replenishment" action="cash_replenishment_action"
+			parent="ph_cash_management_main_menu"
+			groups="account.group_account_user,tf_ph_cash_management.group_cash_management_manager" />
+
+		<!-- Journal Entries -->
+		<record id="cm_view_move_form" model="ir.ui.view">
+			<field name="name">cm.view.move.form</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='ref']" position="after">
+					<field name="cash_management_id" readonly="1"
+						attrs="{'invisible':[('cash_management_id','=',False)]}" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="tf_account_move_tree_readonly" model="ir.ui.view">
+            <field name="name">tf.account.move.tree.readonly</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_tree"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+	</data>
+</odoo>

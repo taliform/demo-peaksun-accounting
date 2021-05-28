@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		
+		<!-- Invoices -->
+    	<record id="invoice_form_pdc_inherit" model="ir.ui.view">
+            <field name="name">invoice.form.pdc.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//page[@name='other_info']" position="before">
+            		<page string="PDC Reference" name="pdc"
+						  attrs="{'invisible': ['|',('pdc_line_ids','=',[]),('type','=','entry')]}">
+            			<field name="pdc_line_ids" readonly="1">
+            				<tree>
+	            				<field name="pdc_id" string="Post Dated Check"/>
+	            				<field name="check_no"/>
+	            				<field name="journal_id"/>
+	            				<field name="allocated_amt" string="Amount" sum="Total Amount"/>
+	            				<field name="check_date"/>
+	            				<field name="pdc_state" string="Status"/>
+	            				<field name="currency_id" invisible="1"/>
+	            			</tree>
+            			</field>
+            		</page>
+            	</xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Modify domains of existing menus -->
+        <record id="account.action_move_out_invoice_type" model="ir.actions.act_window">
+			<field name="domain">
+                [('type','=','out_invoice'),('cash_management_id','=', False),('cash_advance_id','=', False),('is_customer_advance','=',False)]
+            </field>
+		</record>
+
+        <record id="account.action_move_out_refund_type" model="ir.actions.act_window">
+			<field name="domain">
+                [('type','=','out_refund'),('cash_management_id','=', False),('cash_advance_id','=', False),('is_customer_advance','=',False)]
+            </field>
+		</record>
+
+        <record id="account.action_move_in_invoice_type" model="ir.actions.act_window">
+			<field name="domain">
+                [('type','=','in_invoice'),('cash_management_id','=', False),('cash_advance_id','=', False),('is_downpayment','=',False)]
+            </field>
+		</record>
+
+        <record id="account.action_move_in_refund_type" model="ir.actions.act_window">
+			<field name="domain">
+                [('type','=','in_refund'),('cash_management_id','=', False),('cash_advance_id','=', False),('is_downpayment','=',False)]
+            </field>
+		</record>
+
+        <!-- Inherit Account Move Form -->
+        <record id="tf_account_move_form_inherit_dp" model="ir.ui.view">
+			<field name="name">tf.account.move.form.inherit.dp</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form"/>
+			<field name="arch" type="xml">
+                <xpath expr="//field[@name='id']" position="after">
+                    <field name="is_customer_advance" invisible="1"/>
+                    <field name="is_downpayment" invisible="1"/>
+                    <field name="downpayment_ids" invisible="1"/>
+				</xpath>
+                <!-- Hide Type if Down Payment or Customer Advance -->
+                <xpath expr="//span/field[@name='type']" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|','|','|',('type','=','entry'),('state','=','draft'),('is_customer_advance','=',True),('is_downpayment','=',True)]}
+                    </attribute>
+				</xpath>
+                <!-- Customer Advance Label -->
+                <xpath expr="//h1" position="before">
+                    <span class="o_form_label" attrs="{'invisible':[('is_customer_advance','=',False)]}">Customer Advance</span>
+                    <span class="o_form_label" attrs="{'invisible':[('is_downpayment','=',False)]}">Vendor Down Payment</span>
+                </xpath>
+                <!-- Draft Invoice -->
+                <xpath expr="//h1/span[1]" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|','|','|',('type', '!=', 'out_invoice'),('state', '!=', 'draft'),('name', '!=', '/'),('is_customer_advance','=',True)]}
+                    </attribute>
+				</xpath>
+                <!-- Draft Credit Note -->
+                <xpath expr="//h1/span[2]" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|','|','|',('type', '!=', 'out_refund'),('state', '!=', 'draft'),('name', '!=', '/'),('is_customer_advance','=',True)]}
+                    </attribute>
+				</xpath>
+                <!-- Draft Bill -->
+                <xpath expr="//h1/span[3]" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|','|','|',('type', '!=', 'in_invoice'), ('state', '!=', 'draft'), ('name', '!=', '/'),('is_downpayment','=',True)]}
+                    </attribute>
+				</xpath>
+                <!-- Draft Refund -->
+                <xpath expr="//h1/span[4]" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|','|','|',('type', '!=', 'in_refund'), ('state', '!=', 'draft'), ('name', '!=', '/'),('is_downpayment','=',True)]}
+                    </attribute>
+				</xpath>
+                <!-- Draft Customer Advance -->
+                <xpath expr="//h1" position="inside">
+                    <span attrs="{'invisible': ['|','|',('is_customer_advance','=',False),('state','!=','draft'),('name','!=','/')]}">Draft Customer Advance</span>
+				</xpath>
+                <!-- Draft Vendor Down Payment -->
+                <xpath expr="//h1" position="inside">
+                    <span attrs="{'invisible': ['|','|',('is_downpayment','=',False),('state','!=','draft'),('name','!=','/')]}">Draft Vendor Down Payment</span>
+				</xpath>
+                <!-- Down Payment Summaries -->
+                <xpath expr="//field[@name='amount_total']" position="replace">
+                    <field name="amount_total" class="oe_subtotal_footer_separator"
+                           attrs="{'invisible':['|',('is_customer_advance','=',True),('is_downpayment','=',True)]}"/>
+                    <field name="total_downpayment" class="oe_subtotal_footer_separator"
+                           attrs="{'invisible':[('is_customer_advance','=',False),('is_downpayment','=',False)]}"/>
+				</xpath>
+                <xpath expr="//field[@name='amount_residual']" position="replace">
+                    <field name="amount_residual" class="oe_subtotal_footer_separator"
+                           attrs="{'invisible': ['|','|',('state','=','draft'),('is_customer_advance','=',True),('is_downpayment','=',True)]}"/>
+                    <field name="remaining_downpayment" class="oe_subtotal_footer_separator"
+                           attrs="{'invisible':['|',('state','=','draft'),'&amp;',('is_customer_advance','=',False),('is_downpayment','=',False)]}"/>
+				</xpath>
+                <!--Payment Journal -->
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <span attrs="{'invisible': ['|','|',('is_downpayment','=',False),('state','!=','draft'),('name','!=','/')]}">Draft Vendor Down Payment</span>
+				</xpath>
+                <!-- Release Advances Downpayments Button -->
+                <xpath expr="//button[@name='action_post']" position="before">
+                    <button name="action_release_dp" string="Release Advances" class="oe_highlight" type="object" groups="account.group_account_invoice"
+                            attrs="{'invisible': ['|','|',('invoice_payment_state', '!=', 'paid'),('is_customer_advance','=',False),('downpayment_ids','!=',[])]}"/>
+                    <button name="action_release_dp" string="Release Down Payment" class="oe_highlight" type="object" groups="account.group_account_invoice"
+                            attrs="{'invisible': ['|','|',('invoice_payment_state', '!=', 'paid'),('is_downpayment','=',False),('downpayment_ids','!=',[])]}"/>
+                </xpath>
+
+			</field>
+		</record>
+
+        <!-- Customer Advances -->
+        <record id="tf_customer_advance_action" model="ir.actions.act_window">
+            <field name="name">Customer Advances</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="account.view_invoice_tree"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="domain">[('is_customer_advance', '=', True)]</field>
+            <field name="context">{'default_type': 'out_invoice', 'default_is_customer_advance': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a customer advance record that may be reconciled with customer invoices.
+              </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_action_customer_advance"
+                action="tf_customer_advance_action"
+                parent="account.menu_finance_receivables"
+                sequence="1"/>
+
+        <!-- Supplier Down Payments -->
+        <record id="action_move_in_invoice_dp_type" model="ir.actions.act_window">
+            <field name="name">Down Payments</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="account.view_invoice_tree"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="domain">[('is_downpayment','=',True)]</field>
+            <field name="context">{'default_type': 'in_invoice', 'default_is_downpayment':True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a vendor down payment
+              </p>
+            </field>
+        </record>
+
+		<menuitem
+            id="menu_action_move_in_invoice_dp_type"
+            action="action_move_in_invoice_dp_type"
+            parent="account.menu_finance_payables"
+            sequence="2"/>
+
+    </data>
+</odoo>

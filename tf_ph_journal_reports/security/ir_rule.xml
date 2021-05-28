@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+
+		<record id="disbursement_journal_comp_rule" model="ir.rule">
+	        <field name="name">Disbursement Journal Summary</field>
+	        <field name="model_id" ref="model_account_disbursement_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="general_journal_comp_rule" model="ir.rule">
+	        <field name="name">General Journal Summary</field>
+	        <field name="model_id" ref="model_account_general_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="journal_comp_rule" model="ir.rule">
+	        <field name="name">Journal Summary</field>
+	        <field name="model_id" ref="model_account_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="partner_journal_comp_rule" model="ir.rule">
+	        <field name="name">Partner Journal Summary</field>
+	        <field name="model_id" ref="model_account_partner_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="purchase_journal_comp_rule" model="ir.rule">
+	        <field name="name">Purchase Journal Summary</field>
+	        <field name="model_id" ref="model_account_purchase_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="sales_journal_comp_rule" model="ir.rule">
+	        <field name="name">Sales Journal Summary</field>
+	        <field name="model_id" ref="model_account_sales_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="receipt_journal_comp_rule" model="ir.rule">
+	        <field name="name">Receipt Journal Summary</field>
+	        <field name="model_id" ref="model_account_receipt_journal_summary"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+
+	</data>
+</odoo>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+	
+		<!-- Record Rules -->
+		
+	    <record id="group_ca_manager_rule" model="ir.rule">
+	        <field name="name">Cash Advance Manager</field>
+	        <field name="model_id" ref="model_cash_advance"/>
+	        <field name="domain_force">[(1,'=',1),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('group_cash_advance_manager'))]"/>
+	    </record>
+	    <record id="group_ca_user_rule" model="ir.rule">
+	        <field name="name">Cash Advance User</field>
+	        <field name="model_id" ref="model_cash_advance"/>
+	        <field name="domain_force">[('issued_to','=',user.id),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('group_cash_advance_user'))]"/>
+	    </record>
+	    <record id="group_ca_account_rule" model="ir.rule">
+	        <field name="name">Cash Advance Accountant</field>
+	        <field name="model_id" ref="model_cash_advance"/>
+	        <field name="domain_force">[(1,'=',1),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('group_cash_advance_accountant'))]"/>
+	    </record>
+		<record id="group_ca_account_rule2" model="ir.rule">
+	        <field name="name">CA Accounting - Account</field>
+	        <field name="model_id" ref="model_cash_advance"/>
+	        <field name="domain_force">[(1,'=',1),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+	    </record>
+
+	    <record id="group_ca_transaction_manager_rule" model="ir.rule">
+	        <field name="name">Cash Transaction Manager</field>
+	        <field name="model_id" ref="model_cash_advance_transaction"/>
+	        <field name="domain_force">[(1,'=',1),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('group_cash_advance_manager'))]"/>
+	    </record>
+	    <record id="group_ca_transaction_user_rule" model="ir.rule">
+	        <field name="name">CA Transaction User</field>
+	        <field name="model_id" ref="model_cash_advance_transaction"/>
+	        <field name="domain_force">[('cash_advance_id.issued_to','=',user.id),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('group_cash_advance_user'))]"/>
+	    </record>
+	    <record id="group_ca_transaction_account_rule" model="ir.rule">
+	        <field name="name">Cash Transaction Accountant</field>
+	        <field name="model_id" ref="model_cash_advance_transaction"/>
+	        <field name="domain_force">[(1,'=',1),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('group_cash_advance_accountant'))]"/>
+	    </record>
+	    <record id="group_ca_transaction_account_rule2" model="ir.rule">
+	        <field name="name">CAT Accounting - Account</field>
+	        <field name="model_id" ref="model_cash_advance_transaction"/>
+	        <field name="domain_force">[(1,'=',1),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+	    </record>
+	
+	</data>
+</odoo>

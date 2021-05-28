@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="ss_cash_advance_config_settings" model="ir.ui.view">
+	        <field name="name">view.cash.advance.configuration</field>
+	        <field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="account.res_config_settings_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@data-key='account']">
+					<h2>Cash Advance</h2>
+                    <div class="row mt16 o_settings_container">
+                    	<div class="col-12 col-lg-6 o_setting_box" id="ca_journal">
+                            <div class="o_setting_right_pane">
+                                <label for="ca_req_journal_id"/>
+                                <div class="text-muted">
+                                    Default Journal of your Cash Advance
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="ca_req_journal_id" nolabel="1" domain="[('type','=','purchase'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="ca_liq_journal">
+                            <div class="o_setting_right_pane">
+                                <label for="ca_journal_id"/>
+                                <div class="text-muted">
+                                    Default Journal of your Cash Advance Liquidation
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="ca_journal_id" nolabel="1" domain="[('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="ca_liq_inv_journal">
+                            <div class="o_setting_right_pane">
+                                <label for="ca_inv_journal_id"/>
+                                <div class="text-muted">
+                                    Default Journal for Cash Advance Liquidation Invoices
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="ca_inv_journal_id" nolabel="1"
+                                               domain="[('type', '=', 'purchase'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="ca_return_journal">
+                            <div class="o_setting_right_pane">
+                                <label for="ca_return_journal_id"/>
+                                <div class="text-muted">
+                                    Default Journal for Cash Advance Returns
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="ca_return_journal_id" nolabel="1"
+                                               domain="[('type', '=', 'sale'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="ca_reimbursements_journal">
+                            <div class="o_setting_right_pane">
+                                <label for="ca_reimburse_journal_id"/>
+                                <div class="text-muted">
+                                    Default Journal for Cash Advance Reimbursements
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="ca_reimburse_journal_id" nolabel="1"
+                                               domain="[('type', '=', 'purchase'),('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="dr_journal">
+                            <div class="o_setting_right_pane">
+                            	<label for="dr_journal_id"/>
+                                <div class="text-muted">
+                                    Default Journal of your Direct Reimbursement
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="dr_journal_id" nolabel="1" domain="[('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="approval_level">
+                            <div class="o_setting_right_pane">
+                                <label for="ca_multiple_approval"/>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="ca_multiple_approval" nolabel="1" domain="[('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="approver_id">
+                            <div class="o_setting_right_pane">
+                            	<label for="basic_approver_id"/>
+                                <div class="text-muted">
+                                    Default approver for the CA approval
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                    	<field name="manager_ids" invisible="1"/>
+                                        <field name="basic_approver_id" nolabel="1" domain="[('id', 'in', manager_ids),('company_id', '=', company_id)]"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-12 col-lg-6 o_setting_box" id="approver_id">
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('ca_multiple_approval','!=','two')]}">
+                            	<label for="second_approver_id"/>
+                                <div class="text-muted">
+                                    Second level approver for the CA approval
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="second_approver_id" nolabel="1" domain="[('id', 'in', manager_ids),('company_id', '=', company_id)]"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</xpath>
+			</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tf_account_move_form_trial_balance_inherit" model="ir.ui.view">
+			<field name="name">account.move.form.trial.balance.inherit</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_invoice_register_payment']" position="attributes">
+					<attribute name="context">{'is_wizard':True}</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Register Payment wizard (form view) -->
+		<record id="view_account_payment_invoice_form_inherit" model="ir.ui.view">
+			<field name="name">view.account.payment.invoice.form.inherit</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="account.view_account_payment_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='post']" position="attributes">
+					<attribute name="attrs">{'invisible':['|',('state','!=','draft'),'&amp;',('trial_approved','=',False),('with_trial_balance','=',True)]}</attribute>
+					<attribute name="states"></attribute>
+				</xpath>
+
+				<xpath expr="//div[@name='button_box']" position="before">
+					<div name="trial_balance_note" role="alert"
+						class="alert alert-danger" style="margin-top: 10px;"
+						groups="account.group_account_user,account.group_account_manager"
+						attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('is_billing_user','=',True),'|',('trial_approved','=',True),'|',('state','!=','draft'),('is_wizard','=',True)]}">
+						<p>
+							<i class="fa fa-exclamation-triangle"/>
+							<b> Warning:</b> A trial balance exists for the invoice date. Please click <b>Approve</b> to allow posting of the payment.
+							<button string="Approve" type="object" name="trial_approve"
+							groups="account.group_account_user,account.group_account_manager" class="oe_highlight"
+							attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('trial_approved','=',True),('state','!=','draft')]}" />
+						</p>
+					</div>
+				</xpath>
+
+				<xpath expr="//group[1]" position="before">
+					<div name="trial_balance_cancel_note" role="alert"
+						class="alert alert-danger" style="margin-top: 10px;"
+						groups="account.group_account_user,account.group_account_manager"
+						attrs="{'invisible':['|',('cancel_trial_requested','=',False),('state','=','cancelled')]}">
+						<p>
+							<i class="fa fa-exclamation-triangle"/>
+							<b> Warning:</b> Payment cancellation requested with reversal date <b>(<field name="cancel_date" readonly="1"/>)</b> which is covered by a trial balance. Please click <b>Approve</b> to proceed with the payment cancellation.
+							<b> Cancel Reason: </b> <field name="cancel_reason" readonly="1"/>
+							<button string="Approve" type="object" name="trial_cancel"
+							groups="account.group_account_user,account.group_account_manager" class="oe_highlight" />
+						</p>
+					</div>
+				</xpath>
+
+				<xpath expr="//field[@name='id']" position="before">
+					<div name="trial_balance_wizard_note" role="alert"
+						class="alert alert-danger" style="margin-top: 10px;"
+						groups="account.group_account_invoice"
+						attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('trial_approved','=',True),('is_wizard','=',False)]}">
+						<p>
+							<i class="fa fa-exclamation-triangle"/>
+							<b> Warning:</b>A trial balance exists for this payment. Please process this payment in the Payments menu to acquire approval.
+						</p>
+					</div>
+				</xpath>
+
+				<xpath expr="//field[@name='communication']" position="after">
+					<field name="trial_approved" invisible="1" />
+					<field name="with_trial_balance" invisible="1" />
+					<field name="is_billing_user" invisible="1" />
+					<field name="is_wizard" invisible="1" />
+					<field name="cancel_trial_requested" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="tf_account_payment_cancel_trial_balance_view" model="ir.ui.view">
+			<field name="name">account.payment.cancel.trial.balance.view</field>
+			<field name="model">account.payment.cancel</field>
+			<field name="inherit_id" ref="tf_ph_payment.view_account_payment_cancel" />
+			<field name="arch" type="xml">
+				<xpath expr="//group[1]" position="before">
+					<div name="trial_balance_note" role="alert"
+						class="alert alert-danger" style="margin-top: 10px;"
+						attrs="{'invisible':[('with_trial_balance','=',False)]}">
+						<p>
+							<i class="fa fa-exclamation-triangle"/>
+							<b> Warning:</b> A trial balance exists for the chosen date. An approval will be needed to complete the payment's cancellation
+						</p>
+					</div>
+				</xpath>
+				<xpath expr="//field[@name='cancel_reason']" position="after">
+					<field name="with_trial_balance" invisible="1"/>
+				</xpath>
+				<xpath expr="//button[@name='cancel_payment']" position="attributes">
+					<attribute name="attrs">{'invisible':[('with_trial_balance','=',True)]}</attribute>
+				</xpath>
+				<xpath expr="//button[@name='cancel_payment']" position="after">
+					<button string="Request Cancellation" name="action_request_cancel" type="object" class="btn-primary" attrs="{'invisible':[('with_trial_balance','=',False)]}"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="account_payment_form_tb_inherit_cancel_payment" model="ir.ui.view">
+			<field name="name">account.payment.form.cancel.trial.balance.view</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="tf_ph_payment.account_payment_form_inherit_cancel_payment" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='%(tf_ph_payment.action_view_account_payment_cancel)d']" position="attributes">
+					<attribute name="attrs">{'invisible':['|',('state','!=','posted'),('cancel_trial_requested','=',True)]}</attribute>
+					<attribute name="states"></attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="tf_account_payment_form_wh_trial_balance_inherit" model="ir.ui.view">
+			<field name="name">account.move.form.wh.trial.balance.inherit</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="tf_ph_payment.view_account_payment_invoice_form_withholding" />
+			<field name="arch" type="xml">
+				<xpath expr="//footer" position="attributes">
+					<attribute name="attrs">{'invisible':[('with_trial_balance','=',True)]}</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

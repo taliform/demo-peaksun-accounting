@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Inherit Invoice Supplier Form -->
+		<record id="account_view_move_form_trial_balance_inherit" model="ir.ui.view">
+			<field name="name">account.view.move.form.trial.balance.inherit</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//sheet/group[1]" position="before">
+					<div name="trial_balance_note" role="alert"
+						class="alert alert-danger" style="margin-top: 10px;"
+						groups="account.group_account_invoice,account.group_account_user,account.group_account_manager"
+						attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('trial_approved','=',True),('state','!=','draft')]}">
+						<p>
+							<i class="fa fa-exclamation-triangle"/>
+							<b> Warning:</b> A trial balance exists for the invoice date. Please click <b>Approve</b> to allow posting of this invoice.
+							<button string="Approve" type="object" name="trial_approve"
+							groups="account.group_account_user,account.group_account_manager" class="oe_highlight"
+							attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('trial_approved','=',True),('state','!=','draft')]}" />
+						</p>
+					</div>
+				</xpath>
+
+				<xpath expr="//field[@name='restrict_mode_hash_table']"
+					position="after">
+					<field name="trial_approved" invisible="1" />
+					<field name="with_trial_balance" invisible="1" />
+				</xpath>
+
+				<xpath expr="//button[@name='action_post']" position="attributes">
+					<attribute name="attrs">{'invisible':['|',('state','!=','draft'),'&amp;',('trial_approved','=',False),('with_trial_balance','=',True)]}</attribute>
+				</xpath>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

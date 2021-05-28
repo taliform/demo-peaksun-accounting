@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Batch Internal Transfer -->
+        <record id="tf_batch_in_transfer_view_search" model="ir.ui.view">
+            <field name="name">tf.batch.in.transfer.view.search</field>
+            <field name="model">tf.account.batch.internal.transfer</field>
+            <field name="arch" type="xml">
+                <search string="Search Batch Internal Transfers">
+                    <field name="name" string="Reference"
+                           filter_domain="['|','|',('name','ilike',self),('origin_journal_id.name','ilike',self),('destination_journal_id.name','ilike',self)]"/>
+                    <field name="origin_journal_id" operator="child_of"/>
+                    <field name="destination_journal_id" operator="child_of"/>
+                    <field name="confirm_uid" operator="child_of"/>
+                    <field name="generate_uid" operator="child_of"/>
+                    <field name="validate_uid" operator="child_of"/>
+                    <field name="origin_payment_ids" operator="child_of" string="Payment Origin"/>
+                    <field name="generated_payment_ids" operator="child_of" string="Generated Payment"/>
+                    <filter name="my_transfers" string="My Transfers"
+                            domain="['|','|','|',('create_uid', '=', uid),('confirm_uid', '=', uid),('generate_uid', '=', uid),('validate_uid', '=', uid)]"/>
+                    <filter name="open" string="Open" domain="[('state', 'not in', ['cancel','validate'])]"/>
+                    <separator/>
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="confirm" string="Confirmed" domain="[('state', '=', 'confirm')]"/>
+                    <filter name="generate" string="Generated" domain="[('state', '=', 'approval')]"/>
+                    <filter name="validate" string="Validated" domain="[('state', '=', 'validate')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <separator/>
+                    <filter name="create_date" string="Creation Date" date="create_date"/>
+                    <filter name="confirm_date" string="Confirmation Date" date="confirm_date"/>
+                    <filter name="generate_date" string="Generation Date" date="generate_date"/>
+                    <filter name="validate_date" string="Validation Date" date="validate_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="group_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Origin Journal" name="origin_journal_id" domain="[]" context="{'group_by': 'origin_journal_id'}"/>
+                        <filter string="Destination Journal" name="destination_journal_id" domain="[]" context="{'group_by': 'destination_journal_id'}"/>
+                        <filter string="Creation Date" name="group_create_date" domain="[]" context="{'group_by': 'create_date'}"/>
+                        <filter string="Confirmation Date" name="group_confirm_date" domain="[]" context="{'group_by': 'confirm_date'}"/>
+                        <filter string="Generation Date" name="group_generate_date" domain="[]" context="{'group_by': 'generate_date'}"/>
+                        <filter string="Validation Date" name="group_validate_date" domain="[]" context="{'group_by': 'validate_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="tf_batch_in_transfer_view_tree" model="ir.ui.view">
+            <field name="name">tf.batch.in.transfer.view.tree</field>
+            <field name="model">tf.account.batch.internal.transfer</field>
+            <field name="arch" type="xml">
+                <tree string="Batch Internal Transfers"
+                      decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('confirm','generate')">
+                    <field name="name"/>
+                    <field name="origin_journal_id"/>
+                    <field name="destination_journal_id"/>
+                    <field name="create_date"/>
+                    <field name="state"/>
+                    <field name="confirm_date" optional="hide"/>
+                    <field name="generate_date" optional="hide"/>
+                    <field name="validate_date" optional="hide"/>
+                    <field name="create_uid" optional="hide"/>
+                    <field name="confirm_uid" optional="hide"/>
+                    <field name="generate_uid" optional="hide"/>
+                    <field name="validate_uid" optional="hide"/>
+                    <field name="message_unread" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tf_batch_in_transfer_view_form" model="ir.ui.view">
+            <field name="name">tf.batch.in.transfer.view.form</field>
+            <field name="model">tf.account.batch.internal.transfer</field>
+            <field name="arch" type="xml">
+                <form string="Batch Internal Transfer">
+                    <header>
+                        <button name="action_confirm" states="draft" string="Confirm" type="object" class="oe_highlight"
+                            confirm="Confirmation will prevent you to edit the journals and add further payments. Do you still want to proceed ?"/>
+                        <button name="action_generate" states="confirm" string="Generate" type="object" class="oe_highlight"
+                            confirm="This will generate counterpart internal transfer payments for the selected un-deposited payments. Proceed ?"/>
+                        <button name="action_draft" states="confirm" string="Return to Draft" type="object"
+                            confirm="This will return the record into 'Draft' state. Proceed ?"/>
+                        <button name="action_validate" states="generate" string="Validate" type="object" class="oe_highlight"
+                            confirm="This will post the generated counterpart payments and may not be edited any further. Proceed ?"/>
+                        <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', 'in', ['validate','cancel'])]}"
+                            confirm="This will cancel the transfer and delete all generated draft counterpart payments. Proceed ?"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,generate,validate" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_generated"
+                                    type="object" icon="fa-money" class="oe_stat_button">
+                                <field name="generated_nbr" string="Generated Payments" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <span class="o_form_label" >Batch Internal Transfer</span>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group name="left">
+                                <field name="origin_journal_id"
+                                       attrs="{'readonly':[('state','!=','draft')]}"
+                                       options="{'no_create_edit': 1}"/>
+                                <field name="destination_journal_id"
+                                       attrs="{'readonly':[('state','!=','draft')]}"
+                                       options="{'no_create_edit': 1}"/>
+                            </group>
+                            <group name="right">
+                                <field name="create_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="payments" string="Payments">
+                                <field name="origin_payment_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree decoration-danger="transfer_projected_date and (transfer_projected_date &gt;= current_date)">
+                                        <field name="name"/>
+                                        <field name="payment_date"/>
+                                        <field name="partner_id"/>
+                                        <field name="communication"/>
+                                        <field name="amount" sum="Total"/>
+                                        <field name="state"/>
+                                        <field name="transfer_projected_date"/>
+                                        <field name="transfer_projected_bank_id"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="other" string="Other Information">
+                                <group name="other_info">
+                                    <group name="left_info">
+                                        <field name="confirm_uid"/>
+                                        <field name="generate_uid"/>
+                                        <field name="validate_uid"/>
+                                    </group>
+                                    <group name="right_info">
+                                        <field name="confirm_date"/>
+                                        <field name="generate_date"/>
+                                        <field name="validate_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tf_batch_in_transfer_action" model="ir.actions.act_window">
+            <field name="name">Batch Internal Transfers</field>
+            <field name="res_model">tf.account.batch.internal.transfer</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
+            <field name="target">current</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem id="tf_batch_in_transfer_menu" name="Batch Internal Transfers"
+                  parent="account.menu_finance_entries_management"
+                  sequence="101" action="tf_batch_in_transfer_action"/>
+
+        <!-- CF Internal Transfer Projection: Pivot View -->
+        <record id="tf_cf_transfer_projections_pivot" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Internal Transfer</field>
+            <field name="model">account.payment</field>
+            <field name="priority" eval="1000"/>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml" >
+                <pivot string="Cash Flow Projection Report">
+                    <field name="transfer_projected_date" interval="day" type="col"/>
+                    <field name="transfer_projected_bank_id" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="name" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- CF Internal Transfer Projection: Tree View -->
+        <record id="tf_cf_transfer_projections_tree" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Internal Transfer</field>
+            <field name="model">account.payment</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml" >
+                <tree string="Cash Flow Projection: Internal Transfer" create="false" delete="false" editable="top"
+                      decoration-danger="transfer_projected_date and (transfer_projected_date &lt;= current_date)">
+                    <field name="name" readonly="1"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="payment_date" readonly="1"/>
+                    <field name="amount" readonly="1"/>
+                    <field name="transfer_projected_date"/>
+                    <field name="transfer_projected_bank_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- CF Internal Transfer Projection: Action -->
+        <record id="tf_cf_transfer_projections_action" model="ir.actions.act_window">
+            <field name="name">Internal Transfer Projections</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('tf_ph_cf_treasury.tf_cf_transfer_projections_tree')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('tf_ph_cf_treasury.tf_cf_transfer_projections_pivot')})]"/>
+            <field name="view_mode">tree,pivot</field>
+            <field name="target">current</field>
+            <field name="domain">[
+                ('state', 'not in',  ['draft','cancelled']),
+                ('payment_type', '!=', 'transfer'),
+                ('for_undeposited_payment','=',True),
+                ('is_transferred','=',False)
+                ]</field>
+        </record>
+
+        <!-- CF Internal Transfer Projection: Menu -->
+        <menuitem id="tf_cf_transfer_projections_menu" name="Internal Transfers" action="tf_cf_transfer_projections_action"
+                  parent="tf_ph_cf_treasury.tf_cf_projection_sub_menu" sequence="10"/>
+
+    </data>
+</odoo>

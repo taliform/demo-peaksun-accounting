@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_payment_pdc_manager,access.account.payment.pdc.manager,model_account_payment_pdc,account.group_account_manager,1,1,1,1
+access_account_payment_pdc_user,access.account.payment.pdc.user,model_account_payment_pdc,account.group_account_user,1,1,1,1
+access_account_payment_pdc_billing,access.account.payment.pdc.billing,model_account_payment_pdc,account.group_account_invoice,1,1,1,0
+access_account_payment_pdc_invoice_line_manager,access.account.payment.pdc.invoice.line.manager,model_account_payment_pdc_invoice_line,account.group_account_manager,1,1,1,1
+access_account_payment_pdc_invoice_line_user,access.account.payment.pdc.invoice.line.user,model_account_payment_pdc_invoice_line,account.group_account_user,1,1,1,0
+access_account_payment_pdc_invoice_line_biling,access.account.payment.pdc.invoice.line.billing,model_account_payment_pdc_invoice_line,account.group_account_invoice,1,1,1,0

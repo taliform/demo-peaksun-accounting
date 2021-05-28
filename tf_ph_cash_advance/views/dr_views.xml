@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		
+        <record id="cash_direct_action" model="ir.actions.act_window">
+            <field name="name">Direct Reimbursements</field>
+            <field name="res_model">cash.advance</field>
+            <field name="context">{'search_default_not_closed':1,'default_ca_type':'dr','ca_type':'dr'}</field>
+            <field name="domain">[('ca_type','=','dr')]</field>
+            <field name="search_view_id" ref="cash_advance_search"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Direct Reimbursement.
+              </p>
+            </field>
+        </record>
+
+        <record id="cash_direct_action_view1" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="cash_advance_tree"/>
+            <field name="act_window_id" ref="cash_direct_action"/>
+        </record>
+
+        <record id="cash_direct_action_view2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cash_advance_form"/>
+            <field name="act_window_id" ref="cash_direct_action"/>
+        </record>
+        
+        <menuitem name="Direct Reimbursements" sequence="20"
+        		  id="menu_cash_direct_request" 
+        		  action="cash_direct_action" 
+         		  parent="tf_ph_cash_advance.ph_cash_advance_main_menu"
+         		  groups="tf_ph_cash_advance.group_cash_advance_accountant"/>
+    
+    </data>
+</odoo>

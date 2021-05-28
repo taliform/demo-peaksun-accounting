@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+
+		<record id="ss_cash_management_config_settings"
+			model="ir.ui.view">
+			<field name="name">view.cash.management.configuration</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id"
+				ref="account.res_config_settings_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@data-key='account']">
+					<h2>Cash Management</h2>
+					<div class="row mt16 o_settings_container">
+						<div class="col-12 col-lg-6 o_setting_box"
+							id="cm_journal_id">
+							<div class="o_setting_right_pane">
+                                <label for="cm_journal_id"/>
+                                <div class="text-muted">
+                                    Default Clearing Journal of your Cash Management
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="cm_journal_id"
+											domain="[('type', 'in', ('bank', 'cash')), ('company_id', '=', company_id)]" />
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box"
+							id="cr_liq_journal_id">
+							<div class="o_setting_right_pane">
+                                <label for="cr_liq_journal_id"/>
+                                <div class="text-muted">
+                                    CR Liquidation Journal
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml4">
+                                        <field name="cr_liq_journal_id"
+											domain="[('type', '=', 'purchase'), ('company_id', '=', company_id)]" />
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+						<!-- <div class="col-12 col-lg-6 o_setting_box"
+							id="cm_cash_shortage_id">
+							<div class="o_setting_right_pane">
+								<div class="text-muted">
+									Default GL Account for Cash Shortage and Overage
+								</div>
+								<div class="content-group">
+									<div class="row mt16 ml4">
+										<label string="Cash Shortage Account"
+											for="cm_cash_shortage_id" class="col-lg-3 o_light_label" />
+										<field name="cm_cash_shortage_id"
+											domain="[('company_id', '=', company_id)]" />
+									</div>
+									<div class="row mt16 ml4">
+										<label string="Cash Overage Account"
+											for="cm_cash_overage_id" class="col-lg-3 o_light_label" />
+										<field name="cm_cash_overage_id"
+											domain="[('company_id', '=', company_id)]" />
+									</div>
+								</div>
+							</div>
+						</div> -->
+					</div>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.actions.server"
+			id="account_reports.action_journal_items">
+			<field name="name">Journal Items by tax</field>
+			<field name="model_id"
+				ref="account_reports.model_account_financial_html_report_line" />
+			<field name="state">code</field>
+			<field name="code">action = records.report_move_lines_action()</field>
+		</record>
+
+		<!-- These data were added back from v12, acting as a different Cash Flow from v13's specific Cash Flow Statement -->
+		<!-- CASH SUMMARY -->
+
+        <record id="account_financial_report_cashsummary0" model="account.financial.html.report">
+            <field name="name">Direct Cash Flow Report</field>
+            <field name="unfold_all_filter" eval="True"/>
+            <field name="show_journal_filter" eval="True"/>
+            <field name='parent_id' ref='account.account_reports_legal_statements_menu'/>
+        </record>
+        <record id="account_financial_report_cashsummary_net_increase0" model="account.financial.html.report.line">
+            <field name="name">Net increase in cash and cash equivalents</field>
+            <field name="sequence" eval="1"/>
+            <field name="formulas">balance = OP.balance + FI.balance + IN.balance</field>
+			<field name="level" eval="0" />
+            <field name="financial_report_id" ref="account_financial_report_cashsummary0"/>
+            <field name="special_date_changer">strict_range</field>
+        </record>
+
+        <record id="account_financial_report_cashsummary_operating0" model="account.financial.html.report.line">
+            <field name="name">Operating Activities</field>
+            <field name="code">OP</field>
+            <field name="sequence" eval="1"/>
+            <field name="parent_id" ref='account_financial_report_cashsummary_net_increase0'/>
+            <field name="formulas" eval="False" />
+            <field name="level" eval="2" />
+            <field name="special_date_changer">strict_range</field>
+			<field name="cf_type" eval="1" />
+        </record>
+        <record id="account_financial_report_cashsummary_prepayments_received0" model="account.financial.html.report.line">
+            <field name="name">Advance Payments received from customers</field>
+            <field name="code">PRECUS</field>
+            <field name="sequence" eval="1"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('account_id.internal_type', '=', 'receivable')]" />
+            <field name="formulas">balance = -sum.amount_residual</field>
+            <field name="level" eval="3" />
+            <field name="groupby">partner_id</field>
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_cash_received0" model="account.financial.html.report.line">
+            <field name="name">Cash received from operating activities</field>
+            <field name="code">CACUS</field>
+            <field name="sequence" eval="2"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('credit', '>', 0), ('account_id.tag_ids', '=', ref('account.account_tag_operating'))]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="level" eval="3" />
+            <field name="groupby">account_id</field>
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_cash_paid0" model="account.financial.html.report.line">
+            <field name="name">Advance payments made to suppliers</field>
+            <field name="code">PRESUP</field>
+            <field name="sequence" eval="3"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('account_id.internal_type', '=', 'payable')]" />
+            <field name="formulas">balance = -sum.amount_residual</field>
+            <field name="level" eval="3" />
+            <field name="groupby">partner_id</field>
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_cash_spent0" model="account.financial.html.report.line">
+            <field name="name">Cash paid for operating activities</field>
+            <field name="code">LCP</field>
+            <field name="sequence" eval="4"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('debit', '>', 0), ('account_id.tag_ids', '=', ref('account.account_tag_operating'))]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="level" eval="3" />
+            <field name="groupby">account_id</field>
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_investing0" model="account.financial.html.report.line">
+            <field name="name">Investing Activities</field>
+            <field name="code">IN</field>
+            <field name="sequence" eval="2"/>
+            <field name="parent_id" ref='account_financial_report_cashsummary_net_increase0'/>
+            <field name="level" eval="2" />
+            <field name="formulas" eval="False" />
+            <field name="special_date_changer">strict_range</field>
+			<field name="cf_type" eval="1" />
+        </record>
+        <record id="account_financial_report_cashsummary_investing_in0" model="account.financial.html.report.line">
+            <field name="name">Cash in</field>
+            <field name="code">INV_IN</field>
+            <field name="sequence" eval="1"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('credit', '>', 0),('account_id.tag_ids', '=', ref('account.account_tag_investing'))]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="level" eval="3" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_investing_out0" model="account.financial.html.report.line">
+            <field name="name">Cash out</field>
+            <field name="code">INV_OUT</field>
+            <field name="sequence" eval="2"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('debit', '>', 0), ('account_id.tag_ids', '=', ref('account.account_tag_investing'))]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="level" eval="3" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_financing0" model="account.financial.html.report.line">
+            <field name="name">Financing Activities</field>
+            <field name="code">FI</field>
+            <field name="sequence" eval="3"/>
+            <field name="parent_id" ref='account_financial_report_cashsummary_net_increase0'/>
+            <field name="level" eval="2" />
+            <field name="formulas" eval="False" />
+            <field name="special_date_changer">strict_range</field>
+			<field name="cf_type" eval="1"/>
+        </record>
+        <record id="account_financial_report_cashsummary_financing_in0" model="account.financial.html.report.line">
+            <field name="name">Cash in</field>
+            <field name="code">FI_IN</field>
+            <field name="sequence" eval="1"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('credit', '>', 0), ('account_id.tag_ids', '=', ref('account.account_tag_financing'))]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="level" eval="3" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_financing_out0" model="account.financial.html.report.line">
+            <field name="name">Cash out</field>
+            <field name="code">FI_OUT</field>
+            <field name="sequence" eval="2"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('debit', '>', 0), ('account_id.tag_ids', '=', ref('account.account_tag_financing'))]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="level" eval="3" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_unclassified0" model="account.financial.html.report.line">
+            <field name="name">Cash flows from unclassified activities</field>
+            <field name="code">UNC</field>
+            <field name="sequence" eval="4"/>
+            <field name="parent_id" eval="False"/>
+            <field name="level" eval="2" />
+            <field name="formulas">balance = UNC_IN.balance + UNC_OUT.balance</field>
+            <field name="hide_if_zero" eval="True" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_unclassified_in0" model="account.financial.html.report.line">
+            <field name="name">Cash in</field>
+            <field name="code">UNC_IN</field>
+            <field name="sequence" eval="1"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('credit', '>', 0), ('account_id.internal_type', 'not in', ('receivable', 'payable')), ('account_id.tag_ids', 'not in', [ref('account.account_tag_financing'), ref('account.account_tag_investing'), ref('account.account_tag_operating')])]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="level" eval="3" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+        <record id="account_financial_report_cashsummary_unclassified_out0" model="account.financial.html.report.line">
+            <field name="name">Cash out</field>
+            <field name="code">UNC_OUT</field>
+            <field name="sequence" eval="2"/>
+            <field name="parent_id" eval="False"/>
+            <field name="domain" eval="[('debit', '>', 0), ('account_id.internal_type', 'not in', ('receivable', 'payable')), ('account_id.tag_ids', 'not in', [ref('account.account_tag_financing'), ref('account.account_tag_investing'), ref('account.account_tag_operating')])]" />
+            <field name="formulas">balance = -sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="level" eval="3" />
+            <field name="special_date_changer">strict_range</field>
+        </record>
+
+        <!-- Computation Error: this line should never be displayed and serves as a control check for developpers -->
+        <record id="account_financial_report_cashsummary_regulator0" model="account.financial.html.report.line">
+            <field name="name">Computation Error: unexplained difference</field>
+            <field name="code">REGUL</field>
+            <field name="sequence" eval="5"/>
+            <field name="parent_id" eval="False"/>
+            <field name="formulas">balance = (CASHEND.balance - CASHSTART.balance) - (OP.balance + FI.balance + IN.balance + UNC.balance)</field>
+            <field name="level" eval="1" />
+            <field name="hide_if_zero" eval="True" />
+        </record>
+
+        <record id="account_financial_report_cashsummary_opening_balance0" model="account.financial.html.report.line">
+            <field name="name">Beginning Balance</field>
+            <field name="code">CASHSTART</field>
+            <field name="sequence" eval="0"/>
+            <field name="domain" eval="[('cf_html_section_id', '!=', False)]" />
+            <field name="formulas">balance = sum.balance</field>
+            <field name="groupby">account_id</field>
+            <field name="show_domain">foldable</field>
+            <field name="special_date_changer">to_beginning_of_period</field>
+            <field name="financial_report_id" ref="account_financial_report_cashsummary0"/>
+            <field name="level" eval="0" />
+        </record>
+        <record id="account_financial_report_cashsummary_closing_balance0" model="account.financial.html.report.line">
+            <field name="name">Closing Balance</field>
+            <field name="code">CASHEND</field>
+            <field name="sequence" eval="2"/>
+            <field name="domain" eval="[('account_id.internal_type', '=', 'liquidity')]" />
+			<field name="formulas">balance = sum.balance + (FI.balance + IN.balance + OP.balance)</field>
+            <field name="groupby">account_id</field>
+            <field name="show_domain">foldable</field>
+            <field name="financial_report_id" ref="account_financial_report_cashsummary0"/>
+            <field name="level" eval="0" />
+        </record>
+
+
+
+	</data>
+</odoo>

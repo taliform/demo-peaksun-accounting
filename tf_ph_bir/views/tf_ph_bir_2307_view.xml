@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tf_ph_bir_2307_form_view" model="ir.ui.view">
+			<field name="name">tf.ph.bir.2307.form.view</field>
+			<field name="model">bir.creditable.tax.withheld</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="compute_line" type="object"
+							string="Compute Taxes" class="oe_highlight"
+							attrs="{'invisible': [('state','=','validate')]}"
+							groups="account.group_account_invoice" />
+						<button name="validate_state" type="object"
+							string="Validate" class="oe_highlight"
+							attrs="{'invisible': ['|',('state','=','validate'),('line_ids','=',[])]}"
+							confirm="Would you like to validate the record? Remember that validating this will never
+                 	        			allow you to revert the state to 'Draft' anymore." />
+						<button name="print_2307" type="object"
+							attrs="{'invisible': [('state','=','draft')]}"
+							class="oe_highlight" string="Print" />
+						<field name="state" widget="statusbar" class="oe_inline" />
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button type="object" name="action_view_entry"
+								class="oe_stat_button" icon="fa-bars" string="Journal Items"
+								groups="account.group_account_user" attrs="{'invisible': [('move_line_ids', '=', [])]}">
+								<field name='move_line_ids' invisible="1" />
+							</button>
+						</div>
+					
+						<h1>Certificate of Credible Tax Withheld At Source</h1>
+						<label for="name" />
+						<field name="name" readonly="1" />
+						<group>
+							<group>
+								<field name="period_from" required="1"
+									attrs="{'readonly': [('state','=','validate')]}" />
+								<field name="vat_only"
+									attrs="{'readonly': [('state','=','validate')]}"
+									groups="base.group_erp_manager" invisible="1" />
+							</group>
+							<group>
+								<field name="period_to" required="1"
+									attrs="{'readonly': [('state','=','validate')]}" />
+							</group>
+						</group>
+						<group>
+							<group string='Payee Information'>
+								<field name="partner_id" required="1"
+									attrs="{'readonly': [('state','=','validate')]}"
+									options="{'no_create': True, 'no_open': True}" />
+								<field name="partner_tin" readonly="1" />
+								<label for="partner_street" />
+								<div>
+									<field name="partner_street" readonly="1"
+										attrs="{'invisible': [('partner_street','=',False)]}" />
+									<field name="partner_street2" readonly="1"
+										attrs="{'invisible': [('partner_street2','=',False)]}" />
+									<div class="address_format">
+										<field name="partner_city" readonly="1"
+											attrs="{'invisible': [('partner_city','=',False)]}" />
+										<field name="partner_state" readonly="1"
+											attrs="{'invisible': [('partner_state','=',False)]}" />
+										<field name="partner_zip" readonly="1"
+											attrs="{'invisible': [('partner_zip','=',False)]}" />
+									</div>
+								</div>
+								<field name="foreign_address"
+									placeholder="Foreign Address"
+									attrs="{'readonly': [('state','=','validate')]}" />
+								<field name="foreign_zip" placeholder="ZIP"
+									style="width:30%%"
+									attrs="{'readonly': [('state','=','validate')]}" />
+							</group>
+							<group string="Payor Information">
+								<field name="company_id" readonly="1" />
+								<field name="company_tin" readonly="1" />
+								<label for="company_street" />
+								<div>
+									<field name="company_street" readonly="1"
+										attrs="{'invisible': [('company_street','=',False)]}" />
+									<field name="company_street2" readonly="1"
+										attrs="{'invisible': [('company_street2','=',False)]}" />
+									<div class="address_format">
+										<field name="company_city" readonly="1"
+											attrs="{'invisible': [('company_city','=',False)]}" />
+										<field name="company_state" readonly="1"
+											attrs="{'invisible': [('company_state','=',False)]}" />
+										<field name="company_zip" readonly="1"
+											attrs="{'invisible': [('company_zip','=',False)]}" />
+									</div>
+								</div>
+								<field name="auth_rep" required="1"
+									readonly="1"
+									options="{'no_create': True, 'no_open': True}" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Details">
+								<p>
+									<strong>Monthly Income Payments and Tax Withheld for the
+										Quarter</strong>
+								</p>
+								<field name="line_ids" nolabel="1"
+									attrs="{'readonly': [('state','=','validate')]}">
+									<tree editable="bottom">
+										<field name="withholding_tax_id" />
+										<field name="withholding_tax_desc" readonly="1" />
+										<field name="month1" readonly="1" />
+										<field name="month1_pr" readonly="1" />
+										<field name="total_1" readonly="1" />
+										<field name="month2" readonly="1" />
+										<field name="month2_pr" readonly="1" />
+										<field name="total_2" readonly="1" />
+										<field name="month3" readonly="1" />
+										<field name="month3_pr" readonly="1" />
+										<field name="total_3" readonly="1" />
+										<field name="total" />
+										<field name="tax_withheld" />
+									</tree>
+								</field>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="tf_ph_bir_2307_tree_view" model="ir.ui.view">
+			<field name="name">tf.ph,bir.2307.tree.view</field>
+			<field name="model">bir.creditable.tax.withheld</field>
+			<field name="arch" type="xml">
+				<tree string="BIR Reports Records">
+					<field name="name" />
+					<field name="company_id"/>
+					<field name="partner_id" />
+					<field name="period_from" />
+					<field name="period_to" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_tf_ph_bir_2307_view"
+			model="ir.actions.act_window">
+			<field name="name">BIR 2307</field>
+			<field name="res_model">bir.creditable.tax.withheld</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="tf_ph_bir_2307_tree_view" />
+		</record>
+
+		<menuitem id="menu_bir_2307"
+			parent="tf_ph_reports.menu_bir_reports" sequence="20"
+			name="Form 2307" action="action_tf_ph_bir_2307_view" />
+
+	</data>
+</odoo>

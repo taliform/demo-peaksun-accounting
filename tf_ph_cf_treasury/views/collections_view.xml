@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- CF Collections Generate: View -->
+        <record id="tf_cf_collections_tree" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Collections</field>
+            <field name="model">tf.cf.collection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml" >
+                <tree editable="top">
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="projected_rate" widget="percentage"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Disbursements: Action -->
+        <record id="tf_cf_collections_action" model="ir.actions.act_window">
+            <field name="name">Cash Flow Projection: Collections</field>
+            <field name="res_model">tf.cf.collection</field>
+            <field name="view_id" ref="tf_ph_cf_treasury.tf_cf_collections_tree"/>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Disbursements: Menu -->
+        <menuitem id="tf_cf_collections_menu" name="Collections" action="tf_cf_collections_action" parent="tf_cf_projection_menu" sequence="10"/>
+
+    </data>
+</odoo>

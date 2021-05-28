@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bir_monthly_ewt_return_account_user,access.bir.monthly.ewt.return.account.user,tf_ph_bir.model_bir_monthly_ewt_return,account.group_account_user,1,1,1,1
+access_bir_monthly_ewt_return_line_account_user,access.bir.monthly.ewt.return.line.account.user,tf_ph_bir.model_bir_monthly_ewt_return_line,account.group_account_user,1,1,1,1
+access_bir_monthly_ewt_return_line_printout_account_user,access.bir.monthly.ewt.return.line.printout.account.user,tf_ph_bir.model_bir_monthly_ewt_return_line_printout,account.group_account_user,1,1,1,1
+access_bir_2307_account_user,access.bir.2307.account.user,tf_ph_bir.model_bir_creditable_tax_withheld,account.group_account_user,1,1,1,1
+access_bir_2307_line_account_user,access.bir.2307.line.account.user,tf_ph_bir.model_bir_creditable_tax_withheld_line,account.group_account_user,1,1,1,1
+access_account_alphalist_map,access_account_alphalist_map,tf_ph_bir.model_account_alphalist_map,account.group_account_invoice,1,1,1,1
+access_account_alphalist_sawt,access_account_alphalist_sawt,tf_ph_bir.model_account_alphalist_sawt,account.group_account_invoice,1,1,1,1

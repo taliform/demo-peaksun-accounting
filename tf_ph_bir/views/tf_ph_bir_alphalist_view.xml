@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="line_template_alphalist_map_report"
+                  inherit_id="account_reports.line_template" primary="True">
+            <xpath
+                    expr="//div[hasclass('o_account_reports_domain_dropdown')]/*[last()]"
+                    position="before">
+                <t t-if="line['caret_options'] != 'account.tax'">
+                    <a role="menuitem" tabindex="-1" t-att-data-id="line['id']"
+                       action="open_document" class="dropdown-item">View Journal Entry
+                    </a>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="line_template_alphalist_sawt_report"
+                  inherit_id="account_reports.line_template" primary="True">
+            <xpath
+                    expr="//div[hasclass('o_account_reports_domain_dropdown')]/*[last()]"
+                    position="before">
+                <t t-if="line['caret_options'] != 'account.tax'">
+                    <a role="menuitem" tabindex="-1" t-att-data-id="line['id']"
+                       action="open_document" class="dropdown-item">View Journal Entry
+                    </a>
+                </t>
+            </xpath>
+        </template>
+
+        <!-- Menu -->
+        <menuitem id="account_alphalist_menu" name="Alphalist" parent="tf_ph_reports.menu_bir_reports"
+                  sequence="10"/>
+        <menuitem id="menu_account_alphalist_map" name="QAP" action="action_account_alphalist_map"
+                  parent="account_alphalist_menu"/>
+        <menuitem id="menu_account_alphalist_sawt" name="SAWT" action="action_account_alphalist_sawt"
+                  parent="account_alphalist_menu"/>
+
+    </data>
+</odoo>

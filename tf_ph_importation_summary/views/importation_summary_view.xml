@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<menuitem id="menu_account_importation_summary"
+			name="Importation Summary" action="action_account_importation_summary"
+			parent="tf_ph_reports.menu_bir_reports" sequence="150"
+			/>
+
+	</data>
+</odoo>

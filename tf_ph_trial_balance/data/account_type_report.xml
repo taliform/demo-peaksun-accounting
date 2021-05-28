@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<function name="write" model="ir.model.data">
+			<function name="search" model="ir.model.data">
+				<value
+					eval="[('module','=','account'),('name','in',['data_account_type_receivable',
+         													  'data_account_type_payable',
+         													  'data_account_type_liquidity',
+         													  'data_account_type_credit_card',
+         													  'data_account_type_current_assets',
+         													  'data_account_type_non_current_assets',
+         													  'data_account_type_prepayments',
+         													  'data_account_type_fixed_assets',
+         													  'data_account_type_current_liabilities',
+         													  'data_account_type_non_current_liabilities',
+         													  'data_account_type_equity',
+         													  'data_unaffected_earnings',
+         													  'data_account_type_other_income',
+         													  'data_account_type_revenue',
+         													  'data_account_type_depreciation',
+         													  'data_account_type_expenses',
+         													  'data_account_type_direct_costs'])]" />
+			</function>
+			<value eval="{'noupdate': False}" />
+		</function>
+
+		<!-- Account Type: Receivable -->
+		<record id="account.data_account_type_receivable"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Payable -->
+		<record id="account.data_account_type_payable"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Bank and Cash -->
+		<record id="account.data_account_type_liquidity"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Credit Card -->
+		<record id="account.data_account_type_credit_card"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Current Assets -->
+		<record id="account.data_account_type_current_assets"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Non-Current Assets -->
+		<record id="account.data_account_type_non_current_assets"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Prepayments -->
+		<record id="account.data_account_type_prepayments"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Fixed Assets -->
+		<record id="account.data_account_type_fixed_assets"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Current Liabilities -->
+		<record id="account.data_account_type_current_liabilities"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Non-Current Liabilities -->
+		<record id="account.data_account_type_non_current_liabilities"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Equity -->
+		<record id="account.data_account_type_equity"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Current Year Earnings -->
+		<record id="account.data_unaffected_earnings"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Current Year Earnings -->
+		<record id="account.data_unaffected_earnings"
+			model="account.account.type">
+			<field name="report_type">bs</field>
+		</record>
+
+		<!-- Account Type: Other Income -->
+		<record id="account.data_account_type_other_income"
+			model="account.account.type">
+			<field name="report_type">pl</field>
+		</record>
+
+		<!-- Account Type: Income -->
+		<record id="account.data_account_type_revenue"
+			model="account.account.type">
+			<field name="report_type">pl</field>
+		</record>
+
+		<!-- Account Type: Depreciation -->
+		<record id="account.data_account_type_depreciation"
+			model="account.account.type">
+			<field name="report_type">pl</field>
+		</record>
+
+		<!-- Account Type: Expenses -->
+		<record id="account.data_account_type_expenses"
+			model="account.account.type">
+			<field name="report_type">pl</field>
+		</record>
+
+		<!-- Account Type: Cost of Revenue -->
+		<record id="account.data_account_type_direct_costs"
+			model="account.account.type">
+			<field name="report_type">pl</field>
+		</record>
+
+		<function name="write" model="ir.model.data">
+			<function name="search" model="ir.model.data">
+				<value
+					eval="[('module','=','account'),('name','in',['data_account_type_receivable',
+         													  'data_account_type_payable',
+         													  'data_account_type_liquidity',
+         													  'data_account_type_credit_card',
+         													  'data_account_type_current_assets',
+         													  'data_account_type_non_current_assets',
+         													  'data_account_type_prepayments',
+         													  'data_account_type_fixed_assets',
+         													  'data_account_type_current_liabilities',
+         													  'data_account_type_non_current_liabilities',
+         													  'data_account_type_equity',
+         													  'data_unaffected_earnings',
+         													  'data_account_type_other_income',
+         													  'data_account_type_revenue',
+         													  'data_account_type_depreciation',
+         													  'data_account_type_expenses',
+         													  'data_account_type_direct_costs'])]" />
+			</function>
+			<value eval="{'noupdate': True}" />
+		</function>
+
+
+	</data>
+</odoo>

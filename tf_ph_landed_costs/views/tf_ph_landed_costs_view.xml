@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+       <!-- Detailed Valuation Adjustments -->
+       <record id="stock_valuation_adjustment_tree" model="ir.ui.view">
+	       <field name="name">stock.valuation.adjustment.tree</field>
+	       <field name="model">stock.valuation.adjustment.lines</field>
+	       <field name="arch" type="xml">
+		       <tree string="Detailed Valuation Adjustments" create="false">
+		       		<field name="cost_line_id" readonly="1"/>
+                    <field name="product_id" readonly="1"/>
+                    <field name="product_uom_id" readonly="1" />
+                    <field name="weight" readonly="1"/>
+                    <field name="volume" readonly="1"/>
+                    <field name="quantity" readonly="1"/>
+                    <field name="former_cost" invisible="1" />
+                    <field name="former_cost_per_unit" invisible="1" />
+                    <field name="additional_landed_cost" string="Additional Incidental Cost" readonly="1"/>
+	       			<field name="add_cost_per_unit" readonly="1" widget="monetary" />
+		       </tree>
+	       </field>
+	    </record>
+	
+	</data>
+</odoo>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <template id="report_bank_statement_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o" />
+            <div class="page">
+                <h2>
+                    <span t-if="o.state == 'open'">New</span>
+                    <span t-if="o.state == 'confirm'">Validated</span>
+                    <span t-field="o.name"/>
+                </h2>
+    
+                <div class="row mt32 mb32">
+                    <div class="col-3">
+                        <strong>Journal:</strong>
+                        <p t-field="o.journal_id.name"/>
+                    </div>
+                    <div class="col-2">
+                        <strong>Date:</strong>
+                        <p t-field="o.date"/>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-6" style="text-align: center;">
+                        <strong>Book Reconciliation</strong>
+                    </div>
+                    <div class="col-6" style="text-align: center;">
+                        <strong>Bank Reconciliation</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td>Unadjusted Balance</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_unadjusted_balance" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Additional Cash Transaction</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_cash_transactions_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Unreleased Check</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_unreleased_outstanding_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Bounced Checks-Collections</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_cancel_intransit_total"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Bounced Check-Disbursements</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_cancel_outstanding_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Book Error</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_adjustment_book_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black font-weight-bold table-active">
+                                <td>Total</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_book_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>    
+                    <div class="col-6">
+                         <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td>Unadjusted Balance</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_balance_end_real" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Deposit in Transit</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_intransit_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Outstanding Checks</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_outstanding_total"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>Bank Error</td>
+                                <td class="text-right">
+                                    <span t-field="o.summary_adjustment_bank_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black font-weight-bold table-active">
+                                <td>Total</td>
+                                <td class="text-right" rowspan="3">
+                                    <span t-field="o.summary_book_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+               
+                </div>
+
+            </div>
+        </t>
+    </template>
+    
+    <template id="report_bank_statement_document_footer">
+        <div class="footer">
+        
+        </div>
+    </template>
+            
+    <template id="report_bank_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="tf_ph_bank_recon.report_bank_statement_document"/>
+                <t t-call="tf_ph_bank_recon.report_bank_statement_document_footer" />
+            </t>
+        </t>
+    </template>
+
+</data>
+</odoo>

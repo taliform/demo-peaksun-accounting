@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="tf_ph_ca_view_form_cf_inherit" model="ir.ui.view">
+            <field name="name">tf.ph.ca.view.form.cf.inherit</field>
+            <field name="model">cash.advance</field>
+            <field name="inherit_id" ref="tf_ph_cash_advance.cash_advance_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='analytic_account_id']" position="after">
+                     <field name="is_cf_required" invisible="1"/>
+						<label for="id" string="Cash Flow" groups="tf_ph_cash_advance.group_cash_advance_accountant,tf_ph_cash_advance.group_cash_advance_manager"/>
+						<div name="cash_flow">
+							<div name="cf_html_type_id" groups="tf_ph_cash_advance.group_cash_advance_accountant,tf_ph_cash_advance.group_cash_advance_manager">
+								<label for="cf_html_type_id" />
+								<field name="cf_html_type_id" class="oe_inline"
+									   attrs="{'readonly':[('state','in',['validated','close','for_payment','rejected','cancel'])],'required': [('is_cf_required','=', True),('state','=','submit')]}" />
+							</div>
+							<div name="cf_html_section_id" groups="tf_ph_cash_advance.group_cash_advance_accountant,tf_ph_cash_advance.group_cash_advance_manager">
+								<label for="cf_html_section_id" attrs="{'invisible':[('cf_html_type_id','=',False)]}"/>
+								<field name="cf_html_section_id" class="oe_inline"
+									   attrs="{'readonly':['|',('cf_html_type_id','=',False),('state','in',['validated','close','for_payment','rejected','cancel'])],'invisible':[('cf_html_type_id','=',False)], 'required': [('is_cf_required','=', True),('state','=','submit')]}"
+									   domain="[('parent_id','=',cf_html_type_id)]" />
+							</div>
+						</div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

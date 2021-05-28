@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<!-- CM Invoice -->
+		<record id="cash_management_invoice_action" model="ir.actions.act_window">
+	       <field name="name">CM Invoices</field>
+	       <field name="res_model">account.move</field>
+	       <field name="view_mode">tree,kanban,form</field>
+	       <field eval="False" name="view_id"/>
+		   <field name="domain">['&amp;','&amp;',('type','in',('in_invoice','in_refund')),('cash_management_id','!=',
+			False),'|',('is_fund','=', True),('is_repl_released','=', True)]
+		   </field>			   
+		   <field name="context">{'cm_invoice':True,'type':'in_invoice',
+		   'default_type':'in_invoice','journal_type':'purchase',
+		   'create':False,'delete':False}</field>
+	       <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+	       <field name="help" type="html">
+	         <p class="o_view_nocontent_smiling_face">
+	           List of CM Invoices
+	         </p>
+	       </field>
+	   </record>
+		
+		<menuitem name="CM Invoices" sequence="50"
+			id="menu_cash_management_invoice"
+			action="cash_management_invoice_action"
+			parent="tf_ph_cash_management.ph_cash_management_main_menu"
+			groups="account.group_account_user,tf_ph_cash_management.group_cash_management_accountant" />
+
+		<record id="account.action_move_in_invoice_type"
+			model="ir.actions.act_window">
+			<field name="domain">[('type', '=', 'in_invoice'),('cash_management_id','=',False)]</field>
+		</record>
+
+		<record id="account.action_move_in_refund_type"
+			model="ir.actions.act_window">
+			<field name="domain">[('type', '=', 'in_refund'),('cash_management_id','=',False)]</field>
+		</record>
+
+		<!-- CR Liquidation Invoices -->		
+		<record id="ph_cm_transaction_invoice_action" model="ir.actions.act_window">
+	       <field name="name">CR Liquidation Invoices</field>
+	       <field name="res_model">account.move</field>
+	       <field name="view_mode">tree,kanban,form</field>
+	       <field eval="False" name="view_id"/>
+		   <field name="domain">[('type','in',('in_invoice','in_refund')),('cash_management_id','!=',
+				False),('is_fund','=', False),('is_repl_released','=', False)]
+		   </field>			   
+		   <field name="context">{'cm_invoice':
+				True,'type':'in_invoice','default_type':
+				'in_invoice','journal_type':'purchase',
+				'create':False,'delete':False}</field>
+	       <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+	       <field name="help" type="html">
+	         <p class="o_view_nocontent_smiling_face">
+	           List of CR Liquidation Invoices
+	         </p>
+	       </field>
+	   </record>
+
+		<menuitem name="CR Liquidation Invoices" sequence="60"
+			id="menu_ph_cm_transaction_invoice"
+			action="ph_cm_transaction_invoice_action"
+			parent="tf_ph_cash_management.ph_cash_management_main_menu"
+			groups="account.group_account_user,tf_ph_cash_management.group_cash_management_accountant" />
+
+	</data>
+</odoo>

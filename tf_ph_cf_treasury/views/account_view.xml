@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Account Journal Form Inherit -->
+        <record id="tf_account_journal_form_inherit_treasury" model="ir.ui.view">
+            <field name="name">tf.account.journal.form.inherit.treasury</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="for_undeposited_payment" attrs="{'invisible':[('type','not in',['bank','cash'])]}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Account Journal Search Inherit -->
+        <record id="tf_account_journal_search_inherit_treasury" model="ir.ui.view">
+            <field name="name">tf.account.journal.form.inherit.treasury</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_search"/>
+            <field name="arch" type="xml">
+                <filter name="miscellaneous" position="after">
+                    <filter name="undeposited_payments" string="Undeposited Payments"
+                            domain="[('type', 'in', ['bank', 'cash']),('for_undeposited_payment','=',True)]"/>
+                </filter>
+            </field>
+        </record>
+
+        <!-- Payment No Create Tree -->
+        <record id="tf_account_payment_tree_inherit_readonly" model="ir.ui.view">
+            <field name="name">tf.account.payment.tree.inherit.readonly</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="500" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

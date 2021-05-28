@@ -1,0 +1,82 @@
+id,code,name,user_type_id,reconcile,chart_template_id:id
+coa_01,11-01-01-01,Petty Cash,Bank and Cash,0,l10n_ph
+coa_02,11-01-02-01,BDO Savings 1234567,Bank and Cash,0,l10n_ph
+coa_03,11-01-02-02,BDO Dollar Account 7654321,Bank and Cash,0,l10n_ph
+coa_04,11-01-03-00,CM Clearing Account,Bank and Cash,0,l10n_ph
+coa_05,11-01-04-00,DR Clearing Account,Bank and Cash,0,l10n_ph
+coa_06,11-02-01-00,Trading Securities,Current Assets,0,l10n_ph
+coa_07,11-03-01-00,Accounts Receivable - Trade,Receivable,1,l10n_ph
+coa_08,11-03-02-00,Accounts Receivable - Non - Trade,Receivable,1,l10n_ph
+coa_09,11-03-03-00,Advances to Employees,Current Assets,0,l10n_ph
+coa_10,11-03-04-00,Security Deposits,Current Assets,0,l10n_ph
+coa_11,11-03-05-00,Accrued Interest,Current Assets,0,l10n_ph
+coa_12,11-04-01-00,Raw Materials,Current Assets,0,l10n_ph
+coa_13,11-04-02-00,Work in Progress,Current Assets,0,l10n_ph
+coa_14,11-04-03-00,Finished Goods,Current Assets,0,l10n_ph
+coa_15,11-04-04-00,Merchandise Inventory,Current Assets,0,l10n_ph
+coa_16,11-04-05-00,Office Supplies Inventory,Current Assets,0,l10n_ph
+coa_17,11-04-06-00,Inventory Clearing Account,Current Assets,0,l10n_ph
+coa_18,11-05-01-00,Input VAT,Current Assets,0,l10n_ph
+coa_19,11-05-02-00,Prepaid Insurance,Current Assets,0,l10n_ph
+coa_20,11-05-03-00,Creditable Input VAT,Current Assets,0,l10n_ph
+coa_21,11-05-04-00,Prepaid Income Tax,Current Assets,0,l10n_ph
+coa_22,12-01-01-00,Delivery Truck,Fixed Assets,0,l10n_ph
+coa_23,12-01-02-00,Accumulated Depreciation - Delivery Truck,Fixed Assets,0,l10n_ph
+coa_24,12-01-03-00,Service Car,Fixed Assets,0,l10n_ph
+coa_25,12-01-04-00,Accumulated Depreciation - Service Car,Fixed Assets,0,l10n_ph
+coa_26,12-01-05-00,Building,Fixed Assets,0,l10n_ph
+coa_27,12-01-06-00,Accumulated Depreciation- Building,Fixed Assets,0,l10n_ph
+coa_28,12-01-07-00,Computers,Fixed Assets,0,l10n_ph
+coa_29,12-01-08-00,Accumulated Depreciation - Computers,Fixed Assets,0,l10n_ph
+coa_30,21-01-01-00,Accounts Payable - Trade,Payable,1,l10n_ph
+coa_31,21-01-03-00,Accounts Payable Clearing Account,Current Liabilities,0,l10n_ph
+coa_32,21-01-06-00,Utilities Payable,Current Liabilities,0,l10n_ph
+coa_33,21-01-07-00,Notes Payable,Current Liabilities,0,l10n_ph
+coa_34,21-01-08-00,Interest Payable,Current Liabilities,0,l10n_ph
+coa_35,21-01-04-00,Output VAT,Current Liabilities,0,l10n_ph
+coa_36,21-01-05-00,Withholding Tax Payable,Current Liabilities,0,l10n_ph
+coa_37,21-01-09-00,SSS Payable,Current Liabilities,0,l10n_ph
+coa_38,21-01-10-00,SSS Premium Payable,Current Liabilities,0,l10n_ph
+coa_39,21-01-11-00,SSS Loan Payable,Current Liabilities,0,l10n_ph
+coa_40,21-01-12-00,SSS Claims Payable,Current Liabilities,0,l10n_ph
+coa_41,21-01-13-00,PHIC Payable,Current Liabilities,0,l10n_ph
+coa_42,21-01-14-00,HDMF Payable,Current Liabilities,0,l10n_ph
+coa_43,21-01-15-00,HDMF Premium Payable,Current Liabilities,0,l10n_ph
+coa_44,21-01-16-00,HDMF Loan Payable,Current Liabilities,0,l10n_ph
+coa_45,21-01-17-00,VAT Payable,Current Liabilities,0,l10n_ph
+coa_46,21-01-18-00,EWT Payable,Current Liabilities,0,l10n_ph
+coa_47,21-01-19-00,Deferred Output VAT,Current Liabilities,0,l10n_ph
+coa_48,21-02-01-00,Bonds Payable,Non-current Liabilities,0,l10n_ph
+coa_49,31-00-00-00,Preferred Stock,Equity,0,l10n_ph
+coa_50,32-00-00-00,Common Stock,Equity,0,l10n_ph
+coa_51,33-00-00-00,Authorized Capital,Equity,0,l10n_ph
+coa_52,34-01-00-00,Retained Earnings - Beg.,Equity,0,l10n_ph
+coa_53,34-02-00-00,Adjustment on Retained Earnings,Equity,0,l10n_ph
+coa_54,34-03-00-00,Net Income (Loss) for the Period,Current Year Earnings,0,l10n_ph
+coa_55,40-01-00-00,Sales,Income,0,l10n_ph
+coa_56,40-02-00-00,Sales Discount,Income,0,l10n_ph
+coa_57,40-03-00-00,Sales Return,Income,0,l10n_ph
+coa_58,51-00-00-00,Cost of Goods Sold,Cost of Revenue,0,l10n_ph
+coa_59,52-01-00-00,Marketing Support,Expenses,0,l10n_ph
+coa_60,52-02-00-00,Advertisement,Expenses,0,l10n_ph
+coa_61,52-03-00-00,Gondola,Expenses,0,l10n_ph
+coa_62,52-04-00-00,Sales Commissions,Expenses,0,l10n_ph
+coa_63,52-05-00-00,Salaries - Merchandisers,Expenses,0,l10n_ph
+coa_64,60-01-00-00,Communication,Expenses,0,l10n_ph
+coa_65,60-02-00-00,"Power, Light, and Water",Expenses,0,l10n_ph
+coa_66,60-03-00-00,Salaries,Expenses,0,l10n_ph
+coa_67,60-04-00-00,Interest Expense,Expenses,0,l10n_ph
+coa_68,60-05-01-01,Depreciation - Delivery Truck,Depreciation,0,l10n_ph
+coa_69,60-05-01-02,Depreciation - Computers,Depreciation,0,l10n_ph
+coa_70,60-05-01-03,Depreciation - Buildings,Depreciation,0,l10n_ph
+coa_71,60-05-01-04,Depreciation - Service Cars,Depreciation,0,l10n_ph
+coa_72,60-06-00-00,HDMF Company Contribution,Expenses,0,l10n_ph
+coa_73,60-07-00-00,PHIC Company Contribution,Expenses,0,l10n_ph
+coa_74,60-08-00-00,SSS company contribution,Expenses,0,l10n_ph
+coa_75,60-09-01-00,Fire Insurance,Expenses,0,l10n_ph
+coa_76,60-09-02-00,Vehicle Insurance,Expenses,0,l10n_ph
+coa_77,60-10-00-00,Office Supplies Expense,Expenses,0,l10n_ph
+coa_78,70-01-01-00,Interest Income,Other Income,0,l10n_ph
+coa_79,70-01-02-00,Foreign Exchange Gain (Loss),Other Income,0,l10n_ph
+coa_80,70-01-03-00,Foreign Exchange Gain (Loss),Expenses,0,l10n_ph
+coa_81,70-02-01-00,Bank Charges,Expenses,0,l10n_ph

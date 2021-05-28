@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+        <!-- Inherit Journal Entry Form -->
+		<record id="account_move_inherit_trial_balance"
+			model="ir.ui.view">
+			<field name="name">account.move.inherit.trial.balance</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_post']" position="before">
+					<button string="Approve" type="object" name="trial_approve"
+						groups="account.group_account_user,account.group_account_manager" class="oe_highlight"
+						attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('trial_approved','=',True),('state','!=','draft')]}" />
+				</xpath>
+				<xpath expr="//button[@name='action_post']" position="replace">
+					<button name="action_post" string="Post" type="object"
+						class="oe_highlight" groups="account.group_account_invoice"
+						attrs="{'invisible':['|',('state','!=','draft'),'&amp;',('trial_approved','=',False),('with_trial_balance','=',True)]}" />
+				</xpath>
+				<xpath expr="//button[@name='action_duplicate']"
+					position="attributes">
+					<attribute name="attrs" eval="{'invisible':[('trial_approved','=',False),('with_trial_balance','=',True)]}"/>
+				</xpath>
+				<xpath expr="//sheet/div[1]" position="after">
+					<div name="trial_balance_note" role="alert"
+						class="alert alert-info" style="margin-top: 10px;"
+						groups="account.group_account_user,account.group_account_manager"
+						attrs="{'invisible':['|',('with_trial_balance','=',False),'|',('trial_approved','=',True),('state','!=','draft')]}">
+						<p>
+							<b>Note:</b>
+							A trial balance exists for this entry. Please click
+							<b>Approve</b>
+							to proceed.
+						</p>
+					</div>
+				</xpath>
+				<xpath expr="//field[@name='ref']" position="after">
+					<field name="is_manual" invisible="1" />
+					<field name="with_trial_balance" invisible="1" />
+					<field name="trial_approved" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="account.action_move_journal_line"
+			model="ir.actions.act_window">
+			<field name="context">{'default_is_manual': True}</field>
+		</record>
+
+
+	</data>
+</odoo>

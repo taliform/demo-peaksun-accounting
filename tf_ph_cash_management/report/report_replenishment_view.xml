@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+
+		<record id="paperformat_a4_landscape_replenishment"
+			model="report.paperformat">
+			<field name="name">European A4 Half Replenishment</field>
+			<field name="default" eval="True" />
+			<field name="format">custom</field>
+			<field name="page_height">210</field>
+			<field name="page_width">148</field>
+			<field name="orientation">Landscape</field>
+			<field name="margin_top">5</field>
+			<field name="margin_bottom">40</field>
+			<field name="margin_left">5</field>
+			<field name="margin_right">5</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">30</field>
+			<field name="dpi">90</field>
+		</record>
+
+		<report id="custom_report_replenishment"
+			string="Replenishment Report" model="cash.replenishment"
+			report_type="qweb-pdf"
+			name="tf_ph_cash_management.report_replenishment_document"
+			file="Replenishment Report" 
+			print_report_name="'Replenishment Report - %s' % (object.name)" />
+
+		<!-- <report id="custom_report_replenishment_wizard"
+			string="Replenishment Report (PDF)" model="cash.replenishment"
+			report_type="qweb-pdf"
+			name="ss_ph_cash_management_enterprise.report_replenishment_wizard_document"
+			file="ss_ph_cash_management_enterprise.report_replenishment_wizard_document"
+			print_report_name="'Replenishment Report Wizard - %s' % (object.name)" />
+
+		<record id="custom_report_replenishment_wizard"
+			model="ir.actions.report">
+			<field name="paperformat_id"
+				ref="ss_ph_cash_management_enterprise.paperformat_a4_landscape_replenishment" />
+		</record> -->
+
+
+	</data>
+</odoo>

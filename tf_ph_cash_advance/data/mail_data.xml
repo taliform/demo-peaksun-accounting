@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Activities -->
+        <record id="mail_act_ca_for_approval" model="mail.activity.type">
+            <field name="name">CA Approval</field>
+            <field name="icon">fa-line-chart</field>
+            <field name="res_model_id" ref="tf_ph_cash_advance.model_cash_advance"/>
+        </record>
+        
+        <record id="mail_act_ca_liq_for_approval" model="mail.activity.type">
+            <field name="name">CA Liquidation Approval</field>
+            <field name="icon">fa-line-chart</field>
+            <field name="res_model_id" ref="tf_ph_cash_advance.model_cash_advance_transaction"/>
+        </record>
+        
+        <record id="mail_act_dr_liq_for_approval" model="mail.activity.type">
+            <field name="name">DR Liquidation Approval</field>
+            <field name="icon">fa-line-chart</field>
+            <field name="res_model_id" ref="tf_ph_cash_advance.model_cash_advance_transaction"/>
+        </record>
+    </data>
+</odoo>

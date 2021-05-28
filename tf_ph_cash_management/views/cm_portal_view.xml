@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<!-- Menu -->
+	  	<menuitem name="Cash Management" sequence="100"
+			id="cash_management_portal_main_menu"
+			parent="ss_portal_employee.ss_portal_employee_main_menu"
+			groups="tf_ph_cash_management.group_cash_management_user" />
+    
+
+		<!-- Cash Management -->
+		<record id="cash_management_portal_action"
+			model="ir.actions.act_window">
+			<field name="name">Cash Management</field>
+			<field name="res_model">cash.management</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="search_view_id" ref="cash_management_search" />
+			<field name="context">{'menu_from':'portal'}</field>
+			<field name="domain">[('manager_ids.ids','in',uid),('create_uid','=',uid)]
+			</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Click to create a Cash Management.
+				</p>
+			</field>
+		</record>
+		
+		<!-- Cash Request -->
+		<record id="cash_request_action_portal"
+			model="ir.actions.act_window">
+			<field name="name">Cash Requests</field>
+			<field name="res_model">cash.request</field>
+			<field name="context">{'search_default_not_closed':1}</field>
+			<field name="domain">['|','|',('basic_cm_approver_id','=',uid),('cash_management_id.create_uid','=',uid),('issued_to','=',uid)]</field>
+			<field name="search_view_id" ref="cash_request_search" />
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to create a Cash Request.
+				</p>
+			</field>
+		</record>
+
+		<!-- CR Liquidation -->
+		<record id="cash_transaction_action_portal"
+			model="ir.actions.act_window">
+			<field name="name">Liquidations</field>
+			<field name="res_model">cash.transaction</field>
+			<field name="context">{'cr_liquidation_main_menu':True}</field>
+			<field name="view_mode">tree,form,graph</field>
+            <field name="domain">['|',('cash_management_id.create_uid','=',uid),('issued_to','=',uid)]</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to create a Cash Request Liquidation.
+				</p>
+			</field>
+		</record>
+
+		<!-- Cash Replenishment -->
+		<record id="cash_replenishment_action_portal"
+			model="ir.actions.act_window">
+			<field name="name">Replenishments</field>
+			<field name="res_model">cash.replenishment</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">['|',('cash_management_id.create_uid','=',uid),('create_uid','=',uid)]
+			</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to create a Replenishment.
+				</p>
+			</field>
+		</record>
+		
+		<!-- CM Invoice -->
+		<record id="cash_management_invoice_portal_action" model="ir.actions.act_window">
+	       <field name="name">CM Invoices</field>
+	       <field name="res_model">account.move</field>
+	       <field name="view_mode">tree,kanban,form</field>
+	       <field eval="False" name="view_id"/>
+		   <field name="domain">['&amp;','&amp;',('type','in',('in_invoice','in_refund')),('cash_management_id','!=',
+			False),'|',('is_fund','=', True),('is_repl_released','=', True)]
+		   </field>			   
+		   <field name="context">{'cm_invoice':True,'type':'in_invoice',
+		   'default_type':'in_invoice','journal_type':'purchase',
+		   'create':False,'edit':False,'delete':False}</field>
+	       <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+	       <field name="help" type="html">
+	         <p class="o_view_nocontent_smiling_face">
+	           List of CM Invoices
+	         </p>
+	       </field>
+	   </record>
+	   
+	   <!-- CR Liquidation Invoices -->		
+		<record id="cm_transaction_invoice_portal_action" model="ir.actions.act_window">
+	       <field name="name">CR Liquidation Invoices</field>
+	       <field name="res_model">account.move</field>
+	       <field name="view_mode">tree,kanban,form,pivot,graph</field>
+	       <field eval="False" name="view_id"/>
+		   <field name="domain">[('type','in',('in_invoice','in_refund')),('cash_management_id','!=',
+				False),('is_fund','=', False),('is_repl_released','=', False)]
+		   </field>			   
+		   <field name="context">{'cm_invoice':
+				True,'type':'in_invoice','default_type':
+				'in_invoice','journal_type':'purchase',
+				'create':False,'edit':False,'delete':False}</field>
+	       <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+	       <field name="help" type="html">
+	         <p class="o_view_nocontent_smiling_face">
+	           List of CR Liquidation Invoices
+	         </p>
+	       </field>
+	   </record>
+	   
+
+		<!-- Menu -->
+		<menuitem name="Cash Management" sequence="10"
+			id="cash_managament_portal_menu" action="cash_management_portal_action"
+			parent="cash_management_portal_main_menu"
+			groups="tf_ph_cash_management.group_cash_management_manager" />
+
+		<menuitem id="cash_request_portal_menu"
+			parent="cash_management_portal_main_menu" name="Cash Requests"
+			groups="tf_ph_cash_management.group_cash_management_user"
+			sequence="20" action="cash_request_action_portal" />
+
+		<menuitem id="cash_transaction_portal_menu"
+			parent="cash_management_portal_main_menu" name="Liquidations"
+			groups="tf_ph_cash_management.group_cash_management_user"
+			sequence="30" action="cash_transaction_action_portal" />
+
+		<menuitem id="cash_replenishment_portal_menu"
+			parent="cash_management_portal_main_menu" name="Replenishments"
+			groups="tf_ph_cash_management.group_cash_management_manager"
+			sequence="40" action="cash_replenishment_action_portal" />
+		
+		<menuitem id="cash_management_invoice_portal_menu"
+			parent="cash_management_portal_main_menu" name="CM Invoices"
+			groups="tf_ph_cash_management.group_cash_management_accountant"
+			sequence="50" action="cash_management_invoice_portal_action" />
+		
+		<menuitem id="cash_cr_liquidation_invoice_portal_menu"
+			parent="cash_management_portal_main_menu" name="CR Liquidation Invoices"
+			groups="tf_ph_cash_management.group_cash_management_accountant"
+			sequence="60" action="cm_transaction_invoice_portal_action" />
+
+	</data>
+</odoo>

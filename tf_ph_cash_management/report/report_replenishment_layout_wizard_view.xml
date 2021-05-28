@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_replenishment_wizard_document">
+			<t t-foreach="docs" t-as="o">
+				<div class="page">
+					<br />
+					<div class="header">
+						<t t-if="o and 'company_id' in o">
+							<t t-set="company" t-value="o.company_id"></t>
+						</t>
+						<t t-if="not o or not 'company_id' in o">
+							<t t-set="company" t-value="res_company"></t>
+						</t>
+
+						<div class="row">
+							<div class="col-xs-4">
+								<img t-if="company.logo"
+									t-att-src="'data:image/png;base64,%s' % company.logo"
+									style="max-height: 90px;" />
+							</div>
+
+							<div class="col-xs-8">
+								<div class="row"
+									style="text-align: center; font-size: large;">
+									<strong>
+										<span t-field="company.partner_id.name" />
+									</strong>
+								</div>
+
+								<div class="row" style="text-align: center">
+									<strong>REPLENISHMENT REPORT</strong>
+								</div>
+
+								<div class="row" style="text-align: center">
+									<span t-field="o.name" />
+								</div>
+							</div>
+						</div>
+						<br />
+					</div>
+
+					<table width="100%%" border="1"
+						style="border-collapse:collapse;table-layout:fixed;">
+						<thead>
+							<tr>
+								<th
+									style="text-align: left; background-color:gray; color:white">
+									<strong>NAME</strong>
+								</th>
+								<th
+									style="text-align: center; background-color:gray; color:white">
+									<strong>AMOUNT</strong>
+								</th>
+							</tr>
+						</thead>
+
+						<t t-set="currency" t-value="res_company.currency_id" />
+						<tbody>
+							<tr>
+								<td style="width:25%;">Cash Fund</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.cash_fund"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Ongoing Replenishment</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.ongoing_rep"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Unreplenished Transactions</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.unrep_transac"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Unliquidated Amount</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.unliq_amt"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Reimbursement Amount</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.reimbursement_amt"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Cash Balance</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.cash_balance"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Less: Cash Count Total</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.tot_cash_count"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+
+							<tr>
+								<td style="width:25%;">Overage/Shortage</td>
+								<td style="width:15%;text-align:center;">
+									<span t-field="o.overage_shortage"
+										t-field-options='{"widget": "monetary", "display_currency": "o.cash_management_id.currency_id"}' />
+								</td>
+							</tr>
+						</tbody>
+
+					</table>
+				</div>
+			</t>
+		</template>
+
+	</data>
+</odoo>

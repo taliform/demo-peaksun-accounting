@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- CF Undeposited Generate: View -->
+        <record id="tf_cf_undeposited_form" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Undeposited Payments</field>
+            <field name="model">tf.cf.undeposited</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml" >
+                <form string="Cash Flow Projection: Undeposited Payments">
+                    <group col="2" colspan="2">
+                        <label for="date_from" string="Interval" class="oe_inline"/>
+                        <div>
+                            <field name="date_from" class="oe_inline"/>
+                            -
+                            <field name="date_to" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <footer>
+                        <button name="action_generate" string="Generate" colspan="1" type="object" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="_Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Undeposited: Action -->
+        <record id="tf_cf_undeposited_action" model="ir.actions.act_window">
+            <field name="name">Cash Flow Projection: Undeposited Payments</field>
+            <field name="res_model">tf.cf.undeposited</field>
+            <field name="view_id" ref="tf_ph_cf_treasury.tf_cf_undeposited_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type':'internal'}</field>
+        </record>
+
+        <!-- Undeposited: Menu -->
+        <menuitem id="tf_cf_undeposited_menu" name="Internal Transfers" action="tf_cf_undeposited_action" parent="tf_cf_projection_menu" sequence="5"/>
+
+    </data>
+</odoo>

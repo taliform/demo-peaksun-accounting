@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        
+        <record id="view_bank_statement_line_form_localized" model="ir.ui.view">
+            <field name="name"> bank.statement.line.form.localized</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="inherit_id" ref="account.view_bank_statement_line_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//group[last()]" position="after">
+                    <notebook name="statement_line_notebook">
+                        <page name="journal_entries" string="Journal Entries">
+                            <field name="journal_entry_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Bank Statement Adjustment Form -->
+        <record id="view_bank_statement_adjustment_form" model="ir.ui.view">
+            <field name="name">account.bank.statement.adjustment.form</field>
+            <field name="model">account.bank.statement.adjustment</field>
+            <field name="arch" type="xml">
+                <form string="Payment">
+                    <sheet>
+                        <group name="invisible_fields" invisible="1">
+                            <field name="state" />
+                            <field name="currency_id" />
+                        </group>
+                        
+                        <div class="oe_title">
+                            <h1><field name="abs_id"/></h1>
+                        </div>
+                        <group>
+                            <field name="amount"/>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Bank Statement Payment Tree -->
+        <record id="view_bank_statement_adjustment_tree" model="ir.ui.view">
+            <field name="name">account.bank.statement.adjustment.tree</field>
+            <field name="model">account.bank.statement.adjustment</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="currency_id" invisible="1" />
+                    <field name="type" invisible="1" />
+                    <field name="amount" required="1" sum="Total"/>                    
+                    <field name="name" required="1" />
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Bank Statement Payment Form -->
+        <record id="view_bank_statement_payment_form" model="ir.ui.view">
+            <field name="name">account.bank.statement.payment.form</field>
+            <field name="model">account.bank.statement.payment</field>
+            <field name="arch" type="xml">
+                <form string="Payment">
+                    <header>
+                        <button name="release" class="oe_highlight" attrs="{'invisible':[('release_state', '=', 'released')]}" string="Release" type="object" groups="account.group_account_user"/>
+                        <button name="release" class="oe_highlight" attrs="{'invisible':[('release_state', '=', 'unreleased')]}" string="Unrelease" type="object" groups="account.group_account_user"/>
+                        <field name="release_state" widget="statusbar"/>
+                        <field name="state" widget="statusbar" statusbar_visible="posted,reconciled"/>
+                    </header>
+                    <sheet>
+                        <field name="id" invisible="1"/>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="payment_type" widget="radio" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="partner_type" nolabel="1" string="" attrs="{'required': [('payment_type', 'in', ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="partner_id" nolabel="1" attrs="{'required': [('payment_type', 'in', ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}" context="{'default_is_company': True, 'default_supplier': payment_type == 'outbound', 'default_customer': payment_type == 'inbound'}"/>
+                                <field name="journal_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <label for="amount"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="payment_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="bounced" invisible="0"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Bank Statement Payment Tree -->
+        <record id="view_bank_statement_payment_tree" model="ir.ui.view">
+            <field name="name">account.bank.statement.payment.tree</field>
+            <field name="model">account.bank.statement.payment</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state=='draft'" decoration-muted="state=='reconciled'"
+                      decoration-danger="state=='cancelled'" edit="true">
+                    <field name="bounced" invisible="1"/>
+                    <field name="payment_id" invisible="1"/>
+                    <field name="unreleased_am_id" invisible="1"/>
+                    <field name="payment_date"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="state"/>
+<!--                    <button name="action_open_payment_bounce_wizard" states="posted" type="object" icon="fa-ban" groups="account.group_account_user" string="Bounce Payment" help="Bounce Payment"/>-->
+                    <button name="action_open_payment_cancel_wizard" states="posted" type="object" icon="fa-warning" groups="account.group_account_user" string="Cancel Payment" help="Cancel Payment"/>
+                    <field name="release_state" string="Release Status"/>
+                    <button name="release" attrs="{'invisible':['|',('unreleased_am_id','!=',False),('state','=','cancel')]}" 
+                        help="Release / Unrelease" icon="fa-exchange" string="Release / Unrelease" type="object" groups="account.group_account_user"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_bank_statement_tree_localized" model="ir.ui.view">
+            <field name="name">account.bank.statement.tree.localized</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_tree"/>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Bank Statement Form -->
+        <record id="view_bank_statement_form_localized" model="ir.ui.view">
+            <field name="name">account.bank.statement.form.localized</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='check_confirm_bank']" position="before">
+                    <button name="action_lock" string="Lock" type="object" class="oe_highlight" attrs="{'invisible':[('locked','=',True)]}"/>
+                    <button name="action_unlock" string="Unlock" type="object" attrs="{'invisible':[('locked','=',False)]}"/>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="after">
+                    <group name="hidden_fields" invisible="1">
+                        <field name="locked"/>
+                    </group>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object" name="load_payments" string="Load Payments" icon="fa-refresh" class="oe_stat_button" attrs="{'invisible':[('unreleased_am_id','!=',False)]}"/>
+                </xpath>
+                <xpath expr="//page[@name='statement_line_ids']" position="before">
+                    <page name="summary" string="Summary">
+                        <field name="locked_amount" invisible="1"/>
+                        <group>
+                            <group name="book_recon" string="Book Reconciliation">
+                                <label for="summary_unadjusted_balance" string="Unadjusted Balance"/>
+                                <div>
+                                    <field name="summary_unadjusted_balance" string="Unadjusted Balance" readonly="True" class="oe_inline"/> <button name="action_update_unadjusted_balance" type="object" string="(Update)" class="oe_link" attrs="{'invisible': [('locked', '=', True)]}"/>
+                                </div>
+                                <field name="summary_cash_transactions_total" string="Addt'l. Transactions" readonly="True"/>
+                                <field name="summary_unreleased_outstanding_total" readonly="True"/>
+                                <label for="summary_cancel_intransit_total" string="Cancelled Checks"/><br/>
+                                <label for="summary_cancel_intransit_total" string="- Collections" style="padding-left: 20px;"/>
+                                <div><field name="summary_cancel_intransit_total" readonly="True"/></div>
+                                <label for="summary_cancel_outstanding_total" string="- Disbursements" style="padding-left: 20px;"/>
+                                <div><field name="summary_cancel_outstanding_total" readonly="True"/></div>
+                                <field name="summary_adjustment_book_total" readonly="True"/>
+                            </group>
+                            <group name="bank_recon" string="Bank Reconciliation">
+                                <field name="summary_balance_end_real" string="Unadjusted Balance" readonly="True"/>
+                                <field name="summary_intransit_total" readonly="True"/>
+                                <field name="summary_outstanding_total" readonly="True"/>
+                                <field name="summary_adjustment_bank_total" readonly="True"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="summary_book_total" readonly="True"/>
+                            </group>
+                            <group>
+                                <field name="summary_bank_total" readonly="True"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//page[@name='statement_line_ids']" position="after">
+                    <page name="in_transit" string="In Transit">
+                        <style>
+                            .ss_negative::before {
+                                content: '(';
+                            }
+                            .ss_negative::after {
+                                content: ')';
+                            }
+                        </style>
+                        <field name="intransit_payment_ids" readonly="1" options="{'reload_on_button': True}">
+                            <tree decoration-info="state=='draft'" decoration-muted="state=='reconciled'"
+                                  decoration-danger="state=='cancelled'" edit="true">
+                                <field name="bounced" invisible="1"/>
+                                <field name="payment_id" invisible="1"/>
+                                <field name="payment_date"/>
+                                <field name="name"/>
+                                <field name="journal_id"/>
+                                <field name="partner_id" string="Customer"/>
+                                <field name="amount" sum="Amount"/>
+                                <field name="state"/>
+<!--                                <button name="action_open_payment_bounce_wizard" states="posted" type="object" icon="fa-ban" groups="account.group_account_user" string="Bounce Payment" help="Bounce Payment"/>-->
+                                <button name="action_open_payment_cancel_wizard" states="posted" type="object" icon="fa-warning" groups="account.group_account_user" string="Cancel Payment" help="Cancel Payment"/>
+                            </tree>
+                        </field>
+                        <group style="margin-top: 50px" class="oe_subtotal_footer oe_right" colspan="2">
+                            <field name="all_intransit_total" string="Payments Total" readonly="1"/>
+                            <label for="cancel_intransit_total" string="Bounced Total"/>
+                            <div class="oe_right">
+                                <field name="cancel_intransit_total" string="Bounced Total" nolabel="1" readonly="1" class="oe_inline ss_negative"/>
+                            </div>
+                            <field name="intransit_total" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </page>
+                    <page name="outstanding" string="Outstanding">
+                        <group name="outstanding_detail">
+                            <label for="unreleased_am_id"/>
+                            <div>
+                                <field name="unreleased_am_id" readonly="1"/>
+                                <button type="object" class="oe_inline btn-primary" name="open_create_unreleased_aml_wizard" string="Create Journal Entry" icon="fa-clipboard" attrs="{'invisible':[('unreleased_am_id','!=',False)]}"/>
+                            </div>
+                        </group>
+                        <field name="outstanding_payment_ids" readonly="1" options="{'reload_on_button': True}"/>
+                        <group style="margin-top: 50px"  class="oe_subtotal_footer oe_right" colspan="2">
+                            <field name="all_outstanding_total" string="Payments Total" readonly="1"/>
+                            <label for="cancel_outstanding_total" string="Bounced Total"/>
+                            <div class="oe_right">
+                                <field name="cancel_outstanding_total" string="Bounced Total" nolabel="1" readonly="1" class="oe_inline ss_negative"/>
+                            </div>
+                            <field name="unreleased_outstanding_total" readonly="1"/>
+                            <field name="outstanding_total" class="oe_subtotal_footer_separator"/>
+                            <field name="released_outstanding_total" readonly="1"/>
+                        </group>
+                    </page>
+                    <page name="adjustments" string="Adjustments">
+                        <group>
+                            <group string="Book Errors">
+                                <field name="book_error_ids" options="{'reload_on_button': True}" context="{'default_type': 'book'}" nolabel="1"/>
+                            </group>
+                            <group string="Bank Errors">
+                                <field name="bank_error_ids" options="{'reload_on_button': True}" context="{'default_type': 'bank'}" nolabel="1"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='amount']" position="before">
+                    <field name="journal_id" string="Journal Item" readonly="1"/>
+                    <field name="chk_additional"/>
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']/tree" position="attributes">
+                    <attribute name="decoration-warning">chk_additional and not journal_entry_ids</attribute>
+                </xpath>
+
+                <xpath expr="//group[@name='sale_total']" position='replace'>
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']" position="after">
+                    <group style="margin-top: 50px" class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                        <field name="balance_start_copy" string="Starting Balance" readonly="True"/>
+                        <field name="total_entry_encoding" readonly="True"/>
+                        <field name="balance_end" class="oe_subtotal_footer_separator"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+         <template id="assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/tf_ph_bank_recon/static/src/js/bank_recon_renderer.js"></script>
+                <script type="text/javascript" src="/tf_ph_bank_recon/static/src/js/bank_recon_model.js"></script>
+                <script type="text/javascript" src="/tf_ph_bank_recon/static/src/js/bank_recon_action.js"></script>
+            </xpath>
+        </template>
+	</data>
+</odoo>

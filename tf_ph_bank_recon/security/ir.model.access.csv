@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_bank_statement_payment_group_invoice,account.bank.statement.payment.group.invoice,model_account_bank_statement_payment,account.group_account_invoice,1,0,0,0
+access_account_bank_statement_adjustment_group_invoice,account.bank.statement.adjustment.group.invoice,model_account_bank_statement_adjustment,account.group_account_invoice,1,0,0,0
+access_account_bank_statement_payment,account.bank.statement.payment,model_account_bank_statement_payment,account.group_account_user,1,1,1,1
+access_account_bank_statement_adjustment,account.bank.statement.adjustment,model_account_bank_statement_adjustment,account.group_account_user,1,1,1,1

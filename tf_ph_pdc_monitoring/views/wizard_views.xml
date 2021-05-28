@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Assign PDC-->
+		<record id="account_payment_pdc_assign_form" model="ir.ui.view">
+			<field name="name">account.payment.pdc.form</field>
+			<field name="model">account.payment.pdc.assign</field>
+			<field name="arch" type="xml">
+				<form string="Assign PDC">
+					<group colspan="2">
+						<group>
+							<field name="partner_id" readonly="1"/>
+							<field name="check_no" readonly="1"/>
+							<field name="description" readonly="1"/>
+						</group>
+						<group>
+							<field name="amount" string="Payment Amount" readonly="1"/>
+							<field name="check_date" readonly="1"/>
+						</group>
+					</group>
+					<footer>
+						<button name="assign_pdc" string="Assign" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Confirm PDC -->
+		<record id="account_payment_pdc_confirm_form" model="ir.ui.view">
+			<field name="name">account.payment.pdc.confirm.form</field>
+			<field name="model">account.payment.pdc.confirm</field>
+			<field name="arch" type="xml">
+				<form string="Confirm PDC">
+					<group colspan="2">
+						<group>
+							<field name="payment_date" required="1"/>
+							<field name="journal_id" widget="selection" domain="[('type','in',['bank','cash'])]" required="1"/>
+						</group>
+					</group>
+					<footer>
+						<button name="confirm_pdc" string="Confirm" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

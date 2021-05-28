@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+<div t-name="reconciliation.line.create">
+    <div class="quick_add">
+        <div class="btn-group o_reconcile_models" t-if="state.reconcileModels">
+            <t t-foreach="state.reconcileModels" t-as="reconcileModel">
+                <button class="btn btn-primary"
+                        t-if="reconcileModel.rule_type === 'writeoff_button' &amp;&amp; (reconcileModel.match_journal_ids.length == 0 || reconcileModel.match_journal_ids.includes(state.st_line.journal_id))"
+                        t-att-data-reconcile-model-id="reconcileModel.id">
+                    <t t-esc="reconcileModel.name"/>
+                </button>
+            </t>
+            <p t-if="!state.reconcileModels.length" style="color: #bbb;">To speed up reconciliation, define <a style="cursor: pointer;" class="reconcile_model_create">reconciliation models</a>.</p>
+        </div>
+        <div class="dropdown float-right">
+            <a data-toggle="dropdown" href="#"><span class="fa fa-cog" role="img" aria-label="Settings"/></a>
+            <div class="dropdown-menu dropdown-menu-right" role="menu" aria-label="Presets config">
+                <a role="menuitem" class="dropdown-item reconcile_model_create" href="#">Create model</a>
+                <a role="menuitem" class="dropdown-item reconcile_model_edit" href="#">Modify models</a>
+            </div>
+        </div>
+    </div>
+    <table class="float-left">
+        <tr class="create_account_id">
+            <td class="o_td_label">Account</td>
+            <td class="o_td_field"></td>
+        </tr>
+        <tr class="create_tax_id">
+            <td class="o_td_label">Tax</td>
+            <td class="o_td_field"></td>
+        </tr>
+        <tr class="create_analytic_account_id" groups="analytic.group_analytic_accounting">
+            <td class="o_td_label">Analytic Acc.</td>
+            <td class="o_td_field"></td>
+        </tr>
+        <tr class="create_analytic_tag_ids" groups="analytic.group_analytic_tags">
+            <td class="o_td_label">Analytic Tags.</td>
+            <td class="o_td_field"></td>
+        <tr class="create_cf_html_type_id">
+            <td class="o_td_label">Cash Flow Type:</td>
+            <td class="o_td_field"></td>
+        </tr>
+        <tr id='cf_section_59' class="create_cf_html_section_id_59 d-none">
+            <td class="o_td_label">Cash Flow Section:</td>
+            <td class="o_td_field"></td>
+        </tr>
+        <tr id='cf_section_64' class="create_cf_html_section_id_64 d-none">
+            <td class="o_td_label">Cash Flow Section:</td>
+            <td class="o_td_field"></td>
+        </tr>
+        <tr id='cf_section_67' class="create_cf_html_section_id_67 d-none">
+            <td class="o_td_label">Cash Flow Section:</td>
+            <td class="o_td_field"></td>
+        </tr>
+        </tr>
+    </table>
+    <table class="float-right">
+        <tbody>
+            <tr class="create_journal_id" style="display: none;">
+                <td class="o_td_label">Journal</td>
+                <td class="o_td_field"></td>
+            </tr>
+            <tr class="create_label">
+                <td class="o_td_label">Label</td>
+                <td class="o_td_field"></td>
+            </tr>
+            <tr class="create_amount">
+                <td class="o_td_label">Amount</td>
+                <td class="o_td_field"></td>
+            </tr>
+            <tr class="create_force_tax_included d-none">
+                <td class="o_td_label">Tax Included in Price</td>
+                <td class="o_td_field"></td>
+            </tr>
+            <tr class="create_date d-none">
+                <td class="o_td_label">Writeoff Date</td>
+                <td class="o_td_field"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="add_line_container">
+        <a class="add_line" t-att-style="!state.balance.amout ? 'display: none;' : null"><i class="fa fa-plus-circle"/> Save and New</a>
+    </div>
+</div>
+
+</templates>

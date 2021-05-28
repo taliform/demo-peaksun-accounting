@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+		
+		<record id="seq_post_dated_check" model="ir.sequence">
+			<field name="name">PDC</field>
+			<field name="code">account.payment.pdc</field>
+			<field name="prefix">PDC/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+		</record>
+		
+	</data>
+</odoo>

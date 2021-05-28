@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Activities -->
+        <record id="mail_act_cr_for_approval" model="mail.activity.type">
+            <field name="name">CR Approval</field>
+            <field name="icon">fa-line-chart</field>
+            <field name="res_model_id" ref="tf_ph_cash_management.model_cash_request"/>
+        </record>
+    </data>
+</odoo>

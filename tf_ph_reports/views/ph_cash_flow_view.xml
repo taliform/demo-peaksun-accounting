@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Account Payment -->
+		<record id="cash_flow_account_payment_form_inherit" model="ir.ui.view">
+			<field name="name">cash.flow.account.payment.form.inherit</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="account.view_account_payment_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group[last() - 1]" position="after">
+					<group name="cash_flow">
+						<field name="is_cf_required" invisible="1"/>
+						<label for="id" string="Cash Flow" />
+						<div name="cash_flow">
+							<div name="cf_html_type_id">
+								<label for="cf_html_type_id" />
+								<field name="cf_html_type_id" class="oe_inline"
+									   attrs="{'readonly':[('state','=','cancelled')],'required': [('is_cf_required','=', True)]}" />
+							</div>
+							<div name="cf_html_section_id">
+								<label for="cf_html_section_id" attrs="{'invisible':[('cf_html_type_id','=',False)]}"/>
+								<field name="cf_html_section_id" class="oe_inline"
+									   attrs="{'readonly':['|',('cf_html_type_id','=',False),('state','=','cancelled')],'invisible':[('cf_html_type_id','=',False)], 'required': [('is_cf_required','=', True)]}"
+									   domain="[('parent_id','=',cf_html_type_id)]" />
+							</div>
+						</div>
+					</group>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Batch Payments -->
+		<record id="cash_flow_account_payment_invoice_form_batch_inherit" model="ir.ui.view">
+			<field name="name">cash.flow.account.payment.invoice.form.batch.inherit</field>
+			<field name="model">account.payment.register</field>
+			<field name="inherit_id" ref="account.view_account_payment_form_multi" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/group[last()]" position="after">
+					<group name="cash_flow" string="Cash Flow">
+						<field name="is_cf_required" invisible="1"/>
+						<field name="cf_html_type_id" class="oe_inline" attrs="{'required': [('is_cf_required','=', True)]}"/>
+						<field name="cf_html_section_id" attrs="{'readonly':[('cf_html_type_id','=',False)], 'required': [('is_cf_required','=', True)]}"
+							   domain="[('parent_id','=',cf_html_type_id)]" />
+					</group>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Account Move and Move Line -->
+		<record id="cash_flow_account_view_move_form" model="ir.ui.view">
+			<field name="name">cash.flow.account.view.move.form.inherit</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group/group[last()]" position="after">
+					<group name="cash_flow"
+						   attrs="{'invisible': ['|', ('type', 'in', ['in_invoice','out_invoice', 'in_refund', 'out_refund']), ('journal_type', 'not in', ['bank','cash']) ]}" >
+						<field name="is_cf_required" invisible="1"/>
+						<field name="cf_html_type_id" class="oe_inline"
+							   attrs="{'required': [('is_cf_required','=', True)]}" />
+						<field name="cf_html_section_id"
+							   attrs="{'readonly':[('cf_html_type_id','=',False)], 'required': [('is_cf_required','=', True)]}"
+							   domain="[('parent_id','=',cf_html_type_id)]" />
+					</group>
+				</xpath>
+				<xpath expr="//field[@name='invoice_line_ids']" position="attributes">
+					<attribute name="context">{'default_type': context.get('default_type'), 'journal_id': journal_id, 'default_partner_id': commercial_partner_id, 'default_currency_id': currency_id != company_currency_id and currency_id or False, 'default_cf_html_type_id':cf_html_type_id}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+					<field name="cf_html_type_id" invisible="1" />
+					<field name="cf_html_section_id" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="cash_flow_view_move_line_form_inherit" model="ir.ui.view">
+			<field name="name">cash.flow.view.move.line.form.inherit</field>
+			<field name="model">account.move.line</field>
+			<field name="inherit_id" ref="account.view_move_line_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook[1]/page[1]/group[1]/group[last()]" position="after">
+					<group name="cash_flow" string="Cash Flow">
+						<field name="cf_html_type_id" invisible="1"/>
+						<field name="cf_html_section_id"/>
+					</group>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Journal Configuration -->
+		<record id="cash_flow_view_account_journal_form_inherit" model="ir.ui.view">
+			<field name="name">cash.flow.view.account.journal.form.inherit</field>
+			<field name="model">account.journal</field>
+			<field name="inherit_id" ref="account.view_account_journal_form" />
+			<field name="arch" type="xml">
+				<field name="default_credit_account_id" position="after">
+					<field name="req_cashflow" string="Required Cash Flow"
+						   attrs="{'invisible': [('type','not in',('bank','cash'))]}"/>
+				</field>
+			</field>
+		</record>
+
+		<!-- ph.cash.flow: Form -->
+		<record id="view_account_financial_report_line_form"
+				model="ir.ui.view">
+			<field name="name">account.financial.html.report.line.cf.form</field>
+			<field name="model">account.financial.html.report.line</field>
+			<field name="priority" eval="10" />
+			<field name="arch" type="xml">
+				<form string="Cash Flow Report Line">
+					<sheet>
+						<div class="oe_title">
+							<label for="name" string="Section Name" />
+							<h1>
+								<field name="name" placeholder="Section Name" required="1" />
+							</h1>
+						</div>
+						<group name="details">
+							<group>
+								<field name="parent_id" domain="[('cf_type','=',True)]"
+									   required="True" />
+								<field name="sequence" required="1" />
+							</group>
+							<group>
+								<field name="group_by" required="1" />
+							</group>
+						</group>
+						<group name="invisible_fields" invisible="1"
+							   string="Invisible Fields">
+							<group>
+								<field name="code" required="0" />
+								<field name="groupby" />
+								<field name="level" />
+								<field name="green_on_positive" />
+								<field name="figure_type" />
+								<field name="show_domain" />
+								<field name="special_date_changer" />
+								<field name="formulas" />
+								<field name="domain" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- ph.cash.flow: Tree -->
+		<record id="view_account_financial_report_line_tree"
+				model="ir.ui.view">
+			<field name="name">account.financial.html.report.line.cf.tree</field>
+			<field name="model">account.financial.html.report.line</field>
+			<field name="arch" type="xml">
+				<tree string="Report Lines">
+					<field name="name" />
+					<field name="parent_id" />
+					<field name="sequence" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- ph.cash.flow: Search -->
+		<record id="view_account_financial_report_line_search"
+				model="ir.ui.view">
+			<field name="name">account.financial.html.report.line.cf.search
+			</field>
+			<field name="model">account.financial.html.report.line</field>
+			<field name="arch" type="xml">
+				<search string="Cash Flow Section Search">
+					<field name="name" string="Name"
+						   filter_domain="[('name','ilike',self)]" />
+					<separator />
+					<group expand="0" string="Group By">
+						<filter string="Type" name="group_by_type"
+								context="{'group_by':'parent_id'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<!-- ph.cash.flow: Window Action -->
+		<record id="action_cf_section_config"
+				model="ir.actions.act_window">
+			<field name="name">Sections</field>
+			<field name="res_model">account.financial.html.report.line</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id"
+				   ref="view_account_financial_report_line_search" />
+			<field name="domain"
+				   eval="[('parent_id', 'in', [ref('tf_ph_reports.account_financial_report_cashsummary_operating0'), ref('tf_ph_reports.account_financial_report_cashsummary_investing0'), ref('tf_ph_reports.account_financial_report_cashsummary_financing0')])]" />
+			<field name="context"
+				   eval="{'search_default_group_by_type':1,
+                                     'default_level':3,
+                                     'default_green_on_positive':True,
+                                     'default_figure_type':'float',
+                                     'default_show_domain':'foldable',
+                                     'default_special_date_changer':'strict_range',
+                                     'default_formulas':'balance = sum.balance'}" />
+		</record>
+
+		<record id="action_cf_type_config"
+				model="ir.actions.act_window">
+			<field name="name">Types</field>
+			<field name="res_model">account.financial.html.report.line</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id"
+				   ref="view_account_financial_report_line_search" />
+			<field name="domain" eval="[('cf_type', '=', True)]" />
+			<field name="context"
+				   eval="{'default_cf_type':1, 'default_parent_id':ref('tf_ph_reports.account_financial_report_cashsummary_net_increase0'), 'default_level':1}" />
+		</record>
+
+		<!-- ph.cash.flow: Menu -->
+		<menuitem id="menu_ph_cash_flow" name="Cash Flow"
+				  parent="account.account_account_menu" sequence="110" />
+		<menuitem id="menu_ph_cf_section_config"
+				  parent="menu_ph_cash_flow" action="action_cf_section_config"
+				  sequence="20" />
+	</data>
+	<record model="res.groups" id="invisible_menu" >
+        <field name="name">Invisible</field>
+	</record>
+
+	<record id="account_reports.menu_action_account_report_cash_flow" model="ir.ui.menu">
+		<field name="groups_id" eval="[(6, 0, [ref('invisible_menu')])]"/>
+	</record>
+</odoo>

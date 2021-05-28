@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>	
+
+		<record id="replenishment_cash_count_view" model="ir.ui.view">
+			<field name="name">replenishment.cash.count.view</field>
+			<field name="model">replenishment.cash.count</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Confirmation">
+					<group>
+						<group>
+							<div attrs="{'invisible': ['|',('diff_amt_compare','&lt;',0),('diff_amt_compare','=',0.0)]}" class="oe_grey" colspan="4">
+	                            The Cash Count Total is lower than the Cash Balance. Do you want to proceed?
+	                         </div>
+	                         <div attrs="{'invisible': ['|',('diff_amt_compare','&gt;',0),('diff_amt_compare','=',0.0)]}" class="oe_grey" colspan="4">
+	                            The Cash Count Total exceeds the Cash Balance. Do you want to proceed?
+	                         </div>  
+							
+							<field name="cash_balance" readonly="1" class="oe_inline" />
+							<field name="cash_count_total" readonly="1" class="oe_inline" />
+							<field name="diff_amt" readonly="1" class="oe_inline" />
+							<field name="diff_amt_compare" />
+						</group>
+					</group>
+					<footer>
+						<button name="replenish_validate" string="OK" type="object" class="btn-primary" />
+						<button string="Cancel" class="btn-secondary" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tf_ph_bir_1601e_form_view" model="ir.ui.view">
+			<field name="name">tf.ph.bir.1601e.form.view</field>
+			<field name="model">bir.monthly.ewt.return</field>
+			<field name="arch" type="xml">
+				<form string="BIR 1601-EQ">
+					<header>
+						<button name="generate" type="object" string="Generate"
+							class="oe_highlight" />
+						<button name="print_1601e" type="object" string="Print"
+							class="oe_highlight" />
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button type="object" name="action_view_entry"
+								class="oe_stat_button" icon="fa-bars" string="Journal Items"
+								groups="account.group_account_user" attrs="{'invisible': [('move_line_ids', '=', [])]}">
+								<field name='move_line_ids' invisible="1" />
+							</button>
+						</div>
+						<h1>Quarterly Remittance Return of Creditable Income Taxes
+							Withheld(Expanded)
+						</h1>
+						<label for="name" />
+						<field name="name" readonly="1" />
+						<group>
+							<field name="quarter_err" invisible="1"/>
+							<field class="alert alert-warning text-center" attrs="{'invisible': [('quarter_err', '=', False)]}" role="alert" name="date_validation_msg" nolabel="1"/>
+							<group>
+								<field name="quarter" required="1" />
+								<field name="period_from" required="1" />
+								<field name="auth_rep" required="1"
+									options="{'no_create': True, 'no_open': True}" />
+								<field name="wth_agt_categ" />
+								<field name="rdo_code" />
+								<field name="any_taxes_wth" />
+								<field name="spec_law" />
+								<field name="spec_txt"
+									attrs="{'invisible': [('spec_law','=',False)]}" />
+								<field name="amended_return" />
+								<field name="no_of_sheet" />
+							</group>
+							<group>
+								<field name="company_id" readonly="1"/>
+								<field name="period_to" required="1" />
+								<field name="company_tin" readonly="1" />
+								<label for="company_street" />
+								<div>
+									<field name="company_street" readonly="1"
+										attrs="{'invisible': [('company_street','=',False)]}" />
+									<field name="company_street2" readonly="1"
+										attrs="{'invisible': [('company_street2','=',False)]}" />
+									<div class="o_address_format">
+										<field name="company_city" readonly="1" class="o_address_city"
+											attrs="{'invisible': [('company_city','=',False)]}" />
+										<field name="company_state" readonly="1" class="o_address_state"
+											attrs="{'invisible': [('company_state','=',False)]}" />
+										<field name="company_zip_code" readonly="1" class="o_address_zip"
+											attrs="{'invisible': [('company_zip_code','=',False)]}" />
+									</div>
+								</div>
+								<field name="company_email" readonly="1" />
+								<field name="company_phone" readonly="1" />
+								<field name="company_business_type" readonly="1" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Details">
+								<field name="line_details_1601" readonly="1">
+									<tree>
+										<field name="nature_inc" />
+										<field name="atc" />
+										<field name="tax_base" />
+										<field name="tax_rate" />
+										<field name="tax_withheld" />
+									</tree>
+								</field>
+							</page>
+							<page string="Other Fields">
+								<p>
+									<strong>Less: Tax Credits/Payments</strong>
+								</p>
+								<group>
+									<group>
+										<field name="tax_remit_prev"
+											attrs="{'invisible': [('amended_return','=',False)]}" />
+										<field name="first_month_quarter" />
+										<field name="over_remit_prev" />
+									</group>
+									<group>
+										<field name="second_month_quarter" />
+										<field name="other_payments" />
+										<field name="total_tax_cr" readonly="1" />
+									</group>
+								</group>
+								<p>
+									<strong>Add: Penalties</strong>
+								</p>
+								<group>
+									<group>
+										<field name="surcharge" />
+										<field name="interest" />
+									</group>
+									<group>
+										<field name="compromise" />
+									</group>
+								</group>
+
+								<table class="table table-condensed table-bordered">
+									<thead>
+										<tr style="background-color: #737373;">
+											<th colspan="8" style="color: #ffffff;">Totals</th>
+										</tr>
+										<tr class="ss_center">
+											<th>Total Tax Required to be Withheld and Remitted</th>
+											<th>Tax Still Due/(Overremittance)</th>
+											<th>Total Amount Still Due/(Overremittance)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="ss_center">
+											<td>
+												<field name="total_tax_wth" readonly="1" />
+											</td>
+											<td>
+												<field name="tax_due" readonly="1" />
+											</td>
+											<td>
+												<field name="total_amt_due" readonly="1" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="tf_ph_bir_1601e_tree_view" model="ir.ui.view">
+			<field name="name">bir.1601e.tree.view</field>
+			<field name="model">bir.monthly.ewt.return</field>
+			<field name="arch" type="xml">
+				<tree string="BIR 1601-EQ Records">
+					<field name="name" string="Reference No." />
+					<field name="company_id" />
+					<field name="period_from" />
+					<field name="period_to" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_view_bir_1601e"
+			model="ir.actions.act_window">
+			<field name="name">BIR 1601-EQ</field>
+			<field name="res_model">bir.monthly.ewt.return</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="tf_ph_bir_1601e_tree_view" />
+		</record>
+
+		<menuitem id="menu_bir_1601e"
+			parent="tf_ph_reports.menu_bir_reports" sequence="40"
+			name="Form 1601-EQ" action="action_view_bir_1601e" />
+
+	</data>
+</odoo>

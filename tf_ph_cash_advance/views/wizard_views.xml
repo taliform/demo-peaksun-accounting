@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Cancel CA -->
+		<record id="cash_advance_cancel_form" model="ir.ui.view">
+			<field name="name">cash.advance.cancel.form</field>
+			<field name="model">cash.advance.cancel</field>
+			<field name="arch" type="xml">
+				<form string="Cancel Cash Advance">
+					<group>
+						<div class="oe_grey">
+							Note the following:
+		                    <ol>1. If the vendor bill reference is in Draft state, the invoice will be automatically deleted and the cash advance will be cancelled.</ol>
+		                    <ol>2. If the vendor bill reference is in Open state, the invoice will be cancelled and the user must indicate the reason of cancellation.</ol>
+		                    <ol>3. If the vendor bill reference is in Paid state, the user should cancel first the payment record and do the process number 2.</ol>
+						</div>
+					</group>
+                    
+					<footer>
+						<button name="cancel_ca" string="Proceed" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- Revise CA -->
+		<record id="cash_advance_revise_form" model="ir.ui.view">
+			<field name="name">cash.advance.revise.form</field>
+			<field name="model">cash.advance.revise</field>
+			<field name="arch" type="xml">
+				<form string="Revise Cash Advance">
+                    <group>
+                    	<group>
+                    		<field name="amount" required="1"/>
+                    	</group>
+                    	<div class="oe_grey">
+		                    Note the following:
+		                    <ol>1. The amount should be equal to the Vendor's Bill total amount.</ol>
+		                    <ol>2. After changing the amount, the CA will be automatically transition to Open state.</ol>
+                    	</div>
+                    </group>
+                    
+					<footer>
+						<button name="revise_ca" string="Receive" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Reject CA / CALiquidation -->
+		<record id="cash_advance_reject_form" model="ir.ui.view">
+			<field name="name">cash.advance.reject.form</field>
+			<field name="model">cash.advance.reject</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="notes" required="1"/>
+					</group>
+                    
+					<footer>
+						<button name="reject_ca" string="Apply" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- Valdate CA -->
+		<record id="cash_advance_validate_form" model="ir.ui.view">
+			<field name="name">cash.advance.validate.form</field>
+			<field name="model">cash.advance.validate</field>
+			<field name="arch" type="xml">
+				<form string="Validate Cash Advance">
+                    <div role="alert" class="alert alert-info">
+						<field name="cash_advance_id" invisible="1"/>
+						<span class="text-muted">Enter the accounting date for the liquidations.</span>
+						<field name="account_date" required="1"/>
+					</div>
+					<footer>
+						<button name="action_confirm" string="Validate" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+	</data>
+</odoo>

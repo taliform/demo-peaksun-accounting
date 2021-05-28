@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+tf_access_batch_in_transfer_billing,tf.access.batch.in.transfer.billing,model_tf_account_batch_internal_transfer,account.group_account_invoice,1,1,1,1
+tf_access_cf_collection_billing,tf.access.cf.collection.billing,model_tf_cf_collection,account.group_account_invoice,1,1,1,1

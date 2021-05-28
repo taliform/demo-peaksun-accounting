@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<record id="stock_location_costing" model="stock.location">
+			<field name="name">For Costing</field>
+			<field name="location_id" ref="stock.stock_location_locations" />
+			<field name="usage">internal</field>
+		</record>
+
+		<record id="route_landed_cost" model="stock.location.route">
+			<field name="name">Imported Items</field>
+			<field name="product_categ_selectable">0</field>
+			<field name="product_selectable">0</field>
+			<field name="active">1</field>
+			<field name="sequence">10</field>
+		</record>
+
+		<record id="rule_cost_stock" model="stock.rule">
+			<field name="name">Cost → Stock</field>
+			<field name="action">pull_push</field>
+			<field name="picking_type_id" ref="stock.picking_type_internal" />
+			<field name="location_src_id" ref="stock_location_costing" />
+			<field name="location_id" ref="stock.stock_location_stock" />
+			<field name="auto">manual</field>
+			<field name="warehouse_id" ref="stock.warehouse0" />
+			<field name="procure_method">make_to_order</field>
+			<field name="route_id" ref="route_landed_cost" />
+			<field name="sequence">10</field>
+			<field name="group_propagation_option">propagate</field>
+			<field name="delay_alert">1</field>
+			<field name="propagate_date">1</field>
+			<field name="propagate_date_minimum_delta">1</field>
+		</record>
+		
+		<record id="rule_cost_input" model="stock.rule">
+			<field name="name">Stock -> Cost</field>
+			<field name="action">push</field>
+			<field name="picking_type_id" ref="stock.picking_type_in" />
+			<field name="location_src_id" ref="stock.stock_location_stock" />
+			<field name="location_id" ref="stock_location_costing" />
+			<field name="auto">transparent</field>
+			<field name="warehouse_id" ref="stock.warehouse0" />
+			<field name="procure_method">make_to_order</field>
+			<field name="route_id" ref="route_landed_cost" />
+			<field name="sequence">5</field>
+			<field name="group_propagation_option">propagate</field>
+			<field name="delay_alert">1</field>
+			<field name="propagate_date">1</field>
+			<field name="propagate_date_minimum_delta">1</field>
+		</record>
+	
+	</data>
+</odoo>

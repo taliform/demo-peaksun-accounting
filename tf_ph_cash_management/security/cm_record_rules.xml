@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Record Rules -->
+	    <record id="group_cash_management_account_rule" model="ir.rule">
+	        <field name="name">Cash Management Account</field>
+	        <field name="model_id" ref="model_cash_management"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_request_account_rule" model="ir.rule">
+	        <field name="name">Cash Request Account</field>
+	        <field name="model_id" ref="model_cash_request"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_transaction_account_rule" model="ir.rule">
+	        <field name="name">Cash Transaction Account</field>
+	        <field name="model_id" ref="model_cash_transaction"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_replenishment_account_rule" model="ir.rule">
+	        <field name="name">Cash Replenishment Account</field>
+	        <field name="model_id" ref="model_cash_replenishment"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_management_manager_rule" model="ir.rule">
+	        <field name="name">Cash Management Custodian</field>
+	        <field name="model_id" ref="model_cash_management"/>
+	        <field name="domain_force">[('create_uid','=',user.id)]</field>
+	        <field name="groups" eval="[(4, ref('tf_ph_cash_management.group_cash_management_manager'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_request_manager_rule" model="ir.rule">
+	        <field name="name">Cash Request Custodian</field>
+	        <field name="model_id" ref="model_cash_request"/>
+	        <field name="domain_force">['|',('approver_ids','in',[user.id]),('cash_management_id.create_uid','=',user.id)]</field>
+	        <field name="groups" eval="[(4, ref('tf_ph_cash_management.group_cash_management_manager'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_transaction_manager_rule" model="ir.rule">
+	        <field name="name">Cash Transaction Custodian</field>
+	        <field name="model_id" ref="model_cash_transaction"/>
+	        <field name="domain_force">['|',('cash_management_id.create_uid','=',user.id),('issued_to','=',user.id)]</field>
+	        <field name="groups" eval="[(4, ref('tf_ph_cash_management.group_cash_management_manager'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_replenishment_manager_rule" model="ir.rule">
+	        <field name="name">Cash Replenishment Custodian</field>
+	        <field name="model_id" ref="model_cash_replenishment"/>
+	        <field name="domain_force">[('cash_management_id.create_uid','=',user.id)]</field>
+	        <field name="groups" eval="[(4, ref('tf_ph_cash_management.group_cash_management_manager'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_request_user_rule" model="ir.rule">
+	        <field name="name">Cash Request User</field>
+	        <field name="model_id" ref="model_cash_request"/>
+	        <field name="domain_force">['|',('approver_ids','in',[user.id]),('issued_to','=',user.id)]</field>
+	        <field name="groups" eval="[(4, ref('tf_ph_cash_management.group_cash_management_user'))]"/>
+	    </record>
+	    
+	    <record id="group_cash_transaction_user_rule" model="ir.rule">
+	        <field name="name">Cash Transaction User</field>
+	        <field name="model_id" ref="model_cash_transaction"/>
+	        <field name="domain_force">[('cash_request_id.issued_to','=',user.id)]</field>
+	        <field name="groups" eval="[(4, ref('tf_ph_cash_management.group_cash_management_user'))]"/>
+	    </record>
+	    
+	    <!-- Multi Company Rule -->
+		<record id="cm_expense_categ_rule" model="ir.rule">
+	        <field name="name">CM Expense Category</field>
+	        <field name="model_id" ref="model_expense_category"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	
+		<record id="cm_replenish_expense_categ_rule" model="ir.rule">
+	        <field name="name">CM Replenish Expense Category</field>
+	        <field name="model_id" ref="model_replenish_expense_category"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	    <record id="cm_rule" model="ir.rule">
+	        <field name="name">Cash Management</field>
+	        <field name="model_id" ref="model_cash_management"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	  	<record id="cm_cash_req_rule" model="ir.rule">
+	        <field name="name">Cash Request</field>
+	        <field name="model_id" ref="model_cash_request"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	   	<record id="cm_cash_transaction_rule" model="ir.rule">
+	        <field name="name">Cash Transaction</field>
+	        <field name="model_id" ref="model_cash_transaction"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	  	<record id="cm_cash_replenishment_rule" model="ir.rule">
+	        <field name="name">Cash Replenishment</field>
+	        <field name="model_id" ref="model_cash_replenishment"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	
+		<record id="cm_cash_count_rule" model="ir.rule">
+	        <field name="name">Cash Count</field>
+	        <field name="model_id" ref="model_cash_count"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	   	<record id="cm_fund_rule" model="ir.rule">
+	        <field name="name">Cash Management Fund</field>
+	        <field name="model_id" ref="model_cash_management_fund"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	   	<record id="cm_request_fund_rule" model="ir.rule">
+	        <field name="name">Request Fund</field>
+	        <field name="model_id" ref="model_request_fund"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	   	<record id="cm_return_reimburse_rule" model="ir.rule">
+	        <field name="name">Return Reimburse Fund</field>
+	        <field name="model_id" ref="model_return_reimburse"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	    
+	  	<record id="cm_return_reimburse_rule" model="ir.rule">
+	        <field name="name">Return Reimburse Fund</field>
+	        <field name="model_id" ref="model_return_reimburse"/>
+	        <field name="global" eval="True"/>
+	        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+	    </record>
+	
+	</data>
+</odoo>

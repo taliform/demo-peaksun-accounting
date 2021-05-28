@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="account_reports_ph_statements_menu" name="Philippines Statements" parent="account.menu_finance_reports" sequence="3" groups="account.group_account_user"/>
+
+        <!-- Chart template -->
+        <record id="l10n_ph" model="account.chart.template">
+            <field name="name">PH Tax and Account Chart Template</field>
+            <field name="bank_account_code_prefix">01</field>
+            <field name="cash_account_code_prefix">02</field>
+            <field name="transfer_account_code_prefix">06</field>
+            <field name="code_digits">8</field>
+            <field name="currency_id" ref="base.PHP"/>
+        </record>
+
+        <record id="transfer_account" model="account.account.template">
+            <field name="name">Transfer Account</field>
+            <field name="code">1220</field>
+            <field name="reconcile" eval="True"/>
+            <field name="user_type_id" ref="account.data_account_type_current_assets"/>
+            <field name="chart_template_id" ref="l10n_ph"/>
+        </record>
+
+</odoo>

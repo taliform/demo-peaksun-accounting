@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    	
+    	<!-- PDC Search View -->        
+        <record id="post_dated_check_search" model="ir.ui.view">
+            <field name="name">post.dated.check.search</field>
+            <field name="model">account.payment.pdc</field>
+		    <field name="type">search</field>
+		    <field name="arch" type="xml">
+		        <search string="Post Dated Checks">
+		           <field name="name" string="PDC" filter_domain="['|',('name','ilike',self),
+		                                                                  '|',('state','ilike',self),
+                                                                          '|',('create_uid','ilike',self),
+                                                                          '|',('description','ilike',self)"/>
+		           <field name="journal_id" string="Payment Journal" filter_domain="[('journal_id', 'ilike', self)]"/>
+		           <separator/>
+		           <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+		           <filter name="confirmed" string="Confirmed" domain="[('state', '=', 'confirm')]"/>
+		           <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+		           <separator/>
+		           <group  expand='0' string='Group by...'>
+		               <filter name="status" string="Status" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'state'}"/>
+		               <filter name="journal_id" string="Journal" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'journal_id'}"/>
+		               <filter name="partner_id" string="Partner" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'partner_id'}"/>
+		           </group>
+		        </search>
+		    </field>
+		</record>
+		
+		<record id="post_dated_check_tree" model="ir.ui.view">
+            <field name="name">post.dated.check.tree</field>
+            <field name="model">account.payment.pdc</field>
+            <field name="arch" type="xml">
+                <tree string="Post Dated Checks" create="false" edit="false" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+                    <field name="name"/>
+                    <field name="check_no"/>
+                    <field name="partner_id"/>
+                    <field name="journal_id"/>
+                    <field name="check_date"/>
+               		<field name="amount"/>
+               		<field name="description"/>
+               		<field name="state"/>
+               		<field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="post_dated_check_form" model="ir.ui.view">
+            <field name="name">post.dated.check.form</field>
+            <field name="model">account.payment.pdc</field>
+            <field name="arch" type="xml">
+                <form string="Post Dated Checks">
+                    <header>
+						<button name="post_pdc" class="oe_highlight" states="confirmed" string="Pay PDC" type="object"/>
+						<button name="cancel_pdc" states="confirmed" string="Cancel PDC" type="object"/>
+                    	<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,paid"/>
+                    </header>
+                    <sheet>
+                    	<div>
+	                        <h1 class="mt0">
+                            	<field name="name" readonly="1" class="oe_inline"/>
+	                        </h1>
+	                    </div>
+                        <group name="info">
+                            <group name="section1"> 
+                            	<field name="partner_id" readonly="1"/>
+                            	<field name="amount" readonly="1"/>
+                            	<field name="journal_id" readonly="1"/>
+                            </group>
+                            <group name="section2"> 
+                            	<field name="check_date" attrs="{'readonly': [('state','in',['paid','cancel'])]}"/>
+                            	<field name="check_no" attrs="{'readonly': [('state','in',['paid','cancel'])]}"/>
+                            	<field name="description" attrs="{'readonly': [('state','in',['paid','cancel'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Invoices">
+                            	<field name="pdc_invoice_ids" attrs="{'readonly': [('state','in',['paid','cancel'])]}" context="{'default_pdc_id': active_id}">
+                            		<tree>
+                            			<field name="invoice_id"/>
+                            			<field name="invoice_date"/>
+                            			<field name="due_date"/>
+					                  	<field name="allocated_amt" sum="Total Amount"/>
+					                  	<field name="inv_state" string="Status"/>
+					                  	<field name="currency_id" invisible="1"/>
+                            		</tree>
+                            	</field>
+                            </page>
+                        </notebook>
+                    </sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							   groups="base.group_user" />
+						<field name="activity_ids" widget="mail_activity"/>
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+                </form>
+            </field>
+        </record>
+		
+		<record id="post_dated_check_invoice_form" model="ir.ui.view">
+            <field name="name">post.dated.check.invoice.form</field>
+            <field name="model">account.payment.pdc.invoice.line</field>
+            <field name="arch" type="xml">
+                <form string="Post Dated Checks">
+                	<group name="info" readonly="1">
+                		<group name="section1">
+                			<field name="pdc_id"/>
+                			<field name="invoice_id"/>
+                		</group>
+                		<group name="section2">
+                			<field name="allocated_amt"/>
+                			<field name="inv_state"/>
+                		</group>
+                	</group>
+                </form>
+            </field>
+        </record>
+        
+		<record id="pdc_customer_action" model="ir.actions.act_window">
+            <field name="name">Post Dated Checks</field>
+            <field name="res_model">account.payment.pdc</field>
+	    	<field name="view_mode">tree,form</field>
+			<field name="domain">[('partner_type','=','customer')]</field>
+			<field name="search_view_id" ref="post_dated_check_search"/>
+			<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Post Dated Check.
+              </p>
+            </field>
+        </record>
+        
+        <record id="ap_pdc_action_view1" model="ir.actions.act_window.view">
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="post_dated_check_tree"/>
+            <field name="act_window_id" ref="pdc_customer_action"/>
+        </record>
+        
+        <record id="pdc_vendor_action" model="ir.actions.act_window">
+            <field name="name">Post Dated Checks</field>
+            <field name="res_model">account.payment.pdc</field>
+	    	<field name="view_mode">tree,form</field>
+			<field name="domain">[('partner_type','=','supplier')]</field>
+			<field name="search_view_id" ref="post_dated_check_search"/>
+			<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Post Dated Check.
+              </p>
+            </field>
+        </record>
+        
+        <record id="ap_pdc_action_view2" model="ir.actions.act_window.view">
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="post_dated_check_tree"/>
+            <field name="act_window_id" ref="pdc_vendor_action"/>
+        </record>
+        
+		<!-- PDC Customer Menu -->
+    	<menuitem name="Post Dated Checks" sequence="18"
+        		  id="menu_customer_post_dated_check"
+        		  action="pdc_customer_action" 
+        		  parent="account.menu_finance_receivables"
+        		  groups="account.group_account_invoice"/>
+        		  
+        <!-- PDC Vendor Menu -->
+    	<menuitem name="Post Dated Checks" sequence="25"
+        		  id="menu_vendor_post_dated_check"
+        		  action="pdc_vendor_action" 
+        		  parent="account.menu_finance_payables"
+        		  groups="account.group_account_invoice"/>
+    	
+    	
+    </data>
+</odoo>

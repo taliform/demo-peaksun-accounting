@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="action_account_purchase_journal_summary" model="ir.actions.client">
+            <field name="name">Purchase Journal</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.purchase.journal.summary'}" />
+        </record>
+        
+        <record id="action_account_sales_journal_summary" model="ir.actions.client">
+            <field name="name">Sales Journal</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.sales.journal.summary'}" />
+        </record>
+        
+        <record id="action_account_general_journal_summary" model="ir.actions.client">
+            <field name="name">General Journal</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.general.journal.summary'}" />
+        </record>
+        
+        <record id="action_account_receipt_journal_summary" model="ir.actions.client">
+            <field name="name">Cash Receipt Journal</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.receipt.journal.summary'}" />
+        </record>
+        
+        <record id="action_account_disbursement_journal_summary" model="ir.actions.client">
+            <field name="name">Cash Disbursement Journal</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.disbursement.journal.summary'}" />
+        </record>
+ 
+		
+		<!-- Menu -->
+		<menuitem id="menu_new_journal_reports" parent="account.menu_finance_reports" 
+			name="Journals" sequence="10"/>
+			
+		<menuitem id="menu_account_general_journal_summary" name="General" action="action_account_general_journal_summary" 
+					parent="menu_new_journal_reports" sequence="10"/>
+			
+		<menuitem id="menu_account_sales_journal_summary" name="Sales" action="action_account_sales_journal_summary" 
+					parent="menu_new_journal_reports" sequence="20"/>
+					
+		<menuitem id="menu_account_purchase_journal_summary" name="Purchase" action="action_account_purchase_journal_summary" 
+					parent="menu_new_journal_reports" sequence="30"/>
+					
+		<menuitem id="menu_account_receipt_journal_summary" name="Cash Receipt" action="action_account_receipt_journal_summary" 
+					parent="menu_new_journal_reports" sequence="30"/>
+		
+		<menuitem id="menu_account_disbursement_journal_summary" name="Cash Disbursement" action="action_account_disbursement_journal_summary" 
+					parent="menu_new_journal_reports" sequence="40"/>
+	</data>
+</odoo>

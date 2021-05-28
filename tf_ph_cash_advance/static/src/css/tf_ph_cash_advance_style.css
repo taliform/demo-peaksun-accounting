@@ -1,0 +1,61 @@
+th label.oe_form_label.oe_align_right {
+    font-weight: bold;
+}
+
+.ss_bg_grey {
+    background-color: #888888; 
+    color: #ffffff;
+}
+
+.ss_border_grey {
+    border: 1px solid #888888;
+}
+
+.ss_bg_primary {
+    background-color: #7c7bad; 
+    color: #ffffff;
+}
+
+.ss_border_primary {
+    border: 1px solid #7c7bad;
+}
+
+tr.ss_subheader {
+    font-size: 0.85em;
+}
+
+.ss_legend {
+    font-size: 0.8em;
+    color: #aaaaaa;
+}
+
+.oe_form_sheet_width.ss_extend_sheet {
+    max-width: 1092px;
+}
+
+.ss_center td, .ss_center th{
+    text-align: center;
+}
+
+tbody.ss_table_right tr td ~ td,
+tr.ss_table_right td ~ td {
+    text-align: right;
+}
+
+.ss_label {
+    margin-right: 7px;
+}
+
+.ss_spacer {
+    margin-bottom: 15px;
+}
+
+td.ss_pin_o2m,
+td.ss_pin_o2m div.oe_form_field.oe_form_field_one2many {
+	margin: 0;
+	padding: 0;
+}
+
+td.ss_pin_o2m div.oe_form_field.oe_form_field_one2many div.oe_view_manager table.oe_view_manager_header {
+    display: none;
+}

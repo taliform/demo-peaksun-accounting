@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Vendor PDC: Form View -->
+        <record id="tf_cf_vendor_pdc_form" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Vendor PDC</field>
+            <field name="model">tf.cf.vendor.pdc</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml" >
+                <form string="Cash Flow Projection: Vendor PDCs Generation">
+                    <group col="2" colspan="2">
+                        <label for="date_from" string="Interval" class="oe_inline"/>
+                        <div>
+                            <field name="date_from" class="oe_inline"/>
+                            -
+                            <field name="date_to" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <footer>
+                        <button name="action_generate" string="Generate" colspan="1" type="object" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="_Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vendor PDCs: Action -->
+        <record id="tf_cf_vendor_pdc_action" model="ir.actions.act_window">
+            <field name="name">Cash Flow Projection: Vendor PDCs</field>
+            <field name="res_model">tf.cf.vendor.pdc</field>
+            <field name="view_id" ref="tf_ph_cf_treasury.tf_cf_vendor_pdc_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type':'vendor_pdc'}</field>
+        </record>
+
+        <!-- Vendor PDCs: Menu -->
+        <menuitem id="tf_cf_vendor_pdc_menu" name="Vendor PDCs" action="tf_cf_vendor_pdc_action" parent="tf_cf_projection_menu" sequence="25"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<!-- Menu -->
+	  	<menuitem name="Cash Advance" sequence="200" 
+	  	          id="cash_advance_portal_main_menu"  
+	  	          parent="ss_portal_employee.ss_portal_employee_main_menu"
+	  			  groups="tf_ph_cash_advance.group_cash_advance_user"/>
+    
+    	<!-- Cash Advance -->
+    	<record id="cash_advance_action_portal" model="ir.actions.act_window">
+            <field name="name">Cash Advance</field>
+            <field name="res_model">cash.advance</field>
+			<field name="context">{'search_default_not_closed':1,'default_ca_type':'ca','ca_type':'ca','menu_from':'portal'}</field>
+            <field name="domain">[('ca_type','=','ca'),'|',('issued_to','=',uid),('manager_ids.ids','in',uid)]</field>
+            <field name="view_mode">tree,form,graph</field>
+	    	<field name="search_view_id" ref="cash_advance_search"/>
+	    	<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Cash Advance.
+              </p>
+            </field>
+        </record>
+        
+        <!-- Direct Reimbursement -->
+    	<record id="cash_direct_action_portal" model="ir.actions.act_window">
+            <field name="name">Direct Reimbursements</field>
+            <field name="res_model">cash.advance</field>
+			<field name="context">{'search_default_not_closed':1,'default_ca_type':'dr','ca_type':'dr','menu_from':'portal'}</field>
+            <field name="domain">[('ca_type','=','dr'),'|',('issued_to','=',uid),('manager_ids.ids','in',uid)]</field>
+            <field name="view_mode">tree,form,graph</field>
+	    	<field name="search_view_id" ref="cash_advance_search"/>
+	    	<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Direct Reimbursement.
+              </p>
+            </field>
+        </record>
+        
+        <!-- CA Liquidations -->
+        <record id="cash_advance_transaction_action_portal" model="ir.actions.act_window">
+            <field name="name">Liquidations</field>
+            <field name="res_model">cash.advance.transaction</field>
+	    	<field name="view_mode">tree,form</field>
+			<field name="domain">['|','|',('cash_advance_id.issued_to','=',uid),('create_uid','=',uid),('cash_advance_id.manager_ids.ids','in',uid)]</field>
+			<field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create a Cash Advance Liquidation.
+              </p>
+            </field>
+        </record>
+
+		<!-- CA Invoices -->
+		<record id="cash_advance_invoice_action_portal" model="ir.actions.act_window">
+			<field name="name">Invoices</field>
+			<field name="res_model">account.move</field>
+			<field name="view_mode">tree,kanban,form</field>
+			<field name="view_id" ref="account.view_invoice_tree"/>
+			<field name="context">{'type':'in_invoice','default_type': 'in_invoice','journal_type':'purchase'}</field>
+			<field name="domain">[('type','in',('in_invoice','in_refund')),('cash_advance_id','!=', False),('cash_advance_id.issued_to','=',uid)]</field>
+			<field name="search_view_id" ref="account.view_account_invoice_filter"/>
+		</record>
+		
+	  	<menuitem name="Cash Advance" sequence="10"
+	  	          id="cash_advance_portal_menu" 
+	  	          action="cash_advance_action_portal"
+	  	          parent="cash_advance_portal_main_menu" 
+	  	          groups="tf_ph_cash_advance.group_cash_advance_user"/>
+	  	          
+		<menuitem name="Direct Reimbursements" sequence="20"
+		          id="direct_reimbursement_portal_menu"
+		          action="cash_direct_action_portal"
+		          parent="cash_advance_portal_main_menu" 
+	  	          groups="tf_ph_cash_advance.group_cash_advance_user"/>
+	  	          
+	  	 <menuitem name="Liquidations" sequence="30"
+                  id="cash_advance_transaction_portal_menu"
+                  action="cash_advance_transaction_action_portal"
+                  parent="cash_advance_portal_main_menu" 
+	  	          groups="tf_ph_cash_advance.group_cash_advance_user"/>
+	  	          
+	  	 <menuitem name="Invoices" sequence="40"
+	  	          id="cash_advance_invoices_portal_menu" 
+	  	          action="cash_advance_invoice_action_portal"
+	  	          parent="cash_advance_portal_main_menu" 
+	  	          groups="tf_ph_cash_advance.group_cash_advance_manager"/>
+    </data>
+</odoo>

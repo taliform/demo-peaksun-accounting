@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Trial Balance Tree View -->
+		<record id="trial_balance_tree_view" model="ir.ui.view">
+			<field name="name">trial.balance.tree.view</field>
+			<field name="model">tf.ph.trial.balance</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="PH Trial Balance">
+					<field name="name" />
+					<field name="closing_date" />
+					<field name="cut_off_date" />
+					<field name="company_id" groups="base.group_multi_company"
+						options="{'no_create': True}" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Trial Balance Line Tree View -->
+		<record id="trial_balance_lines_tree_view" model="ir.ui.view">
+			<field name="name">trial.balance.lines.tree.view</field>
+			<field name="model">tf.ph.trial.balance.lines</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Trial Balance Lines" class="ss_colors"
+					create="false" edit="false">
+					<field name="account_id" />
+					<field name="unadjusted_debit" sum="Total" />
+					<field name="unadjusted_credit" sum="Total" />
+					<field name="adjustments_debit" sum="Total" />
+					<field name="adjustments_credit" sum="Total" />
+					<field name="adjusted_debit" sum="Total" />
+					<field name="adjusted_credit" sum="Total" />
+					<field name="bs_debit" sum="Total" />
+					<field name="bs_credit" sum="Total" />
+					<field name="pl_debit" sum="Total" />
+					<field name="pl_credit" sum="Total" />
+				</tree>
+			</field>
+		</record>
+
+		<!-- Trial Balance Form Views -->
+		<record id="trial_balance_form_view" model="ir.ui.view">
+			<field name="name">trial.balance.form.view</field>
+			<field name="model">tf.ph.trial.balance</field>
+			<field name="arch" type="xml">
+				<form string="PH Trial Balance">
+					<header>
+						<button type="object" class="oe_highlight"
+							name="load_balances" string="Load Balances" />
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="trial_balance_button_box">
+							<button type="object" class="oe_stat_button"
+								name="view_details" string="View Details" icon="fa-th-list" />
+						</div>
+						<div class="oe_title">
+							<h1>
+								<field name="name" />
+							</h1>
+						</div>
+						<group col="4">
+							<field name="cut_off_date" />
+							<field name="closing_date" />
+						</group>
+						<br />
+						<br />
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr style="background-color:#7c7bad;color:white;">
+									<th />
+									<th style="text-align:center;">
+										<b>Unadjusted</b>
+									</th>
+									<th style="text-align:center;">
+										<b>Adjustments</b>
+									</th>
+									<th style="text-align:center;">
+										<b>Adjusted</b>
+									</th>
+									<th style="text-align:center;">
+										<b>Balance Sheet</b>
+									</th>
+									<th style="text-align:center;">
+										<b>Profit &amp; Loss</b>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="text-align:center;">
+									<td style="background-color:#7c7bad;color:white;">
+										<b>Credit</b>
+									</td>
+									<td>
+										<field name="unadjusted_credit_total" />
+									</td>
+									<td>
+										<field name="adjustments_credit_total" />
+									</td>
+									<td>
+										<field name="adjusted_credit_total" />
+									</td>
+									<td>
+										<field name="bs_credit_total" />
+									</td>
+									<td>
+										<field name="pl_credit_total" />
+									</td>
+								</tr>
+								<tr style="text-align:center;">
+									<td style="background-color:#7c7bad;color:white;">
+										<b>Debit</b>
+									</td>
+									<td>
+										<field name="unadjusted_debit_total" />
+									</td>
+									<td>
+										<field name="adjustments_debit_total" />
+									</td>
+									<td>
+										<field name="adjusted_debit_total" />
+									</td>
+									<td>
+										<field name="bs_debit_total" />
+									</td>
+									<td>
+										<field name="pl_debit_total" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							groups="base.group_user" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<!-- Filters -->
+		<record id="trial_balance_lines_filter" model="ir.ui.view">
+			<field name="name">trial.balance.lines.select</field>
+			<field name="model">tf.ph.trial.balance.lines</field>
+			<field name="arch" type="xml">
+				<search string="Search Accounts">
+					<filter name="bs" string="Balance Sheet"
+						domain="[('account_id.user_type_id.report_type','=', 'bs')]"
+						help="Draft Invoices" />
+					<filter name="p_and_l" string="Profit &amp; Loss"
+						domain="[('account_id.user_type_id.report_type','=', 'pl')]"
+						help="Draft Invoices" />
+					<filter name="cardinal" string="Cardinal Records"
+						domain="['|',('unadjusted_debit','!=',0.0),
+                																'|',('unadjusted_credit','!=',0.0),
+                																'|',('adjustments_debit','!=',0.0),
+                																'|',('adjustments_credit','!=',0.0),
+                																'|',('adjusted_debit','!=',0.0),
+                																'|',('adjusted_credit','!=',0.0),
+                																'|',('bs_debit','!=',0.0),
+                																'|',('bs_credit','!=',0.0),
+                																'|',('pl_debit','!=',0.0),
+                																('pl_credit','!=',0.0)]"
+						help="Draft Invoices" />
+
+					<field name="account_id" string="Account"
+						filter_domain="['|',('account_id.name','ilike',self), ('account_id.code','ilike',self)]" />
+				</search>
+			</field>
+		</record>
+
+
+		`	<!--Trial Balance Menu -->
+		<record id="action_trial_balance" model="ir.actions.act_window">
+			<field name="name">Trial Balance</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">tf.ph.trial.balance</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[] </field>
+			<field name="context">{}</field>
+		</record>
+
+		<menuitem id="menu_trial_balance" name="Trial Balance Report"
+			parent="account.account_reports_legal_statements_menu"
+			action="action_trial_balance" sequence="20" />
+
+	</data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="action_account_purchase_summary" model="ir.actions.client">
+            <field name="name">Purchase Summary</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.purchase.summary'}" />
+        </record>
+        
+        <record id="action_account_sales_summary" model="ir.actions.client">
+            <field name="name">Sales Summary</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.sales.summary'}" />
+        </record>
+		
+		<!-- Menu -->			
+		<menuitem id="menu_account_purchase_summary" name="Purchase Summary" action="action_account_purchase_summary" 
+					parent="tf_ph_reports.menu_bir_reports" sequence="100"/>
+					
+		<menuitem id="menu_account_sales_summary" name="Sales Summary" action="action_account_sales_summary" 
+					parent="tf_ph_reports.menu_bir_reports" sequence="110"/>
+
+	</data>
+</odoo>

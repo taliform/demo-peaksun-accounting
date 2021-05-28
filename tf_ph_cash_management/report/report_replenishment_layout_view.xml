@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_replenishment_document">
+			<t t-call="web.html_container">
+				<t t-call="web.internal_layout">
+					<t t-foreach="docs" t-as="o">
+						<div class="page">
+							<br />
+							<table class="table table-condensed">
+								<tbody>
+									<tr>
+										<td style="width:25%;">
+											Cash Balance, beginning
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+											<span t-field="o.cash_management_id.current_fund" />
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:25%;">
+											Replenished Expenses:
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+									</tr>
+									<tr t-foreach="o.expense_category_line_ids" t-as="l">
+										<td style="width:25%;">
+										</td>
+										<td style="width:25%;">
+											<span t-field="l.expense_category_id.name" />
+										</td>
+										<td style="width:15%;">
+											<span t-field="l.amount" />
+										</td>
+										<td style="width:15%;">
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:25%;">
+											Unreplenished Expenses:
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+									</tr>
+									<tr t-foreach="o.expense_category_line_ids" t-as="l">
+										<td style="width:25%;">
+										</td>
+										<td style="width:25%;">
+											<span t-field="l.expense_category_id.name" />
+										</td>
+										<td style="width:15%;">
+											<span t-field="l.amount" />
+										</td>
+										<td style="width:15%;">
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:25%;">
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+											<span t-field="o.total_expense_category" />
+										</td>
+									</tr>
+									<tr>
+										<td style="width:25%;">
+											Unliquidated Cash Advances
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+											<span t-field="o.cash_management_id.unliquidated_amount" />
+										</td>
+									</tr>
+									<tr>
+										<td style="width:25%;">
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+											<span t-field="o.total_expense_category" />
+										</td>
+									</tr>
+									<tr>
+										<td style="width:25%;">
+											Cash Balance, ending
+										</td>
+										<td style="width:25%;">
+										</td>
+										<td style="width:15%;">
+										</td>
+										<td style="width:15%;">
+											<span t-field="o.cash_management_id.remaining_fund" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+
+	</data>
+</odoo>

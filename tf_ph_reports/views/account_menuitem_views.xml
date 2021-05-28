@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+		<!-- Generic Statements -> Legal Statements -->
+		<record model="ir.ui.menu"
+			id="account.account_reports_legal_statements_menu">
+			<field name="name">Legal Statements</field>
+		</record>
+
+		<!-- Menu -->
+	  	<menuitem name="BIR Reports" sequence="5"
+	  	          id="menu_bir_reports"
+	  	          parent="account.menu_finance_reports"
+	  			  groups="account.group_account_user,account.group_account_manager"/>
+
+	</data>
+</odoo>

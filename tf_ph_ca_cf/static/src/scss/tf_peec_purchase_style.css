@@ -1,0 +1,125 @@
+/*@import "/addons/web/static/src/scss/list_view.scss";*/
+
+.o_list_table > thead > tr > th:not(.o_list_record_selector) {
+    white-space: normal !important;
+}
+
+.normal_wrap [data-name="schedule_date_one"]{
+  background-color: #6CC1ED; !important;
+}
+
+.normal_wrap [data-name="tax_one_ids"]{
+  background-color: #6CC1ED; !important;
+}
+
+.normal_wrap [data-name="vendor_qty_one"]{
+  background-color: #6CC1ED; !important;
+}
+
+.normal_wrap [data-name="vendor_price_one"]{
+  background-color: #6CC1ED; !important;
+}
+
+.normal_wrap [data-name="awarded_qty_one"]{
+  background-color: #6CC1ED; !important;
+}
+
+.normal_wrap [data-name="subtotal_one"]{
+  background-color: #6CC1ED; !important;
+}
+
+.normal_wrap [data-name="schedule_date_two"]{
+  background-color: #b39ddb; !important;
+}
+
+.normal_wrap [data-name="tax_two_ids"]{
+  background-color: #b39ddb; !important;
+}
+
+.normal_wrap [data-name="vendor_qty_two"]{
+  background-color: #b39ddb; !important;
+}
+
+.normal_wrap [data-name="vendor_price_two"]{
+  background-color: #b39ddb; !important;
+}
+
+.normal_wrap [data-name="awarded_qty_two"]{
+  background-color: #b39ddb; !important;
+}
+
+.normal_wrap [data-name="subtotal_two"]{
+  background-color: #b39ddb; !important;
+}
+
+.normal_wrap [data-name="schedule_date_three"]{
+  background-color: #00FF00; !important;
+}
+
+.normal_wrap [data-name="tax_three_ids"]{
+  background-color: #00FF00; !important;
+}
+
+.normal_wrap [data-name="vendor_qty_three"]{
+  background-color: #00FF00; !important;
+}
+
+.normal_wrap [data-name="vendor_price_three"]{
+  background-color: #00FF00; !important;
+}
+
+.normal_wrap [data-name="awarded_qty_three"]{
+  background-color: #00FF00; !important;
+}
+
+.normal_wrap [data-name="subtotal_three"] {
+  background-color: #00FF00; !important;
+}
+
+.normal_wrap [data-name="schedule_date_four"]{
+  background-color: #CCFF00; !important;
+}
+
+.normal_wrap [data-name="tax_four_ids"]{
+  background-color: #CCFF00; !important;
+}
+
+.normal_wrap [data-name="vendor_qty_four"]{
+  background-color: #CCFF00; !important;
+}
+
+.normal_wrap [data-name="vendor_price_four"]{
+  background-color: #CCFF00; !important;
+}
+
+.normal_wrap [data-name="awarded_qty_four"]{
+  background-color: #CCFF00; !important;
+}
+
+.normal_wrap [data-name="subtotal_four"] {
+  background-color: #CCFF00; !important;
+}
+
+.normal_wrap [data-name="schedule_date_five"]{
+  background-color: #FFFF66; !important;
+}
+
+.normal_wrap [data-name="tax_five_ids"]{
+  background-color: #FFFF66; !important;
+}
+
+.normal_wrap [data-name="vendor_qty_five"]{
+  background-color: #FFFF66; !important;
+}
+
+.normal_wrap [data-name="vendor_price_five"]{
+  background-color: #FFFF66; !important;
+}
+
+.normal_wrap [data-name="awarded_qty_five"]{
+  background-color: #FFFF66; !important;
+}
+
+.normal_wrap [data-name="subtotal_five"] {
+  background-color: #FFFF66; !important;
+}

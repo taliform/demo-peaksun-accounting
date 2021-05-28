@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+		<!-- Cash Management Sequence -->
+        <record id="seq_cash_management" model="ir.sequence">
+            <field name="name">Cash Management</field>
+            <field name="code">cash.management</field>
+            <field name="prefix">CM/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+		<!-- Cash Request Sequence -->
+        <record id="seq_cash_request" model="ir.sequence">
+            <field name="name">Cash Request</field>
+            <field name="code">cash.request</field>
+            <field name="prefix">CR/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+		<!-- Cash Transaction Sequence -->
+        <record id="seq_cash_transaction" model="ir.sequence">
+            <field name="name">Cash Transaction</field>
+            <field name="code">cash.transaction</field>
+            <field name="prefix">CT/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Cash Replenishment Sequence -->
+        <record id="seq_cash_replenishment" model="ir.sequence">
+            <field name="name">Cash Replenishment</field>
+            <field name="code">cash.replenishment</field>
+            <field name="prefix">REPL/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+	</data>
+</odoo>

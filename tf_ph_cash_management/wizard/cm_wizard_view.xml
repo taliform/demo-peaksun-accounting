@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Replenish Fund Wizard -->
+		<record id="view_replenish_fund_wizard" model="ir.ui.view">
+			<field name="name">Replenish Fund</field>
+			<field name="model">replenish.fund</field>
+			<field name="arch" type="xml">
+				<form string="Replenish Fund">
+					<p>
+						Replenish Funds?
+					</p>
+					<footer>
+						<button name="generate_replenishment" string="Apply"
+							type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window name="Replenish Fund"
+			res_model="replenish.fund" binding_model="cash.transaction"
+			view_mode="form" target="new"
+			id="action_replenish_fund"
+			groups="tf_ph_cash_management.group_cash_management_manager,account.group_account_invoice" />
+
+
+		<!-- Replenish Report Form -->
+		<record id="view_replenish_report_form" model="ir.ui.view">
+			<field name="name">view.replenish.report.form</field>
+			<field name="model">replenishment.report</field>
+			<field name="arch" type="xml">
+				<form string="Replenishment Report">
+					<sheet string="Cash Management">
+						<div class="oe_title oe_left">
+							<h1>
+								<field name="cash_reple_id" readonly="1" class="oe_inline" />
+							</h1>
+						</div>
+
+						<table class="table table-condensed table-bordered">
+							<tbody>
+								<tr class="ss_table_right">
+									<td style="font-weight: bold;">Cash Fund</td>
+									<td>
+										<field name="cash_fund" readonly="1" widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right">
+									<td style="font-weight: bold;">Ongoing Replenishment</td>
+									<td>
+										<field name="ongoing_rep" readonly="1" widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right">
+									<td style="font-weight: bold;">Unreplenished Transactions</td>
+									<td>
+										<field name='unrep_transac' readonly="1"
+											widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right">
+									<td style="font-weight: bold;">Unliquidated Amount</td>
+									<td>
+										<field name="unliq_amt" readonly="1" widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right"
+									style="border-bottom: 2px solid black">
+									<td style="font-weight: bold;">Reimbursement Amount</td>
+									<td>
+										<field name="reimbursement_amt" readonly="1"
+											widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right">
+									<td style="font-weight: bold;">Cash Balance</td>
+									<td>
+										<field name="cash_balance" readonly="1"
+											widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right"
+									style="border-bottom: 2px solid black">
+									<td style="font-weight: bold;">Less: Cash Count Total</td>
+									<td>
+										<field name="tot_cash_count" readonly="1"
+											widget="monetary" />
+									</td>
+								</tr>
+								<tr class="ss_table_right" style="border-bottom: 5px double">
+									<td style="font-weight: bold;">Overage/Shortage</td>
+									<td>
+										<field name="overage_shortage" readonly="1"
+											widget="monetary" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<footer>
+							<button string="Close" class="oe_link" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Reject CR / CR Liquidation -->
+		<record id="cash_request_reject_form" model="ir.ui.view">
+			<field name="name">cash.request.reject.form</field>
+			<field name="model">cash.request.reject</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="notes" required="1"/>
+					</group>
+                    
+					<footer>
+						<button name="reject_cr" string="Apply" type="object" class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- Reject CR / CR Liquidation -->
+		<record id="tf_cm_update_custodian_wizard_form" model="ir.ui.view">
+			<field name="name">tf.cm.update.custodian.wizard.form</field>
+			<field name="model">tf.cm.update.custodian</field>
+			<field name="arch" type="xml">
+				<form>
+                    <sheet>
+                        <div role="alert" class="alert alert-info">
+                            <h3><field name="cm_id" readonly="1"/></h3>
+                            <span class="text-muted">Select the new custodian for the cash management.</span>
+                            <group>
+                                <field name="custodian_id"/>
+                            </group>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" class="btn-primary" type="object"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

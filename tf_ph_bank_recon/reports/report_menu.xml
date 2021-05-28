@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+    <report 
+        id="bank_statement_report"
+        model="account.bank.statement"
+        string="Bank Statement"
+        report_type="qweb-pdf"
+        name="tf_ph_bank_recon.report_bank_statement"
+        file="tf_ph_bank_recon.report_bank_statement"
+        attachment_use="False"
+        paperformat="tf_ph_bank_recon.paperformat_bank_statement"
+    />
+
+	</data>
+</odoo>

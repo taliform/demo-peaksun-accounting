@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- CF Report Generate Report: Search View -->
+        <record id="tf_cf_report_search_view" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Search</field>
+            <field name="model">tf.cf.projection.line</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml" >
+                <search string="Cash Flow Projection Report">
+                    <field name="payment_id"/>
+                    <field name="move_id" string="Transaction"/>
+                    <separator/>
+                    <filter name="internal" string="Internal Transfers" domain="[('type', '=', 'internal')]"/>
+                    <filter name="customer_pdc" string="Customer PDCs" domain="[('type', '=', 'customer_pdc')]"/>
+                    <filter name="vendor_pdc" string="Vendor PDCs" domain="[('type', '=', 'vendor_pdc')]"/>
+                    <filter name="collection" string="Collections" domain="[('type', '=', 'collection')]"/>
+                    <filter name="disbursement" string="Disbursements" domain="[('type', '=', 'disbursement')]"/>
+                    <filter name="other" string="Other Projections" domain="[('type', '=', 'other')]"/>
+                    <separator/>
+                    <filter name="date" string="Payment Date" date="date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Report Type" name="group_report_type" context="{'group_by': 'type'}"/>
+                        <filter string="Bank" name="group_bank" context="{'group_by': 'journal_id'}"/>
+                        <filter string="Transaction" name="group_transaction" context="{'group_by': 'move_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- CF Report Generate Report: Pivot View -->
+        <record id="tf_cf_report_pivot_view" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Pivot</field>
+            <field name="model">tf.cf.projection.line</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml" >
+                <pivot string="Cash Flow Projection Report">
+                    <field name="date" interval="day" type="col"/>
+                    <field name="type" type="row"/>
+                    <field name="journal_id" type="row"/>
+                    <field name="move_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- CF Report Generate: View -->
+        <record id="tf_cf_report_gen_form" model="ir.ui.view">
+            <field name="name">Cash Flow Projection Report</field>
+            <field name="model">tf.cf.projection.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml" >
+                <form string="Cash Flow Projection: Disbursements Generation">
+                    <group col="2" colspan="2">
+                        <label for="date_from" string="Interval" class="oe_inline"/>
+                        <div>
+                            <field name="date_from" class="oe_inline"/>
+                            -
+                            <field name="date_to" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <footer>
+                        <button name="action_generate" string="Generate" colspan="1" type="object" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="_Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- CF Report Generate: Action -->
+        <record id="tf_cf_report_gen_action" model="ir.actions.act_window">
+            <field name="name">Cash Flow Projection Report</field>
+            <field name="res_model">tf.cf.projection.report</field>
+            <field name="view_id" ref="tf_ph_cf_treasury.tf_cf_report_gen_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type':'report'}</field>
+        </record>
+
+        <!-- CF Report Generate: Menu -->
+        <menuitem id="tf_cf_report_gen_menu" name="Cash Flow Projection" action="tf_cf_report_gen_action" parent="tf_cf_projection_menu" sequence="35"/>
+
+    </data>
+</odoo>

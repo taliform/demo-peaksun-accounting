@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+	 	
+		<record id="cash_advance_invoice_action" model="ir.actions.act_window">
+			<field name="name">Invoices</field>
+			<field name="res_model">account.move</field>
+			<field name="view_mode">tree,kanban,form</field>
+			<field name="view_id" ref="account.view_invoice_tree"/>
+			<field name="context">{'type':'in_invoice','default_type': 'in_invoice','journal_type':'purchase'}</field>
+			<field name="domain">[('type','in',('in_invoice','in_refund')),('cash_advance_id','!=', False)]</field>
+			<field name="search_view_id" ref="account.view_account_invoice_filter"/>
+		</record>
+		
+		<menuitem name="Invoices" sequence="50"
+				  id="menu_cash_advance_invoice" 
+				  action="cash_advance_invoice_action" 
+			 	  parent="tf_ph_cash_advance.ph_cash_advance_main_menu"
+			 	  groups="tf_ph_cash_advance.group_cash_advance_accountant"/>
+		
+		<!-- CA Invoice -->
+		<record id="invoice_supplier_amt_change_form" model="ir.ui.view">
+            <field name="name">invoice.supplier.amt_change.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//group/group[2]" position="inside">
+            		<field name="reason_req" invisible="1"/>
+            		<field name="changed_amt_reason" attrs="{'invisible': [('reason_req','=',False)], 'required': [('reason_req','=',True)]}"/>
+            	</xpath>
+            </field>
+        </record>
+        
+		<!-- Vendor Bills Action -->
+		<record id="account.action_move_in_invoice_type" model="ir.actions.act_window">
+			<field name="domain">[('type','=','in_invoice'),('cash_management_id','=', False),('cash_advance_id','=', False)]</field>
+		</record>
+
+		<record id="account.action_move_in_refund_type" model="ir.actions.act_window">
+			<field name="domain">[('type','=','in_refund'),('cash_management_id','=', False),('cash_advance_id','=', False)]</field>
+		</record>
+		
+		<!-- Customer Invoices Action -->
+		<record id="account.action_move_out_invoice_type" model="ir.actions.act_window">
+			<field name="domain">[('type','=','out_invoice'),('cash_management_id','=', False),('cash_advance_id','=', False)]</field>
+		</record>
+
+		<record id="account.action_move_out_refund_type" model="ir.actions.act_window">
+			<field name="domain">[('type','=','out_refund'),('cash_management_id','=', False),('cash_advance_id','=', False)]</field>
+		</record>
+			
+	</data>
+</odoo>

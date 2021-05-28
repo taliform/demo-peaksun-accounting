@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_bir_1601e" model="ir.actions.report">
+            <field name="name">BIR 1601EQ</field>
+            <field name="model">bir.monthly.ewt.return.printout</field>
+            <field name="report_name">bir.1601e.report</field>
+            <field name="report_type">py3o</field>
+            <field name="py3o_filetype">pdf</field>
+            <field name="module">tf_ph_bir</field>
+            <field name="py3o_template_fallback">report/1601E.odt</field>
+        </record>
+
+        <record id="report_bir_1601e" model="ir.actions.report">
+            <field name="name">BIR 1601EQ</field>
+            <field name="model">bir.monthly.ewt.return</field>
+            <field name="report_name">bir.1601e.report</field>
+            <field name="report_type">py3o</field>
+            <field name="py3o_filetype">pdf</field>
+            <field name="module">tf_ph_bir</field>
+            <field name="py3o_template_fallback">report/1601E.odt</field>
+        </record>
+
+        <record id="report_bir_2307" model="ir.actions.report">
+            <field name="name">BIR 2307</field>
+            <field name="model">bir.creditable.tax.withheld</field>
+            <field name="report_name">bir.2307.report</field>
+            <field name="report_type">py3o</field>
+            <field name="py3o_filetype">pdf</field>
+            <field name="module">tf_ph_bir</field>
+            <field name="py3o_template_fallback">report/2307.odt</field>
+        </record>
+
+    </data>
+</odoo>

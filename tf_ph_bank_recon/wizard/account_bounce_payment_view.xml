@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    
+        <record id="view_account_payment_bounce" model="ir.ui.view">
+            <field name="name">account.bank.statement.payment.bounce.form</field>
+            <field name="model">account.bank.statement.payment</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <form string="Bounce Payment">
+                    <group>
+                        <field name="bounce_date" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Continue" name="action_bounce_payment" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+        
+	</data>
+</odoo>

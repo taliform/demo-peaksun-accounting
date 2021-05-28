@@ -1,0 +1,1 @@
+/home/developer/workspace/odoo10/custom_addons/accounting/ss_ph_trial_balance/ss_ph_trial_balance.rst

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- CF Disbursements Generate: View -->
+        <record id="tf_cf_disbursements_form" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Disbursements</field>
+            <field name="model">tf.cf.disbursement</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml" >
+                <form string="Cash Flow Projection: Disbursements Generation">
+                    <group col="2" colspan="2">
+                        <label for="date_from" string="Interval" class="oe_inline"/>
+                        <div>
+                            <field name="date_from" class="oe_inline"/>
+                            -
+                            <field name="date_to" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <footer>
+                        <button name="action_generate" string="Generate" colspan="1" type="object" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="_Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Disbursements: Action -->
+        <record id="tf_cf_disbursements_action" model="ir.actions.act_window">
+            <field name="name">Cash Flow Projection: Disbursements</field>
+            <field name="res_model">tf.cf.disbursement</field>
+            <field name="view_id" ref="tf_ph_cf_treasury.tf_cf_disbursements_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type':'disbursement'}</field>
+        </record>
+
+        <!-- Disbursements: Menu -->
+        <menuitem id="tf_cf_disbursements_menu" name="Disbursements" action="tf_cf_disbursements_action" parent="tf_cf_projection_menu" sequence="15"/>
+
+        <!-- CF Disbursements Projection: Pivot View -->
+        <record id="tf_cf_disbursements_projections_pivot" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Disbursements</field>
+            <field name="model">account.move</field>
+            <field name="priority" eval="1000"/>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml" >
+                <pivot string="Cash Flow Projection Report">
+                    <field name="disbursement_projected_date" interval="day" type="col"/>
+                    <field name="disbursement_projected_bank_id" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="name" type="row"/>
+                    <field name="amount_residual" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- CF Disbursements Projection: Tree View -->
+        <record id="tf_cf_disbursements_projections_tree" model="ir.ui.view">
+            <field name="name">Cash Flow Projection: Disbursements</field>
+            <field name="model">account.move</field>
+            <field name="priority" eval="1000" />
+            <field name="type">tree</field>
+            <field name="arch" type="xml" >
+                <tree string="Cash Flow Projection: Disbursements" create="false" delete="false" editable="top"
+                      decoration-danger="disbursement_projected_date and (disbursement_projected_date &lt;= current_date)">
+                    <field name="name" readonly="1"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="date" readonly="1"/>
+                    <field name="amount_total" readonly="1"/>
+                    <field name="amount_residual" readonly="1"/>
+                    <field name="disbursement_projected_date"/>
+                    <field name="disbursement_projected_bank_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Disbursements Projection: Action -->
+        <record id="tf_cf_disbursements_projections_action" model="ir.actions.act_window">
+            <field name="name">Disbursement Projections</field>
+            <field name="res_model">account.move</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('tf_ph_cf_treasury.tf_cf_disbursements_projections_tree')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('tf_ph_cf_treasury.tf_cf_disbursements_projections_pivot')})]"/>
+            <field name="view_mode">tree,pivot</field>
+            <field name="target">current</field>
+            <field name="domain">[
+                ('state', '=',  'posted'),
+                ('invoice_payment_state','=','not_paid'),
+                ('type','=','in_invoice'),
+                ('cash_management_id','=', False),
+                ('cash_advance_id','=', False)
+                ]</field>
+        </record>
+
+        <!-- Disbursements Projection: Menu -->
+        <menuitem id="tf_cf_disbursements_projections_menu" name="Disbursements" action="tf_cf_disbursements_projections_action"
+                  parent="tf_ph_cf_treasury.tf_cf_projection_sub_menu" sequence="10"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+<!--         <record id="account_report_type_impsummary" model="account.report.type">
+            <field name="date_range" eval="True" />
+            <field name="comparison" eval="False" />
+            <field name="analytic" eval="False" />
+            <field name="extra_options" eval="False"/>
+            <field name="cash_basis" eval="False" />
+        </record> -->
+        
+<!--         <record id="action_account_import_summary" model="ir.actions.client">
+            <field name="name">Importation Summary</field>
+            <field name="tag">account_report_generic</field>
+            <field name="context" eval="{'url': '/ss_ph_reports/output_format/importation_summary/1', 'model': 'importation.summary'}" />
+        </record> -->
+        
+        <record id="action_account_importation_summary" model="ir.actions.client">
+            <field name="name">Importation Summary</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'model': 'account.importation.summary'}" />
+        </record>
+       
+    </data>
+</odoo>

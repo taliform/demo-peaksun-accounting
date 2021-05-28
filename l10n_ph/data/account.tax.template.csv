@@ -1,0 +1,677 @@
+id,chart_template_id:id,name,description,amount,amount_type,type_tax_use,active,tax_group_id:id,price_include,invoice_repartition_line_ids/factor_percent,invoice_repartition_line_ids/repartition_type,invoice_repartition_line_ids/account_id:id,refund_repartition_line_ids/factor_percent,refund_repartition_line_ids/repartition_type,refund_repartition_line_ids/account_id:id,analytic
+acctaxtmpl0001,l10n_ph,VAT Sales (Exc.),VAT Sales (Exc.),12,percent,sale,1,tax_group_vat,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_35,100,of tax,coa_35,
+acctaxtmpl0002,l10n_ph,VAT Sales (Inc.),VAT Sales (Inc.),12,percent,sale,1,tax_group_vat,1,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_35,100,of tax,coa_35,
+acctaxtmpl0003,l10n_ph,VAT Exempt Sales,VAT Exempt Sales,0,percent,sale,1,tax_group_vat,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_35,100,of tax,coa_35,
+acctaxtmpl0004,l10n_ph,Zero Rated Sales,Zero Rated Sales,0,percent,sale,1,tax_group_vat,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_35,100,of tax,coa_35,
+acctaxtmpl0005,l10n_ph,VAT Purchase (Exc.),VAT Purchase (Exc.),12,percent,purchase,1,tax_group_vat,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_18,100,of tax,coa_18,
+acctaxtmpl0006,l10n_ph,VAT Purchase (Inc.),VAT Purchase (Inc.),12,percent,purchase,1,tax_group_vat,1,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_18,100,of tax,coa_18,
+acctaxtmpl0007,l10n_ph,VAT Exempt Purchase,VAT Exempt Purchase,0,percent,purchase,1,tax_group_vat,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_18,100,of tax,coa_18,
+acctaxtmpl0008,l10n_ph,Zero Rated Purchase,Zero Rated Purchase,0,percent,purchase,1,tax_group_vat,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_18,100,of tax,coa_18,
+acctaxtmpl0009,l10n_ph,WI 010_(P),Professionals ( I ) - WI 010_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0010,l10n_ph,WC 010_(P),Professionals ( C ) - WC 010_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0011,l10n_ph,WI 011_(P),Professionals ( I ) - WI 011_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0012,l10n_ph,WC 011_(P),Professionals ( C ) - WC 011_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0013,l10n_ph,WI 020_(P),Professional Entertainers - WI 020_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0014,l10n_ph,WI 021_(P),Professional Entertainers - WI 021_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0015,l10n_ph,WI 030_(P),Professional Athletes - WI 030_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0016,l10n_ph,WI 031_(P),Professional Athletes - WI 031_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0017,l10n_ph,WI 040_(P),"Movie, Stage, Radio, Television and Musical Directors - WI 040_(P)",-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0018,l10n_ph,WI 041_(P),"Movie, Stage, Radio, Television and Musical Directors - WI 041_(P)",-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0019,l10n_ph,WI 050_(P),Management and Technical Consultants ( I ) - WI 050_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0020,l10n_ph,WC 050_(P),Management and Technical Consultants ( C ) - WC 050_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0021,l10n_ph,WI 051_(P),Management and Technical Consultants ( I ) - WI 051_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0022,l10n_ph,WC 051_(P),Management and Technical Consultants ( C ) - WC 051_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0023,l10n_ph,WI 060_(P),Business and Bookkeeping - WI 060_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0024,l10n_ph,WI 061_(P),Business and Bookkeeping - WI 061_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0025,l10n_ph,WI 070_(P),Insurance Agents and Insurance Adjusters - WI 070_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0026,l10n_ph,WI 071_(P),Insurance Agents and Insurance Adjusters - WI 071_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0027,l10n_ph,WI 080_(P),Other Recipients (Talent Fees) - WI 080_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0028,l10n_ph,WI 081_(P),Other Recipients (Talent Fees) - WI 081_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0029,l10n_ph,WI 090_(P),Directors Fees - WI 090_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0030,l10n_ph,WI 091_(P),Directors Fees - WI 091_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0031,l10n_ph,WI 100_(P),Rentals: Properties ( I ) - WI 100_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0032,l10n_ph,WC 100_(P),Rentals: Properties ( C ) - WC 100_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0033,l10n_ph,WI 110_(P),Rentals: Cinematographic Film ( I ) - WI 110_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0034,l10n_ph,WC 110_(P),Rentals: Cinematographic Film ( C ) - WC 110_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0035,l10n_ph,WI 120_(P),Prime Contractors/Sub-contractors ( I ) - WI 120_(P),-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0036,l10n_ph,WC 120_(P),Prime Contractors/Sub-contractors ( C ) - WC 120_(P),-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0037,l10n_ph,WI 130_(P),Beneficiaries of Estates & Trusts - WI 130_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0038,l10n_ph,WI 140_(P),Gross Commission / Service Fees ( I ) - WI 140_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0039,l10n_ph,WC 140_(P),Gross Commission / Service Fees ( C ) - WC 140_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0040,l10n_ph,WI 141_(P),Payments: Medical Practitioners - WI 141_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0041,l10n_ph,WI 142_(P),Payments: Medical Practitioners - WI 142_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0042,l10n_ph,WI 151_(P),Payments: Medical/Dental/Veterinaty Services - WI 151_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0043,l10n_ph,WI 150_(P),Payments: Medical/Dental/Veterinaty Services - WI 150_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0044,l10n_ph,WI 152_(P),Payments: GPP to Partners - WI 152_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0045,l10n_ph,WI 153_(P),Payments: GPP to Partners - WI 153_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0046,l10n_ph,WI 156_(P),Payments by Credit Card Companies ( I ) - WI 156_(P),-0.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0047,l10n_ph,WC 156_(P),Payments by Credit Card Companies ( C ) - WC 156_(P),-0.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0048,l10n_ph,WI 640_(P),"Income Payments, Government to Goods Suppliers ( I ) - WI 640_(P)",-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0049,l10n_ph,WC 640_(P),"Income Payments, Government to Goods Suppliers ( C ) - WC 640_(P)",-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0050,l10n_ph,WI 157_(P),"Income Payments, Government to Service Suppliers ( I ) - WI 157_(P)",-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0051,l10n_ph,WC 157_(P),"Income Payments, Government to Service Suppliers ( C ) - WC 157_(P)",-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0052,l10n_ph,WI 158_(P),"Income Payments, Corporation to Goods Suppliers ( I ) - WI 158_(P)",-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0053,l10n_ph,WC 158_(P),"Income Payments, Corporation to Goods Suppliers ( C ) - WC 158_(P)",-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0054,l10n_ph,WI 160_(P),"Income Payments, Corporation to Service Suppliers ( I ) - WI 160_(P)",-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0055,l10n_ph,WC 160_(P),"Income Payments, Corporation to Service Suppliers ( C ) - WC 160_(P)",-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0056,l10n_ph,WI 159_(P),Overtime Services - WI 159_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0057,l10n_ph,WI 515_(P),Multi-level Marketing Companies ( I ) - WI 515_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0058,l10n_ph,WC 515_(P),Multi-level Marketing Companies ( C ) - WC 515_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0059,l10n_ph,WI 530_(P),Embalmers - WI 530_(P),-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0060,l10n_ph,WI 535_(P),Pre-Need Companies ( I ) - WI 535_(P),-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0061,l10n_ph,WC 535_(P),Pre-Need Companies ( C ) - WC 535_(P),-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0062,l10n_ph,WI 540_(P),Refineries Tolling Fees ( I ) - WI 540_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0063,l10n_ph,WC 540_(P),Refineries Tolling Fees ( C ) - WC 540_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0064,l10n_ph,WI 555_(P),Sale of Real Property (Ordinary Asset) ( I ) - WI 555_(P),-1.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0065,l10n_ph,WC 555_(P),Sale of Real Property (Ordinary Asset) ( C ) - WC 555_(P),-1.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0066,l10n_ph,WI 556_(P),Sale of Real Property (Ordinary Asset) ( I ) - WI 556_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0067,l10n_ph,WC 556_(P),Sale of Real Property (Ordinary Asset) ( C ) - WC 556_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0068,l10n_ph,WI 557_(P),Sale of Real Property (Ordinary Asset) ( I ) - WI 557_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0069,l10n_ph,WC 557_(P),Sale of Real Property (Ordinary Asset) ( C ) - WC 557_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0070,l10n_ph,WI 558_(P),Sale of Real Property (Ordinary Asset) ( I ) - WI 558_(P),-6,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0071,l10n_ph,WC 558_(P),Sale of Real Property (Ordinary Asset) ( C ) - WC 558_(P),-6,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0072,l10n_ph,WI 610_(P),Agricultural Products ( I ) - WI 610_(P),-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0073,l10n_ph,WC 610_(P),Agricultural Products ( C ) - WC 610_(P),-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0074,l10n_ph,WI 630_(P),Mineral Products and Quarry Resources ( I ) - WI 630_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0075,l10n_ph,WC 630_(P),Mineral Products and Quarry Resources ( C ) - WC 630_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0076,l10n_ph,WI 632_(P),Gold Purchases ( I ) - WI 632_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0077,l10n_ph,WC 632_(P),Gold Purchases ( C ) - WC 632_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0078,l10n_ph,WI 650_(P),MERALCO Refunds Active Contract ( I ) - WI 650_(P),-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0079,l10n_ph,WC 650_(P),MERALCO Refunds Active Contract ( C ) - WC 650_(P),-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0080,l10n_ph,WI 651_(P),MERALCO Refunds Terminated Contract ( I ) - WI 651_(P),-32,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0081,l10n_ph,WC 651_(P),MERALCO Refunds Terminated Contract ( C ) - WC 651_(P),-32,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0082,l10n_ph,WV 010_(P),VAT Withholding  on  Purchase of Goods - Govt. Withholding Agent - WV 010_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0083,l10n_ph,WV 020_(P),VAT Withholding  on  Purchase of Services - Govt. Withholding Agent - WV 020_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0084,l10n_ph,WV 030_(P),VAT Withholding  on  Purchase of Govenrment Public Work Contracts  - WV 030_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0085,l10n_ph,WV 014_(P),VAT Withholding on Purchase of Goods   (with waiver of privilege to claim input tax credits) - WV 014_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0086,l10n_ph,WV 024_(P),VAT Withholding on Purchase of Services   (with waiver of privilege to claim input tax credits) - WV 024_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0087,l10n_ph,WB 084_(P),Person exempt from VAT under Sec. 109 (v)  - WB 084_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0088,l10n_ph,WV 040_(P),VAT Withholding on Non-residents - Gov't. Withholding Agent - WV 040_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0089,l10n_ph,WV 050_(P),VAT Withholding on Non-residents - Private Withholding Agent - WV 050_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0090,l10n_ph,WB 191_(P),Tax on Winnings and Prizes (Sec. 126) (double/forecast/quinella/trifecta bets) - WB 191_(P),-4,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0091,l10n_ph,WB 192_(P),Tax on Winnings and Prizes on horse races/owners of winning racehorses (Sec. 126) - WB 192_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0092,l10n_ph,WB 193_(P),Tax on Winnings and Prizes (Sec. 126 ) (double/forecast/quinella/trifecta bets) - WB 193_(P),-4,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0093,l10n_ph,WB 194_(P),Tax on Winnings and Prizes on horse races/owners of winning racehorses (Sec. 126 ) - WB 194_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0094,l10n_ph,WC 180_(P),Interest on foreign loans payable to NRFCs - WC 180_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0095,l10n_ph,WC 190_(P),Interest and other income payments on foreign currency transactions/loans payable to OBUs - WC 190_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0096,l10n_ph,WC 191_(P),Interest and other income payments on foreign currency transactions/loans payable to FCDUs - WC 191_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0097,l10n_ph,WI 202_(P),Cash dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( I ) - WI 202_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0098,l10n_ph,WC 212_(P),Cash dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( C ) - WC 212_(P),-30,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0099,l10n_ph,WI 203_(P),Property dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( I ) - WI 203_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0100,l10n_ph,WC 213_(P),Property dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( C ) - WC 213_(P),-30,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0101,l10n_ph,WC 222_(P),Cash dividend payment by domestic corporation to NRFCs whose countries allowed tax deemed paid credit - WC 222_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0102,l10n_ph,WC 223_(P),Property dividend payment by domestic corporation to NRFCs whose countries allowed tax deemed paid credit - WC 223_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0103,l10n_ph,WI 224_(P),Cash dividend payment by domestic corporation to NRAETB - WI 224_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0104,l10n_ph,WI 225_(P),Property dividend payment by domestic corporation to NRAETB - WI 225_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0105,l10n_ph,WI 226_(P),Share of NRAETB in the distributable net income after tax of a partnership (see ref.) - WI 226_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0106,l10n_ph,WI 240_(P),Distributive share  of  individual partners  in a taxable partnership (see ref.) - WI 240_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0107,l10n_ph,WI 250_(P),All kinds of royalty payments to citizens (see ref.) ( I ) - WI 250_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0108,l10n_ph,WC 250_(P),All kinds of royalty payments to citizens (see ref.) ( C ) - WC 250_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0109,l10n_ph,WI 260_(P),"On  prizes exceeding P10,000 & other winnings paid to individuals - WI 260_(P)",-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0110,l10n_ph,WC 280_(P),Branch profit remittances  by all corporations except PEZA/SBMA/CDA registered - WC 280_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0111,l10n_ph,WC 290_(P),"On the gross rentals, lease and charter fees derived by non-resident owner or lessor of foreign vessels - WC 290_(P)",-4.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0112,l10n_ph,WC 300_(P),"On the gross  rentals, charters  and  other  fees  derived  by non-resident lessor of aircraft, machineries and equipments - WC 300_(P)",-7.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0113,l10n_ph,WI 310_(P),On payments to oil exploration service contractors/sub-contractors ( I ) - WI 310_(P),-8,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0114,l10n_ph,WC 310_(P),On payments to oil exploration service contractors/sub-contractors ( C ) - WC 310_(P),-8,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0115,l10n_ph,WI 320_(P),Payments to Filipinos or alien individuals employed by Foreign Petroleum Service  Contractors (see ref.) - WI 320_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0116,l10n_ph,WI 330_(P),Payments to NRANETB except on sale of shares in domestic corp. and real property - WI 330_(P),-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0117,l10n_ph,WI 340_(P),"On  payments to non-resident individual/foreign  corporate cinematographic film owners, lessors or distributors  ( I ) - WI 340_(P)",-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0118,l10n_ph,WC 340_(P),"On  payments to non-resident individual/foreign  corporate cinematographic film owners, lessors or distributors  ( C ) - WC 340_(P)",-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0119,l10n_ph,WC 230_(P),On other payments to NRFCs ( C ) - WC 230_(P),-30,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0120,l10n_ph,WI 341_(P),Royalties paid to NRAETB on cinematographic films and similar works - WI 341_(P),-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0121,l10n_ph,WI 350_(P),"Final tax on interest or other payments upon tax-free covenant bonds, mortgages (see ref.) - WI 350_(P)",-30,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0122,l10n_ph,WI 380_(P),"Royalties paid to citizens, resident  aliens and NRAETB on books, other literary works and musical compositions - WI 380_(P)",-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0123,l10n_ph,WI 410_(P),Informers Cash Reward to individuals/juridical persons - WI 410_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0124,l10n_ph,WC 410_(P),Informers Cash Reward to individuals/juridical persons - WC 410_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0125,l10n_ph,WI 450_(P),Final Capital Gains Tax on Sale/Exchange or Other Disposition of Real Property ( I ) - WI 450_(P),-6,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0126,l10n_ph,WC 450_(P),Final Capital Gains Tax on Sale/Exchange or Other Disposition of Real Property ( C ) - WC 450_(P),-6,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0127,l10n_ph,WI 161_(P),Saving  Deposit ( I ) - WI 161_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0128,l10n_ph,WC 161_(P),Saving  Deposit ( C ) - WC 161_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0129,l10n_ph,WI 161_(PT),Time Deposit ( I ) - WI 161_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0130,l10n_ph,WC 161_(PT),Time Deposit ( C ) - WC 161_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0131,l10n_ph,WI 162_(P),Government Securities ( I ) - WI 162_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0132,l10n_ph,WC 162_(P),Government Securities ( C ) - WC 162_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0133,l10n_ph,WI 163_(P),Deposit Substitutes/Others ( I ) - WI 163_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0134,l10n_ph,WC 163_(P),Deposit Substitutes/Others ( C ) - WC 163_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0135,l10n_ph,WI 170_(P),Foreign Currency Deposits ( I ) - WI 170_(P),-7.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0136,l10n_ph,WC 170_(P),Foreign Currency Deposits ( C ) - WC 170_(P),-7.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0137,l10n_ph,WC 440_(P),Preterminated Long Term Deposit/Investment - WC 440_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0138,l10n_ph,WI 440_(P),Preterminated Long Term Deposit/Investment - Less than three (3) years - WI 440_(P),-20,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0139,l10n_ph,WI 441_(P),Preterminated Long Term Deposit/Investment - Three (3) years to less than four (4) years - WI 441_(P),-12,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0140,l10n_ph,WI 442_(P),Preterminated Long Term Deposit/Investment - Four (4) years to less than five (5) years - WI 442_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0141,l10n_ph,WF 320_(P),Alien individual  employed by OBU's - WF 320_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0142,l10n_ph,WF 330_(P),Payment of fringe benefits to Non-Resident Alien Not Engaged in Trade or Business (NRAETB) - WF 330_(P),-25,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0143,l10n_ph,WF 360_(P),Employees other than rank and file (Fringe Benefit Tax - 1/1/1999) - WF 360_(P),-33,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0144,l10n_ph,WF 360_(P1),Employees other than rank and file (Fringe Benefit Tax - 1/1/2000) - WF 360_(P),-32,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0145,l10n_ph,WB 030_(P),Tax on carriers and keepers of garages - WB 030_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0146,l10n_ph,WB 040_(P),Franchise Tax on Gas and Water Utilities - WB 040_(P),-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0147,l10n_ph,WB 050_(P),Franchise Tax on radio & TV broadcasting companies (see ref.) - WB 050_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0148,l10n_ph,WB 070_(P),Tax on life insurance premiums - WB 070_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0149,l10n_ph,WB 090_(P),"Tax on Overseas Dispatch, Message or Conversation from the Philippines - WB 090_(P)",-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0150,l10n_ph,WB 120_(P),Business Tax on Agents of foreign   insurance co.- insurance agents - WB 120_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0151,l10n_ph,WB 121_(P),Business Tax on Agents of  foreign  insurance co.- owner of - WB 121_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0152,l10n_ph,WB 130_(P),Tax on International Carriers - WB 130_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0153,l10n_ph,WB 140_(P),Tax on Cockpits - WB 140_(P),-18,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0154,l10n_ph,WB 150_(P),"Tax on Cabaret, night and day clubs - WB 150_(P)",-18,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0155,l10n_ph,WB 160_(P),Tax  on Boxing exhibitions - WB 160_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0156,l10n_ph,WB 170_(P),Tax on Professional basketball games - WB 170_(P),-15,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0157,l10n_ph,WB 180_(P),Tax on jai - alai and race tracks - WB 180_(P),-30,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0158,l10n_ph,WB 200_(P),"Tax on sale, barter or exchange of stocks listed & traded through Local Stock Exchange - WB 200_(P)",-0.5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0159,l10n_ph,WB 201_(P),Shares of stock sold or exchanged through initial and secondary public offering  -  Not over 25% - WB 201_(P),-4,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0160,l10n_ph,WB 202_(P),Shares of stock sold or exchanged through initial and secondary public offering -  Over 25% but not Exceeding 33 1/3 % - WB 202_(P),-2,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0161,l10n_ph,WB 203_(P),Shares of stock sold or exchanged through initial and secondary public offering -  Over 33 1/3% - WB 203_(P),-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0162,l10n_ph,WB 301_(P),"Quasi Banks - On interest, commissions and discounts from lending activities (see ref.)  - WB 301_(P)",-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0163,l10n_ph,WB 303_(P),"Quasi Banks - On interest, commissions and discounts from lending activities  (see ref.) - WB 303_(P)",-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0164,l10n_ph,WB 102_(P),On dividends and equity shares and net income of subsidiaries - WB 102_(P),0,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0165,l10n_ph,WB 103_(P),"On royalties, rentals of property, real or personal, profits from exchange (see ref.) - WB 103_(P)",-7,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0166,l10n_ph,WB 104_(P),"On net trading gains within the taxable year on foreign currency, debt securities (see ref.) - WB 104_(P)",-7,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0167,l10n_ph,WB 108_(P),"Non Quasi Bank-On interest, commissions and discounts from lending activities (see ref.)  - WB 108_(P)",-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0168,l10n_ph,WB 109_(P),"Non Quasi Bank-On interest, commissions and discounts from lending activities (see ref.)  - WB 109_(P)",-1,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0169,l10n_ph,WB 110_(P),On all other items treated as gross income under the code  - WB 110_(P),-5,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0170,l10n_ph,WV 012_(P),VAT Withholding on Purchases of Goods (with waiver of privilege to claim input tax credit) (creditable) - WV 012_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0171,l10n_ph,WV 022_(P),VAT Withholding on Purchases of Services (with waiver of privilege to claim input tax credit) (creditable) - WV 022_(P),-10,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0172,l10n_ph,WB 080_(P),Persons Exempt from VAT under Sec. 109v (creditable)-Government Withholding Agent - WB 080_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0173,l10n_ph,WB 082_(P),Persons Exempt from VAT under Sec. 109v (creditable)-Private Withholding Agent - WB 082_(P),-3,percent,purchase,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_36,100,of tax,coa_36,
+acctaxtmpl0174,l10n_ph,WI 010_(S),Professionals ( I ) - WI 010_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0175,l10n_ph,WC 010_(S),Professionals ( C ) - WC 010_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0176,l10n_ph,WI 011_(S),Professionals ( I ) - WI 011_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0177,l10n_ph,WC 011_(S),Professionals ( C ) - WC 011_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0178,l10n_ph,WI 020_(S),Professional Entertainers - WI 020_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0179,l10n_ph,WI 021_(S),Professional Entertainers - WI 021_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0180,l10n_ph,WI 030_(S),Professional Athletes - WI 030_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0181,l10n_ph,WI 031_(S),Professional Athletes - WI 031_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0182,l10n_ph,WI 040_(S),"Movie, Stage, Radio, Television and Musical Directors - WI 040_(S)",-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0183,l10n_ph,WI 041_(S),"Movie, Stage, Radio, Television and Musical Directors - WI 041_(S)",-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0184,l10n_ph,WI 050_(S),Management and Technical Consultants ( I ) - WI 050_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0185,l10n_ph,WC 050_(S),Management and Technical Consultants ( C ) - WC 050_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0186,l10n_ph,WI 051_(S),Management and Technical Consultants ( I ) - WI 051_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0187,l10n_ph,WC 051_(S),Management and Technical Consultants ( C ) - WC 051_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0188,l10n_ph,WI 060_(S),Business and Bookkeeping - WI 060_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0189,l10n_ph,WI 061_(S),Business and Bookkeeping - WI 061_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0190,l10n_ph,WI 070_(S),Insurance Agents and Insurance Adjusters - WI 070_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0191,l10n_ph,WI 071_(S),Insurance Agents and Insurance Adjusters - WI 071_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0192,l10n_ph,WI 080_(S),Other Recipients (Talent Fees) - WI 080_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0193,l10n_ph,WI 081_(S),Other Recipients (Talent Fees) - WI 081_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0194,l10n_ph,WI 090_(S),Directors Fees - WI 090_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0195,l10n_ph,WI 091_(S),Directors Fees - WI 091_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0196,l10n_ph,WI 100_(S),Rentals: Properties ( I ) - WI 100_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0197,l10n_ph,WC 100_(S),Rentals: Properties ( C ) - WC 100_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0198,l10n_ph,WI 110_(S),Rentals: Cinematographic Film ( I ) - WI 110_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0199,l10n_ph,WC 110_(S),Rentals: Cinematographic Film ( C ) - WC 110_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0200,l10n_ph,WI 120_(S),Prime Contractors/Sub-contractors ( I ) - WI 120_(S),-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0201,l10n_ph,WC 120_(S),Prime Contractors/Sub-contractors ( C ) - WC 120_(S),-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0202,l10n_ph,WI 130_(S),Beneficiaries of Estates & Trusts - WI 130_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0203,l10n_ph,WI 140_(S),Gross Commission / Service Fees ( I ) - WI 140_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0204,l10n_ph,WC 140_(S),Gross Commission / Service Fees ( C ) - WC 140_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0205,l10n_ph,WI 141_(S),Payments: Medical Practitioners - WI 141_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0206,l10n_ph,WI 142_(S),Payments: Medical Practitioners - WI 142_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0207,l10n_ph,WI 151_(S),Payments: Medical/Dental/Veterinaty Services - WI 151_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0208,l10n_ph,WI 150_(S),Payments: Medical/Dental/Veterinaty Services - WI 150_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0209,l10n_ph,WI 152_(S),Payments: GPP to Partners - WI 152_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0210,l10n_ph,WI 153_(S),Payments: GPP to Partners - WI 153_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0211,l10n_ph,WI 156_(S),Payments by Credit Card Companies ( I ) - WI 156_(S),-0.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0212,l10n_ph,WC 156_(S),Payments by Credit Card Companies ( C ) - WC 156_(S),-0.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0213,l10n_ph,WI 640_(S),"Income Payments, Government to Goods Suppliers ( I ) - WI 640_(S)",-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0214,l10n_ph,WC 640_(S),"Income Payments, Government to Goods Suppliers ( C ) - WC 640_(S)",-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0215,l10n_ph,WI 157_(S),"Income Payments, Government to Service Suppliers ( I ) - WI 157_(S)",-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0216,l10n_ph,WC 157_(S),"Income Payments, Government to Service Suppliers ( C ) - WC 157_(S)",-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0217,l10n_ph,WI 158_(S),"Income Payments, Corporation to Goods Suppliers ( I ) - WI 158_(S)",-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0218,l10n_ph,WC 158_(S),"Income Payments, Corporation to Goods Suppliers ( C ) - WC 158_(S)",-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0219,l10n_ph,WI 160_(S),"Income Payments, Corporation to Service Suppliers ( I ) - WI 160_(S)",-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0220,l10n_ph,WC 160_(S),"Income Payments, Corporation to Service Suppliers ( C ) - WC 160_(S)",-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0221,l10n_ph,WI 159_(S),Overtime Services - WI 159_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0222,l10n_ph,WI 515_(S),Multi-level Marketing Companies ( I ) - WI 515_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0223,l10n_ph,WC 515_(S),Multi-level Marketing Companies ( C ) - WC 515_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0224,l10n_ph,WI 530_(S),Embalmers - WI 530_(S),-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0225,l10n_ph,WI 535_(S),Pre-Need Companies ( I ) - WI 535_(S),-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0226,l10n_ph,WC 535_(S),Pre-Need Companies ( C ) - WC 535_(S),-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0227,l10n_ph,WI 540_(S),Refineries Tolling Fees ( I ) - WI 540_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0228,l10n_ph,WC 540_(S),Refineries Tolling Fees ( C ) - WC 540_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0229,l10n_ph,WI 555_(S),Sale of Real Property (Ordinary Asset) ( I ) - WI 555_(S),-1.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0230,l10n_ph,WC 555_(S),Sale of Real Property (Ordinary Asset) ( C ) - WC 555_(S),-1.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0231,l10n_ph,WI 556_(S),Sale of Real Property (Ordinary Asset) ( I ) - WI 556_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0232,l10n_ph,WC 556_(S),Sale of Real Property (Ordinary Asset) ( C ) - WC 556_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0233,l10n_ph,WI 557_(S),Sale of Real Property (Ordinary Asset) ( I ) - WI 557_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0234,l10n_ph,WC 557_(S),Sale of Real Property (Ordinary Asset) ( C ) - WC 557_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0235,l10n_ph,WI 558_(S),Sale of Real Property (Ordinary Asset) ( I ) - WI 558_(S),-6,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0236,l10n_ph,WC 558_(S),Sale of Real Property (Ordinary Asset) ( C ) - WC 558_(S),-6,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0237,l10n_ph,WI 610_(S),Agricultural Products ( I ) - WI 610_(S),-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0238,l10n_ph,WC 610_(S),Agricultural Products ( C ) - WC 610_(S),-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0239,l10n_ph,WI 630_(S),Mineral Products and Quarry Resources ( I ) - WI 630_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0240,l10n_ph,WC 630_(S),Mineral Products and Quarry Resources ( C ) - WC 630_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0241,l10n_ph,WI 632_(S),Gold Purchases ( I ) - WI 632_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0242,l10n_ph,WC 632_(S),Gold Purchases ( C ) - WC 632_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0243,l10n_ph,WI 650_(S),MERALCO Refunds Active Contract ( I ) - WI 650_(S),-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0244,l10n_ph,WC 650_(S),MERALCO Refunds Active Contract ( C ) - WC 650_(S),-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0245,l10n_ph,WI 651_(S),MERALCO Refunds Terminated Contract ( I ) - WI 651_(S),-32,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0246,l10n_ph,WC 651_(S),MERALCO Refunds Terminated Contract ( C ) - WC 651_(S),-32,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0247,l10n_ph,WV 010_(S),VAT Withholding  on  Purchase of Goods - Govt. Withholding Agent - WV 010_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0248,l10n_ph,WV 020_(S),VAT Withholding  on  Purchase of Services - Govt. Withholding Agent - WV 020_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0249,l10n_ph,WV 030_(S),VAT Withholding  on  Purchase of Govenrment Public Work Contracts  - WV 030_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0250,l10n_ph,WV 014_(S),VAT Withholding on Purchase of Goods   (with waiver of privilege to claim input tax credits) - WV 014_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0251,l10n_ph,WV 024_(S),VAT Withholding on Purchase of Services   (with waiver of privilege to claim input tax credits) - WV 024_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0252,l10n_ph,WB 084_(S),Person exempt from VAT under Sec. 109 (v)  - WB 084_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0253,l10n_ph,WV 040_(S),VAT Withholding on Non-residents - Gov't. Withholding Agent - WV 040_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0254,l10n_ph,WV 050_(S),VAT Withholding on Non-residents - Private Withholding Agent - WV 050_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0255,l10n_ph,WB 191_(S),Tax on Winnings and Prizes (Sec. 126) (double/forecast/quinella/trifecta bets) - WB 191_(S),-4,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0256,l10n_ph,WB 192_(S),Tax on Winnings and Prizes on horse races/owners of winning racehorses (Sec. 126) - WB 192_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0257,l10n_ph,WB 193_(S),Tax on Winnings and Prizes (Sec. 126 ) (double/forecast/quinella/trifecta bets) - WB 193_(S),-4,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0258,l10n_ph,WB 194_(S),Tax on Winnings and Prizes on horse races/owners of winning racehorses (Sec. 126 ) - WB 194_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0259,l10n_ph,WC 180_(S),Interest on foreign loans payable to NRFCs - WC 180_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0260,l10n_ph,WC 190_(S),Interest and other income payments on foreign currency transactions/loans payable to OBUs - WC 190_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0261,l10n_ph, WC191_(S),Interest and other income payments on foreign currency transactions/loans payable to FCDUs - WC191_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0262,l10n_ph,WI 202_(S),Cash dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( I ) - WI 202_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0263,l10n_ph,WC 212_(S),Cash dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( C ) - WC 212_(S),-30,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0264,l10n_ph,WI 203_(S),Property dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( I ) - WI 203_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0265,l10n_ph,WC 213_(S),Property dividend payment by domestic corporation to citizens and resident aliens/NRFCs ( C ) - WC 213_(S),-30,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0266,l10n_ph,WC 222_(S),Cash dividend payment by domestic corporation to NRFCs whose countries allowed tax deemed paid credit - WC 222_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0267,l10n_ph,WC 223_(S),Property dividend payment by domestic corporation to NRFCs whose countries allowed tax deemed paid credit - WC 223_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0268,l10n_ph,WI 224_(S),Cash dividend payment by domestic corporation to NRAETB - WI 224_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0269,l10n_ph,WI 225_(S),Property dividend payment by domestic corporation to NRAETB - WI 225_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0270,l10n_ph,WI 226_(S),Share of NRAETB in the distributable net income after tax of a partnership (see ref.) - WI 226_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0271,l10n_ph,WI 240_(S),Distributive share  of  individual partners  in a taxable partnership (see ref.) - WI 240_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0272,l10n_ph,WI 250_(S),All kinds of royalty payments to citizens (see ref.) ( I ) - WI 250_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0273,l10n_ph,WC 250_(S),All kinds of royalty payments to citizens (see ref.) ( C ) - WC 250_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0274,l10n_ph,WI 260_(S),"On  prizes exceeding P10,000 & other winnings paid to individuals - WI 260_(S)",-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0275,l10n_ph,WC 280_(S),Branch profit remittances  by all corporations except PEZA/SBMA/CDA registered - WC 280_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0276,l10n_ph,WC 290_(S),"On the gross rentals, lease and charter fees derived by non-resident owner or lessor of foreign vessels - WC 290_(S)",-4.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0277,l10n_ph,WC 300_(S),"On the gross  rentals, charters  and  other  fees  derived  by non-resident lessor of aircraft, machineries and equipments - WC 300_(S)",-7.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0278,l10n_ph,WI 310_(S),On payments to oil exploration service contractors/sub-contractors ( I ) - WI 310_(S),-8,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0279,l10n_ph,WC 310_(S),On payments to oil exploration service contractors/sub-contractors ( C ) - WC 310_(S),-8,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0280,l10n_ph,WI 320_(S),Payments to Filipinos or alien individuals employed by Foreign Petroleum Service  Contractors (see ref.) - WI 320_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0281,l10n_ph,WI 330_(S),Payments to NRANETB except on sale of shares in domestic corp. and real property - WI 330_(S),-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0282,l10n_ph,WI 340_(S),"On  payments to non-resident individual/foreign  corporate cinematographic film owners, lessors or distributors  ( I ) - WI 340_(S)",-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0283,l10n_ph,WC 340_(S),"On  payments to non-resident individual/foreign  corporate cinematographic film owners, lessors or distributors  ( C ) - WC 340_(S)",-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0284,l10n_ph,WC 230_(S),On other payments to NRFCs ( C ) - WC 230_(S),-30,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0285,l10n_ph,WI 341_(S),Royalties paid to NRAETB on cinematographic films and similar works - WI 341_(S),-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0286,l10n_ph,WI 350_(S),"Final tax on interest or other payments upon tax-free covenant bonds, mortgages (see ref.) - WI 350_(S)",-30,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0287,l10n_ph,WI 380_(S),"Royalties paid to citizens, resident  aliens and NRAETB on books, other literary works and musical compositions - WI 380_(S)",-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0288,l10n_ph,WI 410_(S),Informers Cash Reward to individuals/juridical persons - WI 410_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0289,l10n_ph,WC 410_(S),Informers Cash Reward to individuals/juridical persons - WC 410_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0290,l10n_ph,WI 450_(S),Final Capital Gains Tax on Sale/Exchange or Other Disposition of Real Property ( I ) - WI 450_(S),-6,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0291,l10n_ph,WC 450_(S),Final Capital Gains Tax on Sale/Exchange or Other Disposition of Real Property ( C ) - WC 450_(S),-6,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0292,l10n_ph,WI 161_(S),Saving  Deposit ( I ) - WI 161_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0293,l10n_ph,WC 161_(S),Saving  Deposit ( C ) - WC 161_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0294,l10n_ph,WI 161_(ST),Time Deposit ( I ) - WI 161_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0295,l10n_ph,WC 161_(ST),Time Deposit ( C ) - WC 161_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0296,l10n_ph,WI 162_(S),Government Securities ( I ) - WI 162_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0297,l10n_ph,WC 162_(S),Government Securities ( C ) - WC 162_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0298,l10n_ph,WI 163_(S),Deposit Substitutes/Others ( I ) - WI 163_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0299,l10n_ph,WC 163_(S),Deposit Substitutes/Others ( C ) - WC 163_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0300,l10n_ph,WI 170_(S),Foreign Currency Deposits ( I ) - WI 170_(S),-7.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0301,l10n_ph,WC 170_(S),Foreign Currency Deposits ( C ) - WC 170_(S),-7.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0302,l10n_ph,WC 440_(S),Preterminated Long Term Deposit/Investment - WC 440_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0303,l10n_ph,WI 440_(S),Preterminated Long Term Deposit/Investment - Less than three (3) years - WI 440_(S),-20,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0304,l10n_ph,WI 441_(S),Preterminated Long Term Deposit/Investment - Three (3) years to less than four (4) years - WI 441_(S),-12,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0305,l10n_ph,WI 442_(S),Preterminated Long Term Deposit/Investment - Four (4) years to less than five (5) years - WI 442_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0306,l10n_ph,WF 320_(S),Alien individual  employed by OBU's - WF 320_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0307,l10n_ph,WF 330_(S),Payment of fringe benefits to Non-Resident Alien Not Engaged in Trade or Business (NRAETB) - WF 330_(S),-25,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0308,l10n_ph,WF 360_(S),Employees other than rank and file (Fringe Benefit Tax - 1/1/1999) - WF 360_(S),-33,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0309,l10n_ph,WF 360_(S1),Employees other than rank and file (Fringe Benefit Tax - 1/1/2000) - WF 360_(S),-32,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0310,l10n_ph,WB 030_(S),Tax on carriers and keepers of garages - WB 030_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0311,l10n_ph,WB 040_(S),Franchise Tax on Gas and Water Utilities - WB 040_(S),-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0312,l10n_ph,WB 050_(S),Franchise Tax on radio & TV broadcasting companies (see ref.) - WB 050_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0313,l10n_ph,WB 070_(S),Tax on life insurance premiums - WB 070_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0314,l10n_ph,WB 090_(S),"Tax on Overseas Dispatch, Message or Conversation from the Philippines - WB 090_(S)",-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0315,l10n_ph,WB 120_(S),Business Tax on Agents of foreign   insurance co.- insurance agents - WB 120_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0316,l10n_ph,WB 121_(S),Business Tax on Agents of  foreign  insurance co.- owner of - WB 121_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0317,l10n_ph,WB 130_(S),Tax on International Carriers - WB 130_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0318,l10n_ph,WB 140_(S),Tax on Cockpits - WB 140_(S),-18,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0319,l10n_ph,WB 150_(S),"Tax on Cabaret, night and day clubs - WB 150_(S)",-18,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0320,l10n_ph,WB 160_(S),Tax  on Boxing exhibitions - WB 160_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0321,l10n_ph,WB 170_(S),Tax on Professional basketball games - WB 170_(S),-15,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0322,l10n_ph,WB 180_(S),Tax on jai - alai and race tracks - WB 180_(S),-30,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0323,l10n_ph,WB 200_(S),"Tax on sale, barter or exchange of stocks listed & traded through Local Stock Exchange - WB 200_(S)",-0.5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0324,l10n_ph,WB 201_(S),Shares of stock sold or exchanged through initial and secondary public offering  -  Not over 25% - WB 201_(S),-4,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0325,l10n_ph,WB 202_(S),Shares of stock sold or exchanged through initial and secondary public offering -  Over 25% but not Exceeding 33 1/3 % - WB 202_(S),-2,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0326,l10n_ph,WB 203_(S),Shares of stock sold or exchanged through initial and secondary public offering -  Over 33 1/3% - WB 203_(S),-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0327,l10n_ph,WB 301_(S),"Quasi Banks - On interest, commissions and discounts from lending activities (see ref.)  - WB 301_(S)",-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0328,l10n_ph,WB 303_(S),"Quasi Banks - On interest, commissions and discounts from lending activities  (see ref.) - WB 303_(S)",-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0329,l10n_ph,WB 102_(S),On dividends and equity shares and net income of subsidiaries - WB 102_(S),0,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0330,l10n_ph,WB 103_(S),"On royalties, rentals of property, real or personal, profits from exchange (see ref.) - WB 103_(S)",-7,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0331,l10n_ph,WB 104_(S),"On net trading gains within the taxable year on foreign currency, debt securities (see ref.) - WB 104_(S)",-7,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0332,l10n_ph,WB 108_(S),"Non Quasi Bank-On interest, commissions and discounts from lending activities (see ref.)  - WB 108_(S)",-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0333,l10n_ph,WB 109_(S),"Non Quasi Bank-On interest, commissions and discounts from lending activities (see ref.)  - WB 109_(S)",-1,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0334,l10n_ph,WB 110_(S),On all other items treated as gross income under the code  - WB 110_(S),-5,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0335,l10n_ph,WV 012_(S),VAT Withholding on Purchases of Goods (with waiver of privilege to claim input tax credit) (creditable) - WV 012_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0336,l10n_ph,WV 022_(S),VAT Withholding on Purchases of Services (with waiver of privilege to claim input tax credit) (creditable) - WV 022_(S),-10,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0337,l10n_ph,WB 080_(S),Persons Exempt from VAT under Sec. 109v (creditable)-Government Withholding Agent - WB 080_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
+acctaxtmpl0338,l10n_ph,WB 082_(S),Persons Exempt from VAT under Sec. 109v (creditable)-Private Withholding Agent - WB 082_(S),-3,percent,sale,1,tax_group_wht,,100,Base,,100,Base,,1
+,,,,,,,,,,100,of tax,coa_21,100,of tax,coa_21,
