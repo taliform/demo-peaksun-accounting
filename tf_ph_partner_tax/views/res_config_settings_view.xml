@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+            
+        <record id="tf_ph_partner_tax_config" model="ir.ui.view">
+            <field name="name">tf.ph.partner.tax.config</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='account']">
+                	<h2>Default Taxes</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="default_taxes">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Taxes</span>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+                                <div class="text-muted">
+                                    Default taxes applied for VAT computations.
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label string="VAT Tax" for="vat_tax_ids" class="col-lg-3 o_light_label"/>
+                                        <field name="vat_tax_ids" widget="many2many_tags" domain="[('type_tax_use', 'in', ('purchase','sale')), ('company_id', '=', company_id)]"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="VAT-Exempt Tax" for="vat_exempt_tax_ids" class="col-lg-3 o_light_label"/>
+                                        <field name="vat_exempt_tax_ids" widget="many2many_tags" domain="[('type_tax_use', 'in', ('purchase','sale')), ('company_id', '=', company_id)]"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="Zero Rated Tax" for="zero_rated_tax_ids" class="col-lg-3 o_light_label"/>
+                                        <field name="zero_rated_tax_ids" widget="many2many_tags" domain="[('type_tax_use', 'in', ('purchase','sale')), ('company_id', '=', company_id)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="withhold_taxes">
+	                         <div class="o_setting_right_pane">
+	                             <span class="o_form_label">Withholding Taxes</span>
+	                             <div class="text-muted">
+	                                 Applicable withholding tax codes (ATC) on each BIR forms.
+	                             </div>
+	                             <div class="content-group">
+<!--		                             <div class="row mt16">-->
+<!--                                        <label string="2306" for="withholding_2306_ids" class="col-lg-3 o_light_label"/>-->
+<!--                                        <field name="withholding_2306_ids" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase'), ('company_id', '=', company_id)]"/>-->
+<!--                                    </div>-->
+                                    <div class="row">
+                                        <label string="2307" for="withholding_2307_ids" class="col-lg-3 o_light_label"/>
+                                        <field name="withholding_2307_ids" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase'), ('company_id', '=', company_id)]"/>
+                                    </div>
+		                         </div>
+	                         </div>
+	                     </div>
+                    </div>
+                </xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

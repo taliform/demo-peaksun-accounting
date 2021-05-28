@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+
+		<template id="account_payable_voucher_middle">
+			<t t-call="web.html_container">
+				<t t-call="web.external_layout">
+					<t t-foreach="docs" t-as="o">
+						<div class="page">
+							<br />
+							<table width="100%">
+								<tr>
+									<td colspan="4"
+										style="text-align:center;font-weight:bold;font-size:30px;">
+										PAYABLE VOUCHER
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4"
+										style="text-align:center;font-weight:bold;font-size:15px;">
+										<strong>NUMBER: </strong><span t-field="o.name"/>
+									</td>
+								</tr>
+								<tr style="height:10px">
+									<td width="10%">
+										<strong>Name:</strong>
+									</td>
+									<td width="45%">
+										<span t-field="o.partner_id.name" />
+									</td>
+									<td width="20%" style="text-align:right;">
+										<strong>Date:</strong>
+									</td>
+									<td width="25%" style="text-align:right;">
+										<span t-field="o.date"
+											  t-options='{"format": "MMMM d, y"}' />
+									</td>
+								</tr>
+
+								<tr style="height:10px">
+									<td width="10%">
+										<strong>Address:</strong>
+									</td>
+									<td width="45%">
+										<span t-field="o.partner_id.street" />
+										<span t-field="o.partner_id.street2" />
+										<span t-field="o.partner_id.city" />
+										<t t-if="o.partner_id.state_id">
+											<span t-field="o.partner_id.state_id.name" />
+										</t>
+										<t t-if="o.partner_id.country_id">
+											<span t-field="o.partner_id.country_id.name" />
+										</t>
+										<span t-field="o.partner_id.zip" />
+									</td>
+									<td width="20%" style="text-align:right;">
+										<strong>Source:</strong>
+									</td>
+									<td width="25%" style="text-align:right;">
+										<span t-field="o.source_doc" />
+									</td>
+								</tr>
+
+								<tr style="height:10px">
+									<td width="10%">
+										<strong>Phone:</strong>
+									</td>
+									<td width="45%">
+										<span t-field="o.partner_id.phone" />
+									</td>
+									<td width="20%" style="text-align:right;">
+										<strong>Purchase Order:</strong>
+									</td>
+									<td width="25%" style="text-align:right;">
+										<span t-field="o.po_id.name" />
+									</td>
+								</tr>
+
+								<tr style="height:10px">
+									<td width="10%">
+										<strong>TIN:</strong>
+									</td>
+									<td width="45%">
+										<span t-field="o.partner_id.vat" />
+									</td>
+									<td width="20%" style="text-align:right;">
+										<strong>Date Due:</strong>
+									</td>
+									<td width="25%" style="text-align:right;">
+										<span t-field="o.invoice_date_due" t-options='{"format": "MMMM d, y"}' />
+									</td>
+								</tr>
+							</table>
+
+							<br />
+							<table width="100%" class="table table-condensed table-bordered" >
+								<thead style="font-size:15px;">
+									<tr>
+										<th width="40%" style="text-align: center; background-color:gray; color:white">
+											<strong>ACCOUNT</strong>
+										</th>
+										<th width="30%"  style="text-align: center; background-color:gray; color:white">
+											<strong>LABEL</strong>
+										</th>
+										<th width="15%" style="text-align: center; background-color:gray; color:white">
+											<strong>DEBIT</strong>
+										</th>
+										<th width="15%" style="text-align: center; background-color:gray; color:white">
+											<strong>CREDIT</strong>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<t t-set="debit" t-value="0.00" />
+									<t t-set="credit" t-value="0.00" />
+									<tr t-foreach="o.line_ids.sorted(key=lambda r: r.debit, reverse=True)" t-as="line">
+										<td style="text-align: center">
+											<span t-field="line.account_id.code" /> <span t-field="line.account_id.name" />
+										</td>
+										<td style="text-align: center">
+											<span t-field="line.name" />
+										</td>
+										<td style="text-align: center">
+											<span t-field="line.debit" />
+										</td>
+										<td style="text-align: center">
+											<span t-field="line.credit" />
+										</td>
+										<t t-set="debit" t-value="debit + line.debit" />
+										<t t-set="credit" t-value="credit + line.credit" />
+									</tr>
+
+									<tr>
+										<td colspan="100%" style="text-align: center">* * * NOTHING FOLLOWS * * *</td>
+									</tr>
+									<tr align="right">
+										<td></td>
+										<td></td>
+										<td style="text-align: right">
+											<t t-if="o.currency_id.position == 'before'">
+												<strong>
+													<span t-field="o.currency_id.symbol" /> <span t-esc="'{:,.2f}'.format(debit)"/>
+												</strong>
+											</t>
+											<t t-if="o.currency_id.position == 'after'">
+												<strong>
+													<span t-esc="'{:,.2f}'.format(debit)"/> <span t-field="o.currency_id.symbol" />
+												</strong>
+											</t>
+										</td>
+										<td style="text-align: right">
+											<t t-if="o.currency_id.position == 'before'">
+												<strong>
+													<span t-field="o.currency_id.symbol" /> <span t-esc="'{:,.2f}'.format(credit)"/>
+												</strong>
+											</t>
+											<t t-if="o.currency_id.position == 'after'">
+												<strong>
+													<span t-esc="'{:,.2f}'.format(credit)"/> <span t-field="o.currency_id.symbol" />
+												</strong>
+											</t>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<table width="100%" class="table table-condensed table-bordered" >
+								<thead>
+									<tr>
+										<th width="70%"
+											style="text-align: center; background-color:gray; color:white">
+											<strong>PARTICULARS</strong>
+										</th>
+										<th width="3_0%"
+											style="text-align: center; background-color:gray; color:white">
+											<strong>AMOUNT</strong>
+										</th>
+									</tr>
+								</thead>
+
+								<t t-set="currency" t-value="res_company.currency_id" />
+								<tr t-foreach="o.line_ids" t-as="line">
+									<t t-if="line.account_id.user_type_id.name == 'Payable'">
+
+										<td style="text-align: center">
+											<!--											<span t-field="o.name" /> - <span t-field="line.invoice_id.reference" />-->
+											<span t-field="o.name" /> - <span t-field="line.move_id.invoice_payment_ref" />
+										</td>
+										<td style="text-align: right">
+											<t t-if="line.debit != 0.00">
+												<span t-field="line.debit"
+													  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}' />
+											</t>
+
+											<t t-if="line.credit != 0.00">
+												<span t-field="line.credit"
+													  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}' />
+
+											</t>
+										</td>
+									</t>
+								</tr>
+							</table>
+
+							<table width="100%" >
+								<thead>
+									<tr>
+										<th width="30%">Prepared By:</th>
+										<th width="30%">Certified By:</th>
+										<th width="40%" style="text-align: right">Noted By:</th>
+									</tr>
+									<tr>
+										<td width="30%">
+											<div><span t-field="o.create_uid.name"/></div>
+										</td>
+										<td width="30%">
+											<div><span t-field="o.certified_by.name"/></div>
+										</td>
+										<td width="40%" style="text-align: right">
+											<div><span t-field="o.noted_by.name"/></div>
+										</td>
+									</tr>
+									<tr>
+										<td width="30%">
+											<strong style="text-align: center; font-size: xx-small;">Signature over Printed Name</strong>
+											<p>Date: <span t-field="o.date" /></p>
+										</td>
+										<td width="30%">
+											<strong style="text-align: center; font-size: xx-small;">Signature over Printed Name</strong>
+											<p>Date: </p>
+										</td>
+										<td width="30%" style="text-align: right">
+											<strong style="text-align: center; font-size: xx-small;">Signature over Printed Name</strong>
+											<p>Date: </p>
+										</td>
+									</tr>
+								</thead>
+							</table>
+							<p style="page-break-after:always;">   </p>
+						</div>
+					</t>
+				</t>
+			</t>
+
+		</template>
+
+
+	</data>
+</odoo>

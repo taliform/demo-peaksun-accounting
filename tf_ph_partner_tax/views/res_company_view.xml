@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="company_tax_view" model="ir.ui.view">
+			<field name="name">Company Tax</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='company_registry']"
+					position="after">
+					<field name="vat_registered" />
+				</xpath>
+				<xpath expr="//field[@name='vat']" position="attributes">
+					<attribute name="placeholder">Enter your TIN: ie. 123-456-789-00000
+					</attribute>
+					<attribute name="required">1
+					</attribute>
+				</xpath>
+				<xpath expr="//field[@name='vat']" position="after">
+					<field name="rdo_code" />
+				</xpath>
+				<xpath expr="//field[@name='website']" position="after">
+					<field name="authorized_rep_id" />
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

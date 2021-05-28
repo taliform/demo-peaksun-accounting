@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<!-- Inherit Customer Invoice Form -->
+		<record id="tf_ph_partner_account_invoice_vat_sales" model="ir.ui.view">
+			<field name="name">tf.ph.partner.account.invoice.vat.sales</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group[hasclass('oe_subtotal_footer')]" position="after">
+					<div class="clearfix"/>
+					<group class="oe_subtotal_footer" attrs="{'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))]}">
+						<div class="o_td_label">
+							<label for="vatable" string="VATable Sales" style="font-weight:bold;" attrs="{'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"/>
+							<label for="vatable" string="VATable" style="font-weight:bold;" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+						</div>
+						<field name="vatable" nolabel="1"/>
+						<div class="o_td_label">
+							<label for="exempt" string="VAT-Exempt Sales" style="font-weight:bold;" attrs="{'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"/>
+							<label for="exempt" string="VAT-Exempt" style="font-weight:bold;" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+						</div>
+						<field name="exempt" nolabel="1"/>
+						<div class="o_td_label">
+							<label for="zero" string="Zero Rated Sales" style="font-weight:bold;" attrs="{'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"/>
+							<label for="zero" string="Zero Rated" style="font-weight:bold;" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+						</div>
+						<field name="zero" nolabel="1"/>
+						<field name="ewt" string="Withholding Tax" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+						<field name="vat_tax" string="Value Added Tax" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+					</group>
+				</xpath>
+
+				<xpath expr="//field[@name='fiscal_position_id']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//group/group[2]" position="inside">
+					<field name="sale_tax_ids" widget="many2many_tags" attrs="{'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"/>
+					<field name="purchase_tax_ids" widget="many2many_tags" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+				</xpath>
+
+				<xpath expr="//group/group[1]" position="inside">
+					<field name="id" invisible="1"/>
+					<field name="base_transaction_type" class="oe-right" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+				</xpath>
+
+				<xpath expr="//field[@name='invoice_line_ids']" position="before">
+					<field name="show_update_transactions" invisible="1"/>
+					<button name="button_upd_transaction" type="object" icon="fa-exclamation-triangle"
+							string=" UPDATE TRANSACTION TYPES"
+						 	attrs="{'invisible': ['|', ('show_update_transactions', '=', False), ('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"
+						 	help="Updates the Transaction Type of all Invoice Lines to Invoice's Transaction Type."
+						 	class="btn-danger oe_right"/>
+				</xpath>
+
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='tax_ids']" position="after">
+					<field name="type" invisible="1"/>
+					<field name="id" invisible="1"/>
+					<field name="invoice_state" invisible="1"/>
+                    <field name="req_transaction_type" invisible="1"/>
+					<field name="transaction_type"
+						   invisible="context.get('default_type') not in ('in_invoice', 'in_refund', 'in_receipt')"/>
+					<button name="change_transaction_type" type="object" icon="fa-pencil-square-o" attrs="{'invisible': ['|', ('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt')), '|',('invoice_state', 'in', ('draft','cancel')),('id','=', False)]}" help="Update Transaction Type"/>
+				</xpath>
+
+				<xpath expr="//field[@name='invoice_line_ids']/form/sheet/group[2]/field[@name='account_id']" position="after">
+					<field name="type" invisible="1"/>
+					<field name="id" invisible="1"/>
+					<field name="invoice_state" invisible="1"/>
+					<field name="req_transaction_type" invisible="1"/>
+					<label for="transaction_type" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+	                <div>
+						<field name="transaction_type" nolabel="1" attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt'))]}"/>
+						<button name="change_transaction_type" type="object" icon="fa-pencil-square-o" attrs="{'invisible': ['|', ('type', 'not in', ('in_invoice', 'in_refund', 'in_receipt')), '|',('invoice_state', 'in', ('draft','cancel')),('id','=', False)]}" help="Update Transaction Type"/>
+					</div>
+
+	            </xpath>
+
+				<xpath expr="//field[@name='line_ids']/tree/field[last()]" position="after">
+					<field name="type" invisible="1"/>
+					<field name="id" invisible="1"/>
+					<field name="invoice_state" invisible="1"/>
+					<field name="req_transaction_type" invisible="1"/>
+					<field name="transaction_type" invisible="1"/>
+				</xpath>
+
+				<xpath expr="//field[@name='line_ids']/form/group/field[last()]" position="after">
+					<field name="type" invisible="1"/>
+					<field name="id" invisible="1"/>
+					<field name="invoice_state" invisible="1"/>
+					<field name="req_transaction_type" invisible="1"/>
+					<field name="transaction_type" invisible="1"/>
+				</xpath>
+
+			</field>
+		</record> 
+
+		<!-- Transaction Type -->		
+		<record id="tf_ph_partner_change_transaction_invoice_view" model="ir.ui.view">
+			<field name="name">tf.ph.partner.change.transaction.invoice.view</field>
+			<field name="model">account.move.line</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Change Transaction Type" create="false" delete="false" edit="false">
+					<h1>
+                        <field name="move_id" readonly="1" class="oe_inline" options="{'no_open': True}"/>
+					</h1>
+					<div>
+						<table class="table table-condensed table-bordered">
+							<thead style="background-color: #737373;">
+								<tr>
+									<td style="color: #ffffff;font-size:15px;text-align:center">Product</td>
+									<td style="color: #ffffff;font-size:15px;text-align:center">Transaction Type</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td style="text-align:center"><field name="product_id" readonly="True" options="{'no_open': True}"/></td>
+									<td style="text-align:center"><field name="transaction_type"/></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<xpath expr="//footer" position="replace">
+						<footer>
+							<button name="write_transaction" type="object" string="Save" class="btn-primary" context="{'transaction_type' : transaction_type}"/>
+							<button string="Cancel" class="btn-secondary" special="cancel"/>
+						</footer>
+					</xpath>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

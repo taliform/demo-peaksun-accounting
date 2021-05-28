@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<record id="tf_ph_partner_tax_tree_view" model="ir.ui.view">
+			<field name="name">tf.ph.partner.tax.tree.view</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_tree"/>
+			<field name="arch" type="xml">
+				<field name="display_name" position="after">
+					<field name="vat" string="TIN &#160;&#160;&#160;&#160;&#160;&#160;&#160;"/>
+				</field>
+			</field>
+		</record>
+		
+		
+		<record id="tf_ph_partner_tax_view" model="ir.ui.view">
+			<field name="name">tf.ph.partner.tax.view</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group/field[@name='user_id']" position="before">
+					<field name="sale_tax_ids" widget="many2many_tags"/>
+				</xpath>
+				
+				<xpath expr="//group/field[@name='property_supplier_payment_term_id']" position="before">
+					<field name="purchase_tax_ids" widget="many2many_tags" string="Vendor Tax"/>
+					<field name="transaction_type"/>
+				</xpath>
+
+				<xpath expr="//field[@name='name']" position="replace" >
+					<field name="name" placeholder="Name" attrs="{'invisible': ['|', '&amp;', ('is_company','=', False),('parent_id', '=', False),('company_name', '!=', False),('company_name', '!=', '')]}"/>
+					<group attrs="{'invisible': ['|', '&amp;', ('is_company','=', True),('parent_id', '=', False),('company_name', '!=', False),('company_name', '!=', '')]}">
+						<field name="first_name" />
+						<field name="middle_name" />
+						<field name="last_name" />
+					</group>
+
+				</xpath>
+
+				<xpath expr="//field[@name='vat']" position="replace">
+					<field name="vat" placeholder="Enter your TIN: ie. 123-456-789-00000" required="1"/>
+					<field name="rdo_code" />
+				</xpath>
+
+				<xpath expr="//field[@name='website']" position="after">
+					<field name="business_id"/>
+				</xpath>
+
+				<xpath expr="//field[@name='category_id']" position="before">
+					<field name="trade_name" placeholder="Trade Name"/>
+				</xpath>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

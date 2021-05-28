@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+      
+      	<record id="tf_ph_partner_stock_property_form_inherit" model="ir.ui.view">
+        	<field name="name">tf.ph.partner.stock.property.form.inherit</field>
+        	<field name="model">product.category</field>
+        	<field name="inherit_id" ref="stock_account.view_category_property_form"/>
+        	<field name="arch" type="xml">
+          		<xpath expr="//group[@name='account_stock_property']" position="replace">
+            		<group name="account_stock_property" string="Account Stock Properties">
+               			<field name="property_stock_account_input_categ_id" domain="[('internal_type','=','other'),('deprecated', '=', False)]"/>
+               			<field name="property_stock_account_output_categ_id" domain="[('internal_type','=','other'),('deprecated', '=', False)]"/>
+               			<field name="property_stock_valuation_account_id" domain="[('internal_type','=','other'),('deprecated', '=', False)]"/>
+               			<field name="property_stock_journal"/>
+            		</group>
+          		</xpath>
+        	</field>
+      	</record>
+    
+		<record id="tf_ph_partner_purchase_property_form_inherit" model="ir.ui.view">
+      		<field name="name">tf.ph.partner.purchase.property.form.inherit</field>
+        	<field name="model">product.category</field>
+        	<field name="inherit_id" ref="purchase.view_category_property_form"/>
+        	<field name="arch" type="xml">
+	          	<xpath expr="//field[@name='property_account_creditor_price_difference_categ']" position="replace">
+	            	<field name="property_account_creditor_price_difference_categ" domain="[('internal_type','=','other'),('deprecated','=',False)]"/>
+	          	</xpath>
+        	</field>
+      	</record>
+   
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<record id="tf_ph_partner_view_business_type_tree" model="ir.ui.view">
+			<field name="name">tf.ph.partner.view.business.type.tree</field>
+			<field name="model">business.type</field>
+			<field name="arch" type="xml">
+				<tree string="Business Type" editable="top">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_business_type_view" model="ir.actions.act_window">
+			<field name="name">Business Type</field>
+			<field name="res_model">business.type</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="tf_ph_partner_view_business_type_tree"/>
+		</record>
+
+		<menuitem id="business_type_menu" parent="account.account_account_menu"
+			action="action_business_type_view" sequence="3"/> 
+	</data>
+</odoo>

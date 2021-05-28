@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tf_ph_voucher_payments_form_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.payments.form.view</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id"
+				ref="account.view_account_payment_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group[2]" position="inside">
+					<field name="check_no" />
+					<field name="payee_id"
+						attrs="{'invisible':[('payment_type','!=','outbound')]}" />
+				</xpath>
+				<xpath expr="//button[@name='post']" position="before">
+					<button name="release_check" type="object"
+						string="Add Payment Date" class="oe_highlight"
+						attrs="{'invisible': ['|','|','|',('check_released','=',True),('state','not in',['pdc','posted']),('payment_type','!=','outbound'),('partner_type','!=','supplier')]}"
+						groups="account.group_account_invoice" />
+					<button name="action_print_voucher" string="Print Voucher" type="object"  attrs="{'invisible': ['|','|','|',('check_released','=',True),('state','not in',['pdc','posted']),('payment_type','!=','outbound'),('partner_type','!=','supplier')]}"  />
+				</xpath>
+				<xpath expr="//div[2]" position="after">
+					<div>
+						<h1 style="text-align:right;float:right;" states="posted">
+							<span
+								attrs="{'invisible': ['|',('payment_type','!=','outbound'), ('partner_type', '!=', 'supplier')]}">Payment Release: </span>
+							<span
+								attrs="{'invisible': ['|','|',('check_released','=',False),('payment_type','!=','outbound'), ('partner_type', '!=', 'supplier')]}"
+								style="color:green;">YES</span>
+							<span
+								attrs="{'invisible': ['|','|',('check_released','=',True),('payment_type','!=','outbound'), ('partner_type', '!=', 'supplier')]}"
+								style="color:red;">NO</span>
+							<div>
+								<h6>
+									<group>
+										<group>
+											<field name="check_release_date" readonly="1"
+												attrs="{'invisible': ['|','|',('check_released','=',False),('payment_type','!=','outbound'),('partner_type','!=','supplier')]}" />
+											<field name="check_released" invisible="1"
+												attrs="{'invisible': ['|','|',('check_released','=',True),('payment_type','!=','outbound'),('partner_type','!=','supplier')]}" />
+
+										</group>
+									</group>
+								</h6>
+							</div>
+						</h1>
+					</div>
+				</xpath>
+
+			</field>
+		</record>
+
+		<record
+			id="tf_ph_voucher_check_account_invoice_view_payment_form"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.check.account.invoice.view.payment.form
+			</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id"
+				ref="account.view_account_payment_invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='payment_date']" position="after">
+					<field name="check_no" />
+					<field name="payee_id"
+						attrs="{'invisible':[('payment_type','!=','outbound')]}" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="tf_ph_voucher_account_payment_supplier_tree_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.account.payment.supplier.tree.view
+			</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id"
+				ref="account.view_account_supplier_payment_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='payment_date']" position="after">
+					<field name="check_released" />
+					<field name="check_release_date" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="tf_ph_voucher_account_payment_customer_tree_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.account.payment.customer.tree.view
+			</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id"
+				ref="account.view_account_payment_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='payment_method_id']"
+					position="after">
+					<field name="check_no" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="tf_ph_voucher_account_payment_search_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.account.payment.search.tree.view
+			</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id"
+				ref="account.view_account_payment_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='name']" position='after'>
+					<field name="check_no" string="Check No."
+						filter_domain="[('check_no','ilike',self)]" />
+					<filter name="release" string="Check Release Date"
+						domain="[('payment_type','=','outbound')]"
+						context="{'group_by':'check_release_date'}"
+						help="Supplier payments that have checks being released." />
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Action print voucher for multi -->
+        <record id="action_account_payment_print_voucher" model="ir.actions.server">
+            <field name="name">Print Payment Vouchers</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="account.model_account_payment"/>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="binding_view_types">list</field>
+            <field name="code">
+				if records:
+					action = records.action_print_voucher()
+            </field>
+        </record>
+	</data>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tf_ph_partner_purchase_order_tax_view" model="ir.ui.view">
+			<field name="name">tf.ph.partner.purchase.order.tax.view</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='company_id']" position="after">
+					<field name="purchase_tax_ids" widget="many2many_tags" string="Vendor Tax"/>
+				</xpath>
+			</field>
+		</record>
+
+
+	</data>
+</odoo>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="tf_ph_voucher_account_move_form_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.account.move.form.view</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_duplicate']"
+					position="replace">
+					<button name="action_duplicate" string="Duplicate"
+						type="object" groups="account.group_account_invoice"
+						invisible="context.get('default_is_ap', False) or context.get('default_is_check', False)" />
+				</xpath>
+
+				<xpath expr="///button[@name='action_duplicate']" position="after">
+					<field name="invoice_payments_widget" invisible="1" />
+					<button name="action_print_voucher" string="Print Voucher" type="object" attrs="{'invisible':['|','|',('invoice_payments_widget','=', False), ('type', '=', 'out_invoice'), ('type', '=', 'out_refund')]}"/>
+				</xpath>
+
+				<xpath
+					expr="//button[@name='%(account.action_view_account_move_reversal)d']"
+					position="replace">
+					<button name="%(account.action_view_account_move_reversal)d"
+						states="posted" string="Reverse Entry" type="action"
+						groups="account.group_account_invoice"
+						invisible="context.get('default_is_ap', False) or context.get('default_is_check', False)" />
+				</xpath>
+
+				<xpath expr="//button[@name='action_post']" position="before">
+					<button name="%(action_report_check_voucher)d"
+						string="Print Voucher" type="action" class="oe_highlight"
+						invisible="context.get('default_is_check', False) or context.get('menu_je', True)" />
+					<button name="%(action_report_account_payable_voucher)d"
+						string="Print Voucher" type="action" class="oe_highlight"
+						invisible="context.get('default_is_ap', False) or context.get('menu_je', True)" />
+				</xpath>
+				<xpath
+					expr="//field[@name='line_ids']/tree/field[@name='date_maturity']"
+					position="after">
+					<field name="internal_notes" />
+				</xpath>
+				<xpath expr="//field[@name='auto_post']"
+					position="after">
+					<field name="certified_by"
+						attrs="{'readonly': [('state','=','posted')]}" />
+					<field name="noted_by"
+						attrs="{'readonly': [('state','=','posted')]}" />
+				</xpath>
+				<xpath expr="//group[1]/group[1]" position="inside">
+					<field name="journal_type" invisible="1" />
+				</xpath>
+				<xpath expr="//group[1]/group[2]" position="inside">
+					<field name="po_id"
+						attrs="{'invisible':[('journal_type','!=','purchase')]}" />
+					<field name="source_doc"
+						attrs="{'invisible':[('journal_type','!=','purchase')]}" />
+				</xpath>
+				<xpath expr="//field[@name='company_id']" position="after">
+					<field name="payee_id"
+						attrs="{'invisible':[('journal_type','!=','bank')]}" />
+				</xpath>
+<!--				<xpath expr="//sheet" position="after">-->
+<!--					<div class="oe_chatter">-->
+<!--						<field name="message_follower_ids" widget="mail_followers" />-->
+<!--						<field name="message_ids" widget="mail_thread" />-->
+<!--					</div>-->
+<!--				</xpath>-->
+			</field>
+		</record>
+
+		<record id="tf_ph_voucher_account_move_tree_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.account.move.tree.view</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='ref']" position="after">
+					<field name="check_no" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="tf_ph_voucher_account_move_search_view"
+			model="ir.ui.view">
+			<field name="name">tf.ph.voucher.account.move.search.tree.view</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_account_move_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='name']" position="replace">
+					<field name="name" string="Move"
+						filter_domain="['|', ('name','ilike',self), 
+				        				'|', ('ref','ilike',self),
+				        				('check_no','ilike',self)]" />
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="account.action_move_journal_line" model="ir.actions.act_window">
+            <field name="context">{'view_no_maturity': True, 'menu_je':1}</field>
+       	</record>
+
+		<record id="action_tf_ph_payment_voucher"
+			model="ir.actions.act_window">
+			<field name="name">Payment Voucher</field>
+			<field name="res_model">account.move</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('journal_id.type','=','bank'),('partner_id.supplier_rank','&gt;', 0)]
+			</field>
+			<field name="context">{'default_is_ap':1, 'menu_je':0}</field>
+			<field name="view_id" ref="account.view_move_tree" />
+			<field name="search_view_id"
+				ref="account.view_account_move_filter" />
+		</record>
+
+		<record id="action_tf_ph_ap_voucher"
+			model="ir.actions.act_window">
+			<field name="name">Payable Voucher</field>
+			<field name="res_model">account.move</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('journal_id.type','=','purchase')]</field>
+			<field name="context">{'default_is_check':1, 'menu_je':0}</field>
+			<field name="view_id" ref="account.view_move_tree" />
+			<field name="search_view_id"
+				ref="account.view_account_move_filter" />
+		</record>
+
+<!--		<menuitem action="action_tf_ph_payment_voucher"-->
+<!--			id="menu_action_tf_ph_payment_voucher"-->
+<!--			parent="account_reports.account_reports_partners_reports_menu"-->
+<!--			groups="account.group_account_user" sequence="10" />-->
+<!--		<menuitem action="action_tf_ph_ap_voucher"-->
+<!--			id="menu_action_tf_ph_ap_voucher"-->
+<!--			parent="account_reports.account_reports_partners_reports_menu"-->
+<!--			groups="account.group_account_user" sequence="10" />-->
+
+
+	</data>
+</odoo>
