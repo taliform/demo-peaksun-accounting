@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- Inherit Account Tax SEARCH View -->
+		<record id="view_account_tax_search_inherit" model="ir.ui.view">
+			<field name="name">view.account.tax.search.inherit</field>
+			<field name="model">account.tax</field>
+			<field name="inherit_id" ref="account.view_account_tax_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//filter[@name='purchase']" position="after">
+					<filter string="Service" name=''
+						domain="[('is_service','=',True)]" />
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

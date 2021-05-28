@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_account_payment_cancel" model="ir.ui.view">
+            <field name="name">account.payment.cancel.form</field>
+            <field name="model">account.payment.cancel</field>
+            <field name="arch" type="xml">
+                <form string="Payment Cancellation">
+                    <group col="4">
+                        <field name="date" required="1"/>
+                        <field name="journal_id" readonly="1"/>
+                        <field name="cancel_reason" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Continue" name="cancel_payment" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_view_account_payment_cancel" model="ir.actions.act_window">
+            <field name="name">Payment Cancel</field>
+            <field name="res_model">account.payment.cancel</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_payment_cancel"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

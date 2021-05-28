@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Service VAT Reclassed Entries: Action -->
+        <record id="action_tf_svc_vat_rce_entry" model="ir.actions.act_window">
+            <field name="name">Service Vat Reclassed Entries</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('vat_payment_id', '=', active_id)]</field>
+        </record>
+
+		<!-- Account Payment -->
+		<record id="view_account_payment_form_withholding" model="ir.ui.view">
+			<field name="name">account.payment.form.withholding</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="account.view_account_payment_form"/>
+			<field name="arch" type="xml">
+				<!-- Service Vat Additions -->
+				<xpath expr="//div[@name='button_box']" position="inside">
+					<button name="%(action_tf_svc_vat_rce_entry)d" class="oe_stat_button" type="action"
+						icon="fa-bars" attrs="{'invisible':[('vat_move_count','=',0)]}">
+						<field name="vat_move_count" string="Service Vat Reclass Entries" widget="statinfo"/>
+					</button>
+					<field name="vendor_valid_for_reclass" invisible="1"/>
+				</xpath>
+
+				<xpath expr="//button[@name='post']" position="after">
+					<button name="action_vendor_svc_vat" class="btn btn-secondary"
+							string="Create Service VAT Reclass Entry" type="object"
+							attrs="{'invisible': ['|',('vendor_valid_for_reclass', '=', False),('state','=','cancelled')]}" />
+				</xpath>
+
+				<xpath expr="//field[@name='communication']" position="after">
+					<field name="or_no" readonly="1" attrs="{'invisible':[('or_no','=',False)]}"/>
+					<field name="or_date" readonly="1" attrs="{'invisible':[('or_date','=',False)]}"/>
+				</xpath>
+				<!-- Withholding Additions -->
+
+				<xpath expr="//field[@name='payment_type']" position="after">
+					<field name="payment_method_type" widget="radio" required="1" attrs="{'readonly': [('state','!=','draft')], 'invisible':[('payment_type','==','transfer')]}"/>
+					<field name="hide_withholding" invisible="1"/>
+				</xpath>
+				<xpath expr="//field[@name='communication']" position="before">
+					<field name="payment_receipt" />
+				</xpath>
+				<xpath expr="//group[@name='payment_difference']" position="replace"/>
+
+				<xpath expr="//group[1]" position="after">
+					<group name="allocation" string="Payment Allocation" attrs="{'invisible':['|','|',('payment_method_type','!=','adjustment'),('payment_type','==','transfer'),('partner_id','=',False)]}">
+						<field name="payment_inv_line_ids" nolabel="1" context="{'partner_id':partner_id,'payment_type':payment_type}" domain="[('state','=','open'),('partner_id','=',partner_id)]" attrs="{'readonly': [('state','!=','draft')]}" />
+					</group>
+					<group name="crdr_allocation" string="Credit Notes" attrs="{'invisible':['|','|',('payment_method_type','!=','adjustment'),('payment_type','==','transfer'),('partner_id','=',False)]}">
+						<field name="payment_crdr_inv_line_ids" nolabel="1" context="{'partner_id':partner_id,'payment_type':payment_type}" domain="[('state','=','open'),('partner_id','=',partner_id)]" attrs="{'readonly': [('state','!=','draft')]}" />
+					</group>
+
+					<group name="difference" attrs="{'invisible': ['|',('payment_method_type', '!=', 'adjustment'),('payment_difference', '=', 0.0)]}">
+						<field name="payment_difference"/>
+						<field name="payment_difference_handling" string="Payment Handling" widget="radio" attrs="{'readonly': [('state','!=','draft')]}"/>
+						<!-- <field name="writeoff_account_id" string="Post Difference In" attrs="{'readonly': [('state','!=','draft')], 'invisible': [('payment_difference_handling','=','open')],'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+                        <field name="writeoff_label" string="Label" attrs="{'readonly': [('state','!=','draft')], 'invisible': [('payment_difference_handling','=','open')], 'required': [('payment_difference_handling', '=', 'reconcile')]}"/> -->
+					</group>
+
+					<group name="charges" string="Payment Charges" attrs="{'invisible':['|','|',('payment_difference_handling', '=', 'open'),('payment_method_type','!=','adjustment'),('payment_type','==','transfer')]}">
+						<field name= "payment_charge_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+							<tree editable="bottom">
+								<field name="recon_model_id" required="1"/>
+								<field name="account_id" required="1" options="{'no_create_edit':True}"/>
+								<field name="analytic_accnt_id" options="{'no_create_edit':True}"/>
+								<field name="tax_id" domain="[('for_withholding','=',False)]" options="{'no_create_edit':True}"/>
+								<field name="currency_id" invisible="1"/>
+								<field name="journal_id" invisible="1"/>
+								<field name="label"/>
+								<field name="amount" sum="Total Write-off Amount"/>
+								<field name="amount_untaxed" invisible="1" sum="Total Untaxed Amount" groups="account.group_show_line_subtotals_tax_excluded"/>
+								<field name="amount_tax" invisible="1" sum="Total Tax Amount"/>
+							</tree>
+						</field>
+					</group>
+					<group name="withholding" string="Withholding" attrs="{'invisible':[('hide_withholding', '=', True)]}">
+						<group>
+
+							<field name="multiple_wth_tax" string="Multiple Withholding" attrs="{'readonly': [('state','!=','draft')]}"/>
+							<field name="wht_tax_id" options="{'no_create': True, 'no_open': True}"
+								   domain="[('for_withholding','=',True),('type_tax_use','=','sale')]"
+								   attrs="{'invisible':[('multiple_wth_tax','=',True)], 'readonly': [('state','!=','draft')]}"/>
+							<field name="wht_amount" attrs="{'invisible':['|',('multiple_wth_tax','=',True),('wht_tax_id','=',False)],'required':[('wht_tax_id','!=',False)]}" />
+							<field name="wht_account_id" attrs="{'invisible':['|',('multiple_wth_tax','=',True),('wht_tax_id','=',False)],'required':[('wht_tax_id','!=',False)]}"/>
+						</group>
+
+						<field name="payment_withholding_ids" nolabel="1" attrs="{'invisible': [('multiple_wth_tax','=',False)], 'readonly': [('state','!=','draft')]}">
+							<tree editable="bottom">
+								<field name="wht_tax_id" required="1"
+									   options="{'no_create': True, 'no_open': True}"
+									   domain="[('for_withholding','=',True),('type_tax_use','=','sale')]" />
+								<field name="wht_amount" required="1"/>
+								<field name="wht_account_id" required="1"/>
+								<field name="wht_analytic_accnt_id"/>
+							</tree>
+						</field>
+					</group>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Register Payment (Invoice Form) -->
+		<record id="view_account_payment_invoice_form_withholding" model="ir.ui.view">
+			<field name="name">account.payment.invoice.form.withholding</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="account.view_account_payment_form"/>
+			<field name="priority">20</field>
+			<field name="mode">primary</field>
+			<field name="arch" type="xml">
+				<xpath expr="//header" position="replace"/>
+				<xpath expr="//field[@name='check_number']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//sheet" position="after">
+					<footer>
+						<field name="state" invisible="1"/>
+						<button string="Validate" name="post" type="object" class="btn-primary"/>
+						<button string="Assign PDC" name="assign_pdc" type="object" context="{'from_inv_wizard': True}"/>
+						<button string="Cancel" class="btn-secondary" special="cancel"/>
+					</footer>
+				</xpath>
+
+				<xpath expr="//group[@name='withholding']" position="replace"/>
+				<xpath expr="//field[@name='payment_method_id']" position="after">
+					<field name="wht_tax_id" options="{'no_create': True, 'no_open': True}" domain="[('for_withholding','=',True),('type_tax_use','=','sale')]" context="{'wht_from_invoice': True}" />
+					<field name="wht_amount" attrs="{'invisible':[('wht_tax_id','=',False)],'required':[('wht_tax_id','!=',False)]}" />
+					<field name="wht_account_id" attrs="{'invisible':[('wht_tax_id','=',False)],'required':[('wht_tax_id','!=',False)]}"/>
+				</xpath>
+				<xpath expr="//button[@name='post']" position="attributes">
+					<attribute name="context">{'wht_from_invoice': True, 'wht_amount':wht_amount, 'wht_tax_id': wht_tax_id, 'wht_account_id': wht_account_id}</attribute>
+				</xpath>
+				<xpath expr="//sheet" position="inside">
+					<group name="difference" attrs="{'invisible': [('payment_difference', '=', 0.0)]}">
+						<group>
+							<field name="payment_difference"/>
+							<field name="payment_difference_handling" string="Payment Handling" widget="radio" attrs="{'readonly': [('state','!=','draft')]}"/>
+						</group>
+						<group>
+							<field name="writeoff_account_id" string="Post Difference In" attrs="{'readonly': [('state','!=','draft')], 'invisible': [('payment_difference_handling','=','open')],'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+                        	<field name="writeoff_label" string="Label" attrs="{'readonly': [('state','!=','draft')], 'invisible': [('payment_difference_handling','=','open')], 'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+						</group>
+					</group>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Register Payment (Invoice Tree) -->
+		<record id="view_account_payment_from_invoices_form_withholding" model="ir.ui.view">
+			<field name="name">account.payment.invoices.form.withholding</field>
+			<field name="model">account.payment.register</field>
+			<field name="inherit_id" ref="account.view_account_payment_form_multi"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group[2]" position="inside">
+					<field name="check_no" />
+					<field name="payment_receipt" />
+				</xpath>
+				<xpath  expr='//field[@name="payment_method_id"]' position='after'>
+					<field name="payment_type" invisible="1"/>
+					<field name="amount_total"/>
+					<field name="wht_tax_id"  options="{'no_create': True, 'no_open': True}" attrs="{'invisible':[('payment_type','=','outbound')], 'required':[('wht_tax_id','!=',False)]}" domain="[('for_withholding','=',True),('type_tax_use','=','sale')]" context="{'wht_from_invoice': True}"/>
+					<field name="wht_amount" attrs="{'invisible':[('wht_tax_id','=',False)],'required':[('wht_tax_id','!=',False)]}" />
+					<field name="wht_account_id" attrs="{'invisible':[('wht_tax_id','=',False)],'required':[('wht_tax_id','!=',False)]}"/>
+				</xpath>
+				<xpath expr="//button[@name='create_payments']" position="attributes">
+					<attribute name="context">{'wht_from_invoice': True, 'wht_amount':wht_amount, 'wht_tax_id': wht_tax_id, 'wht_account_id': wht_account_id}</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Account Payment Invoice Line-->
+		<record id="view_account_payment_invoice_line_form_withholding" model="ir.ui.view">
+			<field name="name">account.payment.invoice.line.form.withholding</field>
+			<field name="model">account.payment.invoice.line</field>
+			<field name="arch" type="xml">
+				<form string="Payment Allocation">
+					<group name="alloc" readonly="1">
+						<group name="first">
+							<field name="invoice_id"/>
+							<field name="account_id"/>
+							<field name="invoice_date"/>
+							<field name="due_date"/>
+						</group>
+						<group name="second">
+							<field name="currency_id"/>
+							<field name="original_amount"/>
+							<field name="balance_amount"/>
+							<field name="full_reconcile"/>
+							<field name="allocation"/>
+						</group>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<!-- Account Payment Charge Line-->
+		<record id="view_account_payment_charge_line_form_withholding" model="ir.ui.view">
+			<field name="name">account.payment.charge.line.form.withholding</field>
+			<field name="model">account.payment.charge.line</field>
+			<field name="arch" type="xml">
+				<form string="Payment Charges">
+					<group name="charge" readonly="1">
+						<group name="first">
+							<field name="recon_model_id"/>
+							<field name="account_id"/>
+							<field name="analytic_accnt_id"/>
+							<field name="tax_id"/>
+						</group>
+						<group name="second">
+							<field name="journal_id"/>
+							<field name="label"/>
+							<field name="amount"/>
+						</group>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<!-- Account Tax -->
+		<record id="withholding_account_tax_form_inherit" model="ir.ui.view">
+			<field name="name">withholding.account.tax.form.inherit</field>
+			<field name="model">account.tax</field>
+			<field name="inherit_id" ref="account.view_tax_form" />
+			<field name="arch" type="xml">
+				<field name="include_base_amount" position="after">
+					<field name="is_service" />
+					<field name="account_vat_service_id"
+						   attrs="{'invisible':[('is_service','=',False)],'required':[('is_service','=',True)]}" />
+					<field name="for_withholding" />
+				</field>
+			</field>
+		</record>
+
+		<!-- Inherit Account Tax SEARCH View -->
+		<record id="view_account_tax_search_inherit" model="ir.ui.view">
+			<field name="name">view.account.tax.search.inherit</field>
+			<field name="model">account.tax</field>
+			<field name="inherit_id" ref="account.view_account_tax_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//filter[@name='purchase']" position="after">
+					<filter string="Service" name=''
+						domain="[('is_service','=',True)]" />
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Payments (Customer) -->
+		<record id="account.action_account_payments" model="ir.actions.act_window">
+			<field name="context">{'default_payment_type': 'inbound', 'default_partner_type': 'customer', 'search_default_inbound_filter': 1, 'default_payment_method_type': 'adjustment'}</field>
+		</record>
+
+		<!-- Payments (Vendor) -->
+		<record id="account.action_account_payments_payable" model="ir.actions.act_window">
+			<field name="context">{'default_payment_type': 'outbound', 'default_partner_type': 'supplier', 'search_default_outbound_filter': 1, 'default_payment_method_type': 'adjustment'}</field>
+		</record>
+		<!--		Cancel Payment-->
+
+		<record id="account_payment_form_inherit_cancel_payment" model="ir.ui.view">
+			<field name="name">account.payment.form.inherit.cancel.payment</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="account.view_account_payment_form"/>
+			<field name="arch" type="xml">
+
+				<button name="action_draft" position="replace">
+					<button name="action_draft" class="oe_highlight" states="cancelled" string="Set To Draft" type="object" invisible="1"/>
+				</button>
+				<xpath expr="//field[@name='check_number']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<button name="post" position="after">
+					<button name="%(action_view_account_payment_cancel)d" states="posted"
+							string="Cancel" type="action" groups="account.group_account_invoice"
+							context="{'default_journal_id': journal_id}"/>
+				</button>
+			</field>
+		</record>
+
+		<record id="account_payment_invoice_line_tree" model="ir.ui.view">
+			<field name="name">account.payment.invoice.line.tree</field>
+			<field name="model">account.payment.invoice.line</field>
+			<field name="arch" type="xml">
+				<tree editable="bottom">
+					<field name="invoice_ids_ref" invisible="1"/>
+					<field name="invoice_id" domain="[('id', 'in', invoice_ids_ref)]" required="1" options="{'no_create_edit': True}"/>
+					<field name="reference" string="Payment Ref" readonly="1"/>
+					<field name="account_id" invisible="1"/>
+					<field name="invoice_date" readonly="1"/>
+					<field name="due_date" readonly="1"/>
+					<field name="currency_id" readonly="1"/>
+					<field name="original_amount" readonly="1"/>
+					<field name="balance_amount" readonly="1"/>
+					<field name="full_reconcile" />
+					<field name="allocation" sum="Total Amount"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="account_payment_crdr_line_tree" model="ir.ui.view">
+			<field name="name">account.payment.crdr.line.tree</field>
+			<field name="model">account.payment.crdr.invoice.line</field>
+			<field name="arch" type="xml">
+				<tree editable="bottom">
+					<field name="invoice_ids_ref" invisible="1"/>
+					<field name="invoice_id" domain="[('id', 'in', invoice_ids_ref)]" required="1" options="{'no_create_edit': True}"/>
+					<field name="reference" string="Payment Ref" readonly="1"/>
+					<field name="account_id" invisible="1"/>
+					<field name="invoice_date" readonly="1"/>
+					<field name="due_date" readonly="1"/>
+					<field name="currency_id" readonly="1"/>
+					<field name="original_amount" readonly="1"/>
+					<field name="balance_amount" readonly="1"/>
+					<field name="full_reconcile" />
+					<field name="allocation" sum="Total Amount"/>
+				</tree>
+			</field>
+		</record>
+	</data>
+</odoo>

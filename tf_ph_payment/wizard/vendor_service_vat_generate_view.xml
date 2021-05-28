@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="tf_vendor_service_vat_generate_form" model="ir.ui.view">
+            <field name="name">tf.vendor.service.vat.generate.form</field>
+            <field name="model">tf.vendor.service.vat.generate</field>
+            <field name="arch" type="xml">
+                <form string="Service Vat Generation">
+                    <group col="4">
+                        <field name="or_no" required="1"/>
+                        <field name="or_date" required="1"/>
+                        <field name="payment_id" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Confirm" name="action_confirm" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

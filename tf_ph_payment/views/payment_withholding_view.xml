@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>        
+        <template id="assets_backend" name="account assets" inherit_id="web.assets_backend">
+            <xpath expr="//script[@src='/account/static/src/js/reconciliation/reconciliation_renderer.js']" position="replace">
+                <script type="text/javascript" src="/tf_ph_payment/static/src/js/reconciliation_renderer.js"></script>
+            </xpath>
+            <xpath expr="//script[@src='/account/static/src/js/reconciliation/reconciliation_model.js']" position="replace">
+                <script type="text/javascript" src="/tf_ph_payment/static/src/js/reconciliation_model.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>
