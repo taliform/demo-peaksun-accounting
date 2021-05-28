@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    	<record id="ss_holiday_type1" model="ss.holiday.type">
+    		<field name="name">Regular Holiday</field>
+    		<field name="code">REG</field>
+    	</record>
+    	<record id="ss_holiday_type2" model="ss.holiday.type">
+    		<field name="name">Special Non-Working Holiday</field>
+    		<field name="code">SPE</field>
+    	</record>
+    </data>
+</odoo>

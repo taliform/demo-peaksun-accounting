@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="ss_portal_employee_main_menu" name="Employee Portal" web_icon="ss_portal_employee,static/description/icon.png" groups="base.group_user" sequence="10"/>
+        
+        <menuitem id="ss_portal_employee_menu"
+    			name="Employee" 
+    			groups="base.group_user"
+    			parent="ss_portal_employee_main_menu"
+    			sequence="20"/>
+    	
+    	<menuitem id="ss_portal_purchase_menu"
+				name="Purchase"
+				groups="base.group_user"
+				parent="ss_portal_employee.ss_portal_employee_main_menu"
+				sequence="100"/>
+				
+		<menuitem id="ss_portal_approval_menu"
+				name="Approvals"
+				groups="base.group_user"
+				parent="ss_portal_employee.ss_portal_employee_main_menu"
+				sequence="200"/>
+    </data>
+</odoo>
